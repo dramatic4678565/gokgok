@@ -2,8 +2,8 @@ import type {
   AppClassProperties,
   AppState,
   InteractiveCanvasAppState,
-} from "@excalidraw/excalidraw/types";
-import type { Mutable } from "@excalidraw/common/utility-types";
+} from "@mosaic/mosaic/types";
+import type { Mutable } from "@mosaic/common/utility-types";
 
 import { getBoundTextElement } from "./textElement";
 
@@ -13,18 +13,18 @@ import { makeNextSelectedElementIds, getSelectedElements } from "./selection";
 
 import type {
   GroupId,
-  ExcalidrawElement,
+  MosaicElement,
   NonDeleted,
   ElementsMapOrArray,
   ElementsMap,
-  NonDeletedExcalidrawElement,
+  NonDeletedMosaicElement,
   NonDeletedElementsMapOrArray,
 } from "./types";
 
 export const selectGroup = (
   groupId: GroupId,
   appState: InteractiveCanvasAppState,
-  elements: readonly NonDeletedExcalidrawElement[],
+  elements: readonly NonDeletedMosaicElement[],
 ): Pick<
   InteractiveCanvasAppState,
   "selectedGroupIds" | "selectedElementIds" | "editingGroupId"
@@ -69,14 +69,14 @@ export const selectGroupsForSelectedElements = (function () {
     "selectedGroupIds" | "editingGroupId" | "selectedElementIds"
   >;
 
-  let lastSelectedElements: readonly NonDeletedExcalidrawElement[] | null =
+  let lastSelectedElements: readonly NonDeletedMosaicElement[] | null =
     null;
-  let lastElements: readonly NonDeletedExcalidrawElement[] | null = null;
+  let lastElements: readonly NonDeletedMosaicElement[] | null = null;
   let lastReturnValue: SelectGroupsReturnType | null = null;
 
   const _selectGroups = (
-    selectedElements: readonly NonDeletedExcalidrawElement[],
-    elements: readonly NonDeletedExcalidrawElement[],
+    selectedElements: readonly NonDeletedMosaicElement[],
+    elements: readonly NonDeletedMosaicElement[],
     appState: Pick<AppState, "selectedElementIds" | "editingGroupId">,
     prevAppState: InteractiveCanvasAppState,
   ): SelectGroupsReturnType => {
@@ -164,7 +164,7 @@ export const selectGroupsForSelectedElements = (function () {
    */
   const selectGroupsForSelectedElements = (
     appState: Pick<AppState, "selectedElementIds" | "editingGroupId">,
-    elements: readonly NonDeletedExcalidrawElement[],
+    elements: readonly NonDeletedMosaicElement[],
     prevAppState: InteractiveCanvasAppState,
     /**
      * supply null in cases where you don't have access to App instance and
@@ -217,7 +217,7 @@ export const isSelectedViaGroup = (
     InteractiveCanvasAppState,
     "editingGroupId" | "selectedGroupIds"
   >,
-  element: ExcalidrawElement,
+  element: MosaicElement,
 ) => getSelectedGroupForElement(appState, element) != null;
 
 export const getSelectedGroupForElement = (
@@ -225,7 +225,7 @@ export const getSelectedGroupForElement = (
     InteractiveCanvasAppState,
     "editingGroupId" | "selectedGroupIds"
   >,
-  element: ExcalidrawElement,
+  element: MosaicElement,
 ) =>
   element.groupIds
     .filter((groupId) => groupId !== appState.editingGroupId)
@@ -241,7 +241,7 @@ export const getSelectedGroupIds = (
 // given a list of elements, return the the actual group ids that should be selected
 // or used to update the elements
 export const selectGroupsFromGivenElements = (
-  elements: readonly NonDeletedExcalidrawElement[],
+  elements: readonly NonDeletedMosaicElement[],
   appState: InteractiveCanvasAppState,
 ) => {
   let nextAppState: InteractiveCanvasAppState = {
@@ -271,7 +271,7 @@ export const selectGroupsFromGivenElements = (
 
 export const editGroupForSelectedElement = (
   appState: AppState,
-  element: NonDeleted<ExcalidrawElement>,
+  element: NonDeleted<MosaicElement>,
 ): AppState => {
   return {
     ...appState,
@@ -283,13 +283,13 @@ export const editGroupForSelectedElement = (
   };
 };
 
-export const isElementInGroup = (element: ExcalidrawElement, groupId: string) =>
+export const isElementInGroup = (element: MosaicElement, groupId: string) =>
   element.groupIds.includes(groupId);
 
 export const getElementsInGroup = <
-  P extends NonDeletedExcalidrawElement | ExcalidrawElement,
+  P extends NonDeletedMosaicElement | MosaicElement,
 >(
-  elements: P extends NonDeletedExcalidrawElement
+  elements: P extends NonDeletedMosaicElement
     ? NonDeletedElementsMapOrArray
     : ElementsMapOrArray,
   groupId: string,
@@ -304,12 +304,12 @@ export const getElementsInGroup = <
 };
 
 export const getSelectedGroupIdForElement = (
-  element: ExcalidrawElement,
+  element: MosaicElement,
   selectedGroupIds: { [groupId: string]: boolean },
 ) => element.groupIds.find((groupId) => selectedGroupIds[groupId]);
 
 export const addToGroup = (
-  prevGroupIds: ExcalidrawElement["groupIds"],
+  prevGroupIds: MosaicElement["groupIds"],
   newGroupId: GroupId,
   editingGroupId: AppState["editingGroupId"],
 ) => {
@@ -325,12 +325,12 @@ export const addToGroup = (
 };
 
 export const removeFromSelectedGroups = (
-  groupIds: ExcalidrawElement["groupIds"],
+  groupIds: MosaicElement["groupIds"],
   selectedGroupIds: { [groupId: string]: boolean },
 ) => groupIds.filter((groupId) => !selectedGroupIds[groupId]);
 
 export const getMaximumGroups = <
-  T extends NonDeletedExcalidrawElement | ExcalidrawElement,
+  T extends NonDeletedMosaicElement | MosaicElement,
 >(
   elements: T[],
   elementsMap: ElementsMap,
@@ -374,7 +374,7 @@ export const getNonDeletedGroupIds = (elements: ElementsMap) => {
 };
 
 export const elementsAreInSameGroup = (
-  elements: readonly ExcalidrawElement[],
+  elements: readonly MosaicElement[],
 ) => {
   const allGroups = elements.flatMap((element) => element.groupIds);
   const groupCount = new Map<string, number>();
@@ -390,12 +390,12 @@ export const elementsAreInSameGroup = (
   return maxGroup === elements.length;
 };
 
-export const isInGroup = (element: ExcalidrawElement) => {
+export const isInGroup = (element: MosaicElement) => {
   return element.groupIds.length > 0;
 };
 
 export const getNewGroupIdsForDuplication = (
-  groupIds: ExcalidrawElement["groupIds"],
+  groupIds: MosaicElement["groupIds"],
   editingGroupId: AppState["editingGroupId"],
   mapper: (groupId: GroupId) => GroupId,
 ) => {
@@ -415,11 +415,11 @@ export const getNewGroupIdsForDuplication = (
 // given a list of selected elements, return the element grouped by their immediate group selected state
 // in the case if only one group is selected and all elements selected are within the group, it will respect group hierarchy in accordance to their nested grouping order
 export const getSelectedElementsByGroup = (
-  selectedElements: NonDeletedExcalidrawElement[],
+  selectedElements: NonDeletedMosaicElement[],
   elementsMap: ElementsMap,
   appState: Readonly<Pick<AppState, "selectedGroupIds" | "editingGroupId">>,
-): NonDeletedExcalidrawElement[][] => {
-  const buckets: Map<string, NonDeletedExcalidrawElement[]> = new Map();
+): NonDeletedMosaicElement[][] => {
+  const buckets: Map<string, NonDeletedMosaicElement[]> = new Map();
   const selectedGroupIds = getSelectedGroupIds(appState);
   const isSingleSelectedGroupCase =
     selectedGroupIds.length === 1 &&

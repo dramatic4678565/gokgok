@@ -3,21 +3,21 @@ import {
   arrayToMap,
   getSizeFromPoints,
   reseed,
-} from "@excalidraw/common";
+} from "@mosaic/common";
 import {
   type GlobalPoint,
   type LocalPoint,
   lineSegment,
   pointFrom,
   pointRotateRads,
-} from "@excalidraw/math";
-import { Excalidraw } from "@excalidraw/excalidraw";
-import { API } from "@excalidraw/excalidraw/tests/helpers/api";
-import { UI } from "@excalidraw/excalidraw/tests/helpers/ui";
-import "@excalidraw/utils/test-utils";
-import { render } from "@excalidraw/excalidraw/tests/test-utils";
+} from "@mosaic/math";
+import { Mosaic } from "@mosaic/mosaic";
+import { API } from "@mosaic/mosaic/tests/helpers/api";
+import { UI } from "@mosaic/mosaic/tests/helpers/ui";
+import "@mosaic/utils/test-utils";
+import { render } from "@mosaic/mosaic/tests/test-utils";
 
-import type { Zoom } from "@excalidraw/excalidraw/types";
+import type { Zoom } from "@mosaic/mosaic/types";
 
 import * as distance from "../src/distance";
 import { getElementBounds } from "../src/bounds";
@@ -33,8 +33,8 @@ import { newFreeDrawElement } from "../src/newElement";
 import { getAllMidpoints } from "../src/utils";
 
 import type {
-  ExcalidrawDiamondElement,
-  NonDeletedExcalidrawElement,
+  MosaicDiamondElement,
+  NonDeletedMosaicElement,
   NonDeletedSceneElementsMap,
   Ordered,
 } from "../src/types";
@@ -43,7 +43,7 @@ describe("check rotated elements can be hit:", () => {
   beforeEach(async () => {
     localStorage.clear();
     reseed(7);
-    await render(<Excalidraw handleKeyboardGlobally={true} />);
+    await render(<Mosaic handleKeyboardGlobally={true} />);
   });
 
   it("arrow", () => {
@@ -88,7 +88,7 @@ describe("hitElementItself cache", () => {
 
     localStorage.clear();
     reseed(7);
-    await render(<Excalidraw handleKeyboardGlobally={true} />);
+    await render(<Mosaic handleKeyboardGlobally={true} />);
   });
 
   it("reuses cached result when threshold increases", () => {
@@ -688,7 +688,7 @@ describe("freedraw loop fill containment", () => {
 });
 
 describe("binding hit tests", () => {
-  type SceneElement = Ordered<NonDeletedExcalidrawElement>;
+  type SceneElement = Ordered<NonDeletedMosaicElement>;
   const zoom = (value: number) => ({ value } as Zoom);
 
   const hitTest = (
@@ -922,7 +922,7 @@ describe("intersectElementWithLineSegment", () => {
       width: 200,
       height: 200,
       roundness: { type: ROUNDNESS.PROPORTIONAL_RADIUS },
-    }) as ExcalidrawDiamondElement;
+    }) as MosaicDiamondElement;
     const elementsMap = arrayToMap([diamond]);
     const [, , left] = getAllMidpoints(diamond, elementsMap);
 

@@ -1,20 +1,18 @@
 # Mosaic — Upstream Sync Guide
 
-Apnar project `mosaic` ekhon `excalidraw/excalidraw` er upor based. Excalidraw niyomito update hoy
-(protiponche koyek hundred commit), tai ekta **auto-sync system** banano hoye geche — jate apnar
-PC/off thakleo apnar repo nije theke update hoye jay.
+Apnar project `mosaic` ekhon `excalidraw/excalidraw` er upor based. Excalidraw niyomito update hoy (protiponche koyek hundred commit), tai ekta **auto-sync system** banano hoye geche — jate apnar PC/off thakleo apnar repo nije theke update hoye jay.
 
 ---
 
 ## 1. Ki ki seta kora holo
 
-| Jinis | Kothay |
-|---|---|
-| Apnar repo | `https://github.com/dramatic4678565/mosaic` |
-| Upstream (source) | `https://github.com/excalidraw/excalidraw` |
-| Apnar main branch | `D:\custode-code-website\web\mosaic` |
-| Auto-sync workflow | `.github/workflows/sync-upstream.yml` |
-| Local helper script | `scripts/sync-upstream.ps1` |
+| Jinis               | Kothay                                      |
+| ------------------- | ------------------------------------------- |
+| Apnar repo          | `https://github.com/dramatic4678565/mosaic` |
+| Upstream (source)   | `https://github.com/excalidraw/excalidraw`  |
+| Apnar main branch   | `D:\custode-code-website\web\mosaic`        |
+| Auto-sync workflow  | `.github/workflows/sync-upstream.yml`       |
+| Local helper script | `scripts/sync-upstream.ps1`                 |
 
 ### Remotes
 
@@ -24,6 +22,7 @@ Apnar repo-r duita remote ache:
 - **`upstream`** → `https://github.com/excalidraw/excalidraw.git` (asol Excalidraw, ekeno push korar dorkar nai)
 
 Check korte:
+
 ```powershell
 git remote -v
 ```
@@ -32,8 +31,7 @@ git remote -v
 
 ## 2. ⚠️ APNAR KAJ BAQI ACHE (3 ta step)
 
-Ei step gulo ami korte parini, karon ei PC-r Git login kora account `goglprt45646` —
-kintu apnar repo-r owner `dramatic4678565`. Tai ekhon push korle permission denied ashbe.
+Ei step gulo ami korte parini, karon ei PC-r Git login kora account `goglprt45646` — kintu apnar repo-r owner `dramatic4678565`. Tai ekhon push korle permission denied ashbe.
 
 ### Step 1 — GitHub Desktop-e account bodlao
 
@@ -45,6 +43,7 @@ kintu apnar repo-r owner `dramatic4678565`. Tai ekhon push korle permission deni
 ### Step 2 — Ami ke amake bolun
 
 Login shesh korle amake bolun. Ami:
+
 - `main` branch push korbo apnar `mosaic` repo-te
 - workflow + script push korbo
 - repo-r default branch `main` set korbo
@@ -77,10 +76,8 @@ upstream/master → apnar main e merge
 
 **Apni ki korte paren seta bujhte:**
 
-- **Conflict nai** (ghobaro beshi kaj-e eivabe hoy) → apnar PC-r/off thakleo **apni kichu korte paren na**.
-  Apnar `main` nije theke update hoye jabe. Eta-i j beshi majority case.
-- **Conflict ache** (apni ar excalidraw-r ei eki file e change korechen) → eta apni nije resolve
-  korte hobe. Details niche section 5 e.
+- **Conflict nai** (ghobaro beshi kaj-e eivabe hoy) → apnar PC-r/off thakleo **apni kichu korte paren na**. Apnar `main` nije theke update hoye jabe. Eta-i j beshi majority case.
+- **Conflict ache** (apni ar excalidraw-r ei eki file e change korechen) → eta apni nije resolve korte hobe. Details niche section 5 e.
 
 ### Action hoy koto porjonto check korbe
 
@@ -104,6 +101,7 @@ Upstream e kichu na thakle Action kichu korbe na — apnar repo untouched thakbe
 ```
 
 `-Sync` run korle script nije theke:
+
 1. `upstream` theke latest master fetch kore
 2. `main` e merge kore
 3. `origin/main` e push kore
@@ -134,22 +132,17 @@ Eita kon kon file e conflict ache list korbe, ar merge-ta pending state e rakhbe
 .\scripts\sync-upstream.ps1 -PushResolve
 ```
 
-`-PushResolve` verify kore je shob upstream commit sheshbhabe eshobheseeche kina.
-Na thakle apnake bole dey — false "sab kichu hoye geche" message dey na.
+`-PushResolve` verify kore je shob upstream commit sheshbhabe eshobheseeche kina. Na thakle apnake bole dey — false "sab kichu hoye geche" message dey na.
 
 Tarpor GitHub-e PR ta merge kore DAO (auto-merge conflict-e chole na, tai ekbar tap korte hobe).
 
-**Jodi bhul kore `-Resolve` chala na `-PushResolve` chaliye felen**, script detect korbe
-upstream er kichu merge hoy nai, ar bolbe abar `-Resolve` chalate. Apnar kaaj nosto hobe na.
+**Jodi bhul kore `-Resolve` chala na `-PushResolve` chaliye felen**, script detect korbe upstream er kichu merge hoy nai, ar bolbe abar `-Resolve` chalate. Apnar kaaj nosto hobe na.
 
-Ami `merge.conflictstyle = diff3` config kore diyechi — tai conflict-e
-**common ancestor** o dekhay. Eta resolution onek easy kore.
+Ami `merge.conflictstyle = diff3` config kore diyechi — tai conflict-e **common ancestor** o dekhay. Eta resolution onek easy kore.
 
 ### GitHub Desktop diye korte chan?
 
-Korte paren. `upstream-sync` branch e switch kore `upstream/master` merge kore
-conflict solve koro, tarpor `origin/upstream-sync` e push koro. Etabe GitHub-e
-PR ta mergeable hoye jabe.
+Korte paren. `upstream-sync` branch e switch kore `upstream/master` merge kore conflict solve koro, tarpor `origin/upstream-sync` e push koro. Etabe GitHub-e PR ta mergeable hoye jabe.
 
 ---
 
@@ -163,6 +156,7 @@ main                    ← sirf upnar-update, kintu clean
 ```
 
 GitHub Desktop e:
+
 1. Current branch e click kore **New Branch** → `feat/my-feature`
 2. Kaj koro
 3. **Commit to main** e click kore **Commit to feat/my-feature** select koro
@@ -173,8 +167,7 @@ Eivabe apnar kaj upstream update theke alada thakay — conflict beshi kom hobe.
 
 ### Conflict komabar tips
 
-Excalidraw er ei file gulo **beshi frequent change hoy**, tai eigulo sokhe edit korar
-dhoyob na (jodi na paren):
+Excalidraw er ei file gulo **beshi frequent change hoy**, tai eigulo sokhe edit korar dhoyob na (jodi na paren):
 
 - `packages/excalidraw/**`
 - `packages/element/**`
@@ -182,6 +175,7 @@ dhoyob na (jodi na paren):
 - `packages/excalidraw/index.tsx`
 
 Apni nijer feature beshirbhag eivabe likhte paren:
+
 - Alada file banano
 - Apni nije banano component gulo use kora
 
@@ -208,16 +202,14 @@ git branch -a
 
 ### GitHub Desktop e regular kaj
 
-| Button | Ki kore |
-|---|---|
-| **Fetch origin** | Apnar `mosaic` repo theke newest code anay |
-| **History** | Ki ki commit hocche dekha jay |
-| **Current branch** | Branch switch / notun branch banano |
-| **Push origin** | Apnar kaaj GitHub-e pathay |
+| Button             | Ki kore                                    |
+| ------------------ | ------------------------------------------ |
+| **Fetch origin**   | Apnar `mosaic` repo theke newest code anay |
+| **History**        | Ki ki commit hocche dekha jay              |
+| **Current branch** | Branch switch / notun branch banano        |
+| **Push origin**    | Apnar kaaj GitHub-e pathay                 |
 
-> **Jano:** GitHub Desktop **"Fetch origin"** `upstream` theke kichu anay **na** — oita
-> sudhu apnar `mosaic` repo-r kaj kore. Upstream anar kaaj **server-e** hoy (Action) ba
-> `sync-upstream.ps1` diye hoy. Eta normal, kono bhool na.
+> **Jano:** GitHub Desktop **"Fetch origin"** `upstream` theke kichu anay **na** — oita sudhu apnar `mosaic` repo-r kaj kore. Upstream anar kaaj **server-e** hoy (Action) ba `sync-upstream.ps1` diye hoy. Eta normal, kono bhool na.
 
 ---
 
@@ -235,13 +227,10 @@ Link: https://github.com/dramatic4678565/mosaic/pulls
 
 ## 9. Jenochintu jinis (mon dhore rekho)
 
-1. **`main` ke force-push korben na.** Force-push korle apnar custom kaaj chole jabe ar
-   future sync bhitre kaj kora sammoy remote history chole jay.
+1. **`main` ke force-push korben na.** Force-push korle apnar custom kaaj chole jabe ar future sync bhitre kaj kora sammoy remote history chole jay.
 2. **Workflow Action tab theke "Run workflow"** diye jekhono shomoy manually trigger kora jay.
-3. **Auto-merge Action** jeno cholo, repo-r auto-merge feature ON kina check korun:
-   Settings → General → Features → **Allow auto-merge** ON.
-4. **60 din e kono activity na thakle GitHub scheduled workflow disable kore dey.** Eta
-   ghosey na — Settings → Actions e giye workflow enable kore din, ba amake bolun.
+3. **Auto-merge Action** jeno cholo, repo-r auto-merge feature ON kina check korun: Settings → General → Features → **Allow auto-merge** ON.
+4. **60 din e kono activity na thakle GitHub scheduled workflow disable kore dey.** Eta ghosey na — Settings → Actions e giye workflow enable kore din, ba amake bolun.
 5. **`upstream` remote-r kichu push korar dorkar nai** (oita Excalidraw-r repo).
 
 ---
@@ -253,6 +242,7 @@ Link: https://github.com/dramatic4678565/mosaic/pulls
 ```
 
 Eta janay:
+
 - kon branch e achen
 - koto upstream commit pending
 - apni koto din er modhye update chuyen

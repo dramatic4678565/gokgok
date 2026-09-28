@@ -5,7 +5,7 @@ import {
   pointRotateRads,
   type Radians,
   type LocalPoint,
-} from "@excalidraw/math";
+} from "@mosaic/math";
 
 import {
   MIN_FONT_SIZE,
@@ -13,13 +13,13 @@ import {
   STICKY_NOTE_MIN_SIZE,
   rescalePoints,
   getFontString,
-} from "@excalidraw/common";
+} from "@mosaic/common";
 
-import type { GlobalPoint } from "@excalidraw/math";
+import type { GlobalPoint } from "@mosaic/math";
 
-import type { PointerDownState } from "@excalidraw/excalidraw/types";
+import type { PointerDownState } from "@mosaic/mosaic/types";
 
-import type { Mutable } from "@excalidraw/common/utility-types";
+import type { Mutable } from "@mosaic/common/utility-types";
 
 import {
   getArrowLocalFixedPoints,
@@ -77,16 +77,16 @@ import type {
   TransformHandleDirection,
 } from "./transformHandles";
 import type {
-  ExcalidrawLinearElement,
-  ExcalidrawTextElement,
-  NonDeletedExcalidrawElement,
+  MosaicLinearElement,
+  MosaicTextElement,
+  NonDeletedMosaicElement,
   NonDeleted,
-  ExcalidrawElement,
-  ExcalidrawTextElementWithContainer,
-  ExcalidrawImageElement,
+  MosaicElement,
+  MosaicTextElementWithContainer,
+  MosaicImageElement,
   ElementsMap,
-  ExcalidrawElbowArrowElement,
-  ExcalidrawArrowElement,
+  MosaicElbowArrowElement,
+  MosaicArrowElement,
 } from "./types";
 import type { ElementUpdate } from "./mutateElement";
 
@@ -94,7 +94,7 @@ import type { ElementUpdate } from "./mutateElement";
 export const transformElements = (
   originalElements: PointerDownState["originalElements"],
   transformHandleType: MaybeTransformHandleType,
-  selectedElements: readonly NonDeletedExcalidrawElement[],
+  selectedElements: readonly NonDeletedMosaicElement[],
   scene: Scene,
   shouldRotateWithDiscreteAngle: boolean,
   shouldResizeFromCenter: boolean,
@@ -208,7 +208,7 @@ export const transformElements = (
 };
 
 const rotateSingleElement = (
-  element: NonDeletedExcalidrawElement,
+  element: NonDeletedMosaicElement,
   scene: Scene,
   pointerX: number,
   pointerY: number,
@@ -234,14 +234,14 @@ const rotateSingleElement = (
   }
   const boundTextElementId = getBoundTextElementId(element);
 
-  let update: ElementUpdate<NonDeletedExcalidrawElement> = {
+  let update: ElementUpdate<NonDeletedMosaicElement> = {
     angle,
   };
 
   if (isBindingElement(element)) {
     update = {
       ...update,
-    } as ElementUpdate<NonDeletedExcalidrawElement>;
+    } as ElementUpdate<NonDeletedMosaicElement>;
 
     if (element.startBinding) {
       unbindBindingElement(element, "start", scene);
@@ -255,7 +255,7 @@ const rotateSingleElement = (
 
   if (boundTextElementId) {
     const textElement =
-      scene.getElement<ExcalidrawTextElementWithContainer>(boundTextElementId);
+      scene.getElement<MosaicTextElementWithContainer>(boundTextElementId);
 
     if (textElement && !isArrowElement(element)) {
       const { x, y } = computeBoundTextPosition(
@@ -273,7 +273,7 @@ const rotateSingleElement = (
 };
 
 export const rescalePointsInElement = (
-  element: NonDeletedExcalidrawElement,
+  element: NonDeletedMosaicElement,
   width: number,
   height: number,
   normalizePoints: boolean,
@@ -290,7 +290,7 @@ export const rescalePointsInElement = (
     : {};
 
 export const measureFontSizeFromWidth = (
-  element: NonDeleted<ExcalidrawTextElement>,
+  element: NonDeleted<MosaicTextElement>,
   elementsMap: ElementsMap,
   nextWidth: number,
 ): { size: number } | null => {
@@ -315,8 +315,8 @@ export const measureFontSizeFromWidth = (
 };
 
 export const resizeSingleTextElement = (
-  origElement: NonDeleted<ExcalidrawTextElement>,
-  element: NonDeleted<ExcalidrawTextElement>,
+  origElement: NonDeleted<MosaicTextElement>,
+  element: NonDeleted<MosaicTextElement>,
   scene: Scene,
   transformHandleType: TransformHandleDirection,
   shouldResizeFromCenter: boolean,
@@ -395,7 +395,7 @@ export const resizeSingleTextElement = (
       shouldResizeFromCenter,
     );
 
-    const resizedElement: Partial<NonDeleted<ExcalidrawTextElement>> = {
+    const resizedElement: Partial<NonDeleted<MosaicTextElement>> = {
       width: Math.abs(newWidth),
       height: Math.abs(metrics.height),
       x: newOrigin.x,
@@ -410,7 +410,7 @@ export const resizeSingleTextElement = (
 
 const rotateMultipleElements = (
   originalElements: PointerDownState["originalElements"],
-  elements: readonly NonDeletedExcalidrawElement[],
+  elements: readonly NonDeletedMosaicElement[],
   scene: Scene,
   pointerX: number,
   pointerY: number,
@@ -427,8 +427,8 @@ const rotateMultipleElements = (
   }
 
   const rotatedElementsMap = new Map<
-    ExcalidrawElement["id"],
-    NonDeletedExcalidrawElement
+    MosaicElement["id"],
+    NonDeletedMosaicElement
   >(elements.map((element) => [element.id, element]));
 
   for (const element of elements) {
@@ -496,7 +496,7 @@ const rotateMultipleElements = (
 
 export const getResizeOffsetXY = (
   transformHandleType: MaybeTransformHandleType,
-  selectedElements: NonDeletedExcalidrawElement[],
+  selectedElements: NonDeletedMosaicElement[],
   elementsMap: ElementsMap,
   x: number,
   y: number,
@@ -555,7 +555,7 @@ export const getResizeOffsetXY = (
 
 export const getResizeArrowDirection = (
   transformHandleType: MaybeTransformHandleType,
-  element: NonDeleted<ExcalidrawLinearElement>,
+  element: NonDeleted<MosaicLinearElement>,
 ): "origin" | "end" => {
   const [, [px, py]] = element.points;
   const isResizeEnd =
@@ -729,8 +729,8 @@ const getResizedOrigin = (
 export const resizeSingleElement = (
   nextWidth: number,
   nextHeight: number,
-  latestElement: NonDeletedExcalidrawElement,
-  origElement: NonDeletedExcalidrawElement,
+  latestElement: NonDeletedMosaicElement,
+  origElement: NonDeletedMosaicElement,
   originalElementsMap: ElementsMap,
   scene: Scene,
   handleDirection: TransformHandleDirection,
@@ -920,7 +920,7 @@ export const resizeSingleElement = (
     Number.isFinite(newOrigin.x) &&
     Number.isFinite(newOrigin.y)
   ) {
-    let updates: ElementUpdate<ExcalidrawElement> = {
+    let updates: ElementUpdate<MosaicElement> = {
       ...newOrigin,
       width: Math.abs(nextWidth),
       height: Math.abs(nextHeight),
@@ -931,7 +931,7 @@ export const resizeSingleElement = (
       if (latestElement.startBinding) {
         updates = {
           ...updates,
-        } as ElementUpdate<ExcalidrawArrowElement>;
+        } as ElementUpdate<MosaicArrowElement>;
 
         if (latestElement.startBinding) {
           unbindBindingElement(latestElement, "start", scene);
@@ -942,7 +942,7 @@ export const resizeSingleElement = (
         updates = {
           ...updates,
           endBinding: null,
-        } as ElementUpdate<ExcalidrawArrowElement>;
+        } as ElementUpdate<MosaicArrowElement>;
       }
     }
 
@@ -986,8 +986,8 @@ export const resizeSingleElement = (
 };
 
 const getNextSingleWidthAndHeightFromPointer = (
-  latestElement: ExcalidrawElement,
-  origElement: ExcalidrawElement,
+  latestElement: MosaicElement,
+  origElement: MosaicElement,
   handleDirection: TransformHandleDirection,
   pointerX: number,
   pointerY: number,
@@ -1080,7 +1080,7 @@ const getNextSingleWidthAndHeightFromPointer = (
 };
 
 const getNextMultipleWidthAndHeightFromPointer = (
-  selectedElements: readonly NonDeletedExcalidrawElement[],
+  selectedElements: readonly NonDeletedMosaicElement[],
   originalElementsMap: ElementsMap,
   elementsMap: ElementsMap,
   handleDirection: TransformHandleDirection,
@@ -1125,7 +1125,7 @@ const getNextMultipleWidthAndHeightFromPointer = (
         ),
       },
     ];
-  }, [] as ExcalidrawTextElementWithContainer[]);
+  }, [] as MosaicTextElementWithContainer[]);
 
   const originalBoundingBox = getCommonBoundingBox(
     originalElementsArray.map((orig) => orig).concat(boundTextElements),
@@ -1207,7 +1207,7 @@ const getNextMultipleWidthAndHeightFromPointer = (
 };
 
 export const resizeMultipleElements = (
-  selectedElements: readonly NonDeletedExcalidrawElement[],
+  selectedElements: readonly NonDeletedMosaicElement[],
   elementsMap: ElementsMap,
   handleDirection: TransformHandleDirection,
   scene: Scene,
@@ -1254,15 +1254,15 @@ export const resizeMultipleElements = (
     (
       acc: {
         /** element at resize start */
-        orig: NonDeletedExcalidrawElement;
+        orig: NonDeletedMosaicElement;
         /** latest element */
-        latest: NonDeletedExcalidrawElement;
+        latest: NonDeletedMosaicElement;
       }[],
       element,
     ) => {
       // originalElementsMap holds snapshots of the (non-deleted) selection
       const origElement = originalElementsMap!.get(element.id) as
-        | NonDeletedExcalidrawElement
+        | NonDeletedMosaicElement
         | undefined;
       if (origElement) {
         acc.push({ orig: origElement, latest: element });
@@ -1300,7 +1300,7 @@ export const resizeMultipleElements = (
           ),
         },
       ];
-    }, [] as ExcalidrawTextElementWithContainer[]);
+    }, [] as MosaicTextElementWithContainer[]);
 
     boundingBox = getCommonBoundingBox([
       ...targetElements.map(({ orig }) => orig),
@@ -1392,17 +1392,17 @@ export const resizeMultipleElements = (
     const [flipFactorX, flipFactorY] = [flipByX ? -1 : 1, flipByY ? -1 : 1];
 
     const elementsAndUpdates: {
-      element: NonDeletedExcalidrawElement;
+      element: NonDeletedMosaicElement;
       update: Mutable<
-        Pick<ExcalidrawElement, "x" | "y" | "width" | "height" | "angle">
+        Pick<MosaicElement, "x" | "y" | "width" | "height" | "angle">
       > & {
-        points?: ExcalidrawLinearElement["points"];
-        fontSize?: ExcalidrawTextElement["fontSize"];
-        scale?: ExcalidrawImageElement["scale"];
-        boundTextFontSize?: ExcalidrawTextElement["fontSize"];
-        startBinding?: ExcalidrawElbowArrowElement["startBinding"];
-        endBinding?: ExcalidrawElbowArrowElement["endBinding"];
-        fixedSegments?: ExcalidrawElbowArrowElement["fixedSegments"];
+        points?: MosaicLinearElement["points"];
+        fontSize?: MosaicTextElement["fontSize"];
+        scale?: MosaicImageElement["scale"];
+        boundTextFontSize?: MosaicTextElement["fontSize"];
+        startBinding?: MosaicElbowArrowElement["startBinding"];
+        endBinding?: MosaicElbowArrowElement["endBinding"];
+        fixedSegments?: MosaicElbowArrowElement["fixedSegments"];
       };
     }[] = [];
 
@@ -1498,7 +1498,7 @@ export const resizeMultipleElements = (
 
       const boundTextElement = originalElementsMap.get(
         getBoundTextElementId(orig) ?? "",
-      ) as ExcalidrawTextElementWithContainer | undefined;
+      ) as MosaicTextElementWithContainer | undefined;
 
       // sticky notes derive their label's size from the layout below
       if (boundTextElement && !isStickyNoteElement(orig)) {
@@ -1521,8 +1521,8 @@ export const resizeMultipleElements = (
 
     const elementsToUpdate = elementsAndUpdates.map(({ element }) => element);
     const resizedElementsMap = new Map<
-      ExcalidrawElement["id"],
-      NonDeletedExcalidrawElement
+      MosaicElement["id"],
+      NonDeletedMosaicElement
     >(elementsAndUpdates.map(({ element }) => [element.id, element]));
 
     for (const {

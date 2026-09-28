@@ -1,4 +1,4 @@
-import "@excalidraw/utils/test-utils";
+import "@mosaic/utils/test-utils";
 
 import {
   bezierEquation,

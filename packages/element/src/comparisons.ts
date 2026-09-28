@@ -1,4 +1,4 @@
-import type { ElementOrToolType } from "@excalidraw/excalidraw/types";
+import type { ElementOrToolType } from "@mosaic/mosaic/types";
 
 export const hasBackground = (type: ElementOrToolType) =>
   type === "rectangle" ||

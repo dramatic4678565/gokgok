@@ -1,11 +1,11 @@
-import { isDevEnv, isTestEnv } from "@excalidraw/common";
+import { isDevEnv, isTestEnv } from "@mosaic/common";
 
 import { charWidth, getLineWidth } from "./textMeasurements";
 
 import type { FontString } from "./types";
 
 /**
- * This module approximates browser-like soft wrapping for Excalidraw text.
+ * This module approximates browser-like soft wrapping for Mosaic text.
  *
  * The flow is:
  * 1. `parseTokens()` splits a hard line into breakable tokens using a unicode-aware regex.

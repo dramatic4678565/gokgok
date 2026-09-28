@@ -1,16 +1,16 @@
-import { invariant, toBrandedType, type Bounds } from "@excalidraw/common";
+import { invariant, toBrandedType, type Bounds } from "@mosaic/common";
 
 import {
   clamp,
   type GlobalPoint,
   pointFrom,
   type LocalPoint,
-} from "@excalidraw/math";
+} from "@mosaic/math";
 
 import type {
   AppState,
-  PendingExcalidrawElements,
-} from "@excalidraw/excalidraw/types";
+  PendingMosaicElements,
+} from "@mosaic/mosaic/types";
 
 import { bindBindingElement } from "./binding";
 import { updateElbowArrowPoints } from "./elbowArrow";
@@ -41,13 +41,13 @@ import {
 import {
   type NonDeleted,
   type ElementsMap,
-  type ExcalidrawBindableElement,
-  type ExcalidrawElement,
-  type ExcalidrawFlowchartNodeElement,
-  type NonDeletedExcalidrawElement,
+  type MosaicBindableElement,
+  type MosaicElement,
+  type MosaicFlowchartNodeElement,
+  type NonDeletedMosaicElement,
   type NonDeletedSceneElementsMap,
   type Ordered,
-  type OrderedExcalidrawElement,
+  type OrderedMosaicElement,
 } from "./types";
 
 import type { Scene } from "./Scene";
@@ -113,13 +113,13 @@ const findNearestFreeSlot = (
 // flowchart as `node` — the whole connected component acts as the obstacle
 // set during placement (#8518).
 const getConnectedFlowchartNodes = (
-  node: ExcalidrawBindableElement,
+  node: MosaicBindableElement,
   elementsMap: ElementsMap,
-): ExcalidrawBindableElement[] => {
+): MosaicBindableElement[] => {
   const arrows = [...elementsMap.values()].filter(isElbowArrow);
   const visited = new Set<string>([node.id]);
   const queue: string[] = [node.id];
-  const connected: ExcalidrawBindableElement[] = [];
+  const connected: MosaicBindableElement[] = [];
 
   while (queue.length > 0) {
     const currentId = queue.shift()!;
@@ -159,7 +159,7 @@ const getConnectedFlowchartNodes = (
 //   extends it at either end so the existing pending nodes keep their
 //   positions, unless the grown cluster no longer fits there
 const placeCluster = (
-  parent: ExcalidrawFlowchartNodeElement,
+  parent: MosaicFlowchartNodeElement,
   direction: LinkDirection,
   count: number,
   obstacles: readonly Bounds[],
@@ -230,7 +230,7 @@ const placeCluster = (
 };
 
 const cloneFlowchartNode = (
-  template: ExcalidrawFlowchartNodeElement,
+  template: MosaicFlowchartNodeElement,
   x: number,
   y: number,
 ) => {
@@ -263,14 +263,14 @@ const cloneFlowchartNode = (
 
   invariant(
     isFlowchartNodeElement(node),
-    "not an ExcalidrawFlowchartNodeElement",
+    "not an MosaicFlowchartNodeElement",
   );
 
   return node;
 };
 
 export const addNewNodes = (
-  startNode: NonDeleted<ExcalidrawFlowchartNodeElement>,
+  startNode: NonDeleted<MosaicFlowchartNodeElement>,
   appState: AppState,
   direction: LinkDirection,
   scene: Scene,
@@ -290,7 +290,7 @@ export const addNewNodes = (
     stickyCrossStart,
   );
 
-  const nodes: NonDeletedExcalidrawElement[] = [];
+  const nodes: NonDeletedMosaicElement[] = [];
   for (const position of positions) {
     const nextNode = cloneFlowchartNode(startNode, position.x, position.y);
     const bindingArrow = createBindingArrow(
@@ -308,8 +308,8 @@ export const addNewNodes = (
 };
 
 const createBindingArrow = (
-  startBindingElement: NonDeleted<ExcalidrawFlowchartNodeElement>,
-  endBindingElement: NonDeleted<ExcalidrawFlowchartNodeElement>,
+  startBindingElement: NonDeleted<MosaicFlowchartNodeElement>,
+  endBindingElement: NonDeleted<MosaicFlowchartNodeElement>,
   direction: LinkDirection,
   appState: AppState,
   scene: Scene,
@@ -402,18 +402,18 @@ const createBindingArrow = (
     appState.zoom,
   );
 
-  const changedElements = new Map<string, OrderedExcalidrawElement>();
+  const changedElements = new Map<string, OrderedMosaicElement>();
   changedElements.set(
     startBindingElement.id,
-    startBindingElement as OrderedExcalidrawElement,
+    startBindingElement as OrderedMosaicElement,
   );
   changedElements.set(
     endBindingElement.id,
-    endBindingElement as OrderedExcalidrawElement,
+    endBindingElement as OrderedMosaicElement,
   );
   changedElements.set(
     bindingArrow.id,
-    bindingArrow as OrderedExcalidrawElement,
+    bindingArrow as OrderedMosaicElement,
   );
 
   LinearElementEditor.movePoints(
@@ -437,7 +437,7 @@ const createBindingArrow = (
         [startBindingElement.id, startBindingElement],
         [endBindingElement.id, endBindingElement],
         [bindingArrow.id, bindingArrow],
-      ] as [string, Ordered<NonDeletedExcalidrawElement>][]),
+      ] as [string, Ordered<NonDeletedMosaicElement>][]),
     ),
     { points: bindingArrow.points },
   );
@@ -452,12 +452,12 @@ const createBindingArrow = (
 export class FlowChartNavigator {
   isExploring: boolean = false;
   // nodes that are ONE link away (successor and predecessor both included)
-  private sameLevelNodes: ExcalidrawElement[] = [];
+  private sameLevelNodes: MosaicElement[] = [];
   private sameLevelIndex: number = 0;
   // set it to the opposite of the defalut creation direction
   private direction: LinkDirection | null = null;
   // for speedier navigation
-  private visitedNodes: Set<ExcalidrawElement["id"]> = new Set();
+  private visitedNodes: Set<MosaicElement["id"]> = new Set();
 
   clear() {
     this.isExploring = false;
@@ -468,10 +468,10 @@ export class FlowChartNavigator {
   }
 
   exploreByDirection(
-    element: ExcalidrawElement,
+    element: MosaicElement,
     elementsMap: ElementsMap,
     direction: LinkDirection,
-  ): ExcalidrawElement["id"] | null {
+  ): MosaicElement["id"] | null {
     if (!isBindableElement(element)) {
       return null;
     }
@@ -581,13 +581,13 @@ export class FlowChartNavigator {
 
   private static getNodeRelatives(
     type: "predecessors" | "successors",
-    node: ExcalidrawBindableElement,
+    node: MosaicBindableElement,
     elementsMap: ElementsMap,
     direction: LinkDirection,
   ) {
     const items = [...elementsMap.values()].reduce(
       (
-        acc: { relative: ExcalidrawBindableElement; heading: Heading }[],
+        acc: { relative: MosaicBindableElement; heading: Heading }[],
         el,
       ) => {
         let oppositeBinding;
@@ -609,7 +609,7 @@ export class FlowChartNavigator {
 
           invariant(
             isBindableElement(relative),
-            "not an ExcalidrawBindableElement",
+            "not an MosaicBindableElement",
           );
 
           const edgePoint = (
@@ -653,7 +653,7 @@ export class FlowChartNavigator {
   }
 
   private static getSuccessors(
-    node: ExcalidrawBindableElement,
+    node: MosaicBindableElement,
     elementsMap: ElementsMap,
     direction: LinkDirection,
   ) {
@@ -666,7 +666,7 @@ export class FlowChartNavigator {
   }
 
   private static getPredecessors(
-    node: ExcalidrawBindableElement,
+    node: MosaicBindableElement,
     elementsMap: ElementsMap,
     direction: LinkDirection,
   ) {
@@ -686,10 +686,10 @@ export class FlowChartCreator {
   // cross-axis anchor of the pending cluster, so growing it keeps the
   // already-visible pending nodes in place
   private clusterCrossStart: number | null = null;
-  pendingNodes: PendingExcalidrawElements | null = null;
+  pendingNodes: PendingMosaicElements | null = null;
 
   createNodes(
-    startNode: NonDeleted<ExcalidrawFlowchartNodeElement>,
+    startNode: NonDeleted<MosaicFlowchartNodeElement>,
     appState: AppState,
     direction: LinkDirection,
     scene: Scene,
@@ -724,7 +724,7 @@ export class FlowChartCreator {
 
       invariant(
         frame && isFrameElement(frame),
-        "not an ExcalidrawFrameElement",
+        "not an MosaicFrameElement",
       );
 
       if (
@@ -754,7 +754,7 @@ export class FlowChartCreator {
 }
 
 export const isNodeInFlowchart = (
-  element: ExcalidrawFlowchartNodeElement,
+  element: MosaicFlowchartNodeElement,
   elementsMap: ElementsMap,
 ) => {
   for (const [, el] of elementsMap) {

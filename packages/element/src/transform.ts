@@ -1,4 +1,4 @@
-import { pointFrom, type LocalPoint } from "@excalidraw/math";
+import { pointFrom, type LocalPoint } from "@mosaic/math";
 
 import {
   DEFAULT_FONT_FAMILY,
@@ -18,10 +18,10 @@ import {
   DEFAULT_STICKY_NOTE_SIZE,
   isTransparent,
   DEFAULT_ZOOM,
-} from "@excalidraw/common";
+} from "@mosaic/common";
 
-import type { MarkOptional } from "@excalidraw/common/utility-types";
-import type { Zoom } from "@excalidraw/excalidraw/types";
+import type { MarkOptional } from "@mosaic/common/utility-types";
+import type { Zoom } from "@mosaic/mosaic/types";
 
 import { bindBindingElement } from "./binding";
 import {
@@ -57,27 +57,27 @@ import { getCommonBounds } from "./bounds";
 import { Scene } from "./Scene";
 
 import type {
-  ExcalidrawArrowElement,
-  ExcalidrawBindableElement,
-  ExcalidrawElement,
-  ExcalidrawFrameElement,
-  ExcalidrawFreeDrawElement,
-  ExcalidrawGenericElement,
-  ExcalidrawIframeLikeElement,
-  ExcalidrawImageElement,
-  ExcalidrawLinearElement,
-  ExcalidrawMagicFrameElement,
-  ExcalidrawSelectionElement,
-  ExcalidrawTextElement,
+  MosaicArrowElement,
+  MosaicBindableElement,
+  MosaicElement,
+  MosaicFrameElement,
+  MosaicFreeDrawElement,
+  MosaicGenericElement,
+  MosaicIframeLikeElement,
+  MosaicImageElement,
+  MosaicLinearElement,
+  MosaicMagicFrameElement,
+  MosaicSelectionElement,
+  MosaicTextElement,
   FileId,
   FontFamilyValues,
   NonDeleted,
-  NonDeletedExcalidrawElement,
+  NonDeletedMosaicElement,
   NonDeletedSceneElementsMap,
   Ordered,
   TextAlign,
   VerticalAlign,
-  ExcalidrawStickyNoteElement,
+  MosaicStickyNoteElement,
 } from "./types";
 
 /**
@@ -106,7 +106,7 @@ export type ValidLinearElement = {
         | (
             | {
                 type: Exclude<
-                  ExcalidrawBindableElement["type"],
+                  MosaicBindableElement["type"],
                   | "image"
                   | "text"
                   | "frame"
@@ -114,12 +114,12 @@ export type ValidLinearElement = {
                   | "embeddable"
                   | "iframe"
                 >;
-                id?: ExcalidrawGenericElement["id"];
+                id?: MosaicGenericElement["id"];
               }
             | {
-                id: ExcalidrawGenericElement["id"];
+                id: MosaicGenericElement["id"];
                 type?: Exclude<
-                  ExcalidrawBindableElement["type"],
+                  MosaicBindableElement["type"],
                   | "image"
                   | "text"
                   | "frame"
@@ -136,11 +136,11 @@ export type ValidLinearElement = {
               }
             | {
                 type?: "text";
-                id: ExcalidrawTextElement["id"];
+                id: MosaicTextElement["id"];
                 text: string;
               }
           ) &
-            Partial<Omit<ExcalidrawTextElement, "created">>)
+            Partial<Omit<MosaicTextElement, "created">>)
       ) &
         FragmentConstructorOpts;
   start?:
@@ -148,7 +148,7 @@ export type ValidLinearElement = {
         | (
             | {
                 type: Exclude<
-                  ExcalidrawBindableElement["type"],
+                  MosaicBindableElement["type"],
                   | "image"
                   | "text"
                   | "frame"
@@ -156,12 +156,12 @@ export type ValidLinearElement = {
                   | "embeddable"
                   | "iframe"
                 >;
-                id?: ExcalidrawGenericElement["id"];
+                id?: MosaicGenericElement["id"];
               }
             | {
-                id: ExcalidrawGenericElement["id"];
+                id: MosaicGenericElement["id"];
                 type?: Exclude<
-                  ExcalidrawBindableElement["type"],
+                  MosaicBindableElement["type"],
                   | "image"
                   | "text"
                   | "frame"
@@ -178,19 +178,19 @@ export type ValidLinearElement = {
               }
             | {
                 type?: "text";
-                id: ExcalidrawTextElement["id"];
+                id: MosaicTextElement["id"];
                 text: string;
               }
           ) &
-            Partial<Omit<ExcalidrawTextElement, "created">>)
+            Partial<Omit<MosaicTextElement, "created">>)
       ) &
         FragmentConstructorOpts;
-} & Partial<ExcalidrawLinearElement>;
+} & Partial<MosaicLinearElement>;
 
 export type ValidContainer =
   | {
-      type: Exclude<ExcalidrawGenericElement["type"], "selection">;
-      id?: ExcalidrawGenericElement["id"];
+      type: Exclude<MosaicGenericElement["type"], "selection">;
+      id?: MosaicGenericElement["id"];
       label?: {
         text: string;
         fontSize?: number;
@@ -207,21 +207,21 @@ export type ValidContainer =
  */
 export type ValidStickyNote = {
   type: "stickynote";
-  id?: ExcalidrawStickyNoteElement["id"];
+  id?: MosaicStickyNoteElement["id"];
   label?: Extract<ValidContainer, { label?: unknown }>["label"];
 } & ElementConstructorOpts &
-  Partial<Pick<ExcalidrawStickyNoteElement, "baseHeight">>;
+  Partial<Pick<MosaicStickyNoteElement, "baseHeight">>;
 
-export type ExcalidrawElementSkeleton =
+export type MosaicElementSkeleton =
   | Extract<
-      Exclude<ExcalidrawElement, ExcalidrawSelectionElement>,
-      ExcalidrawIframeLikeElement | ExcalidrawFreeDrawElement
+      Exclude<MosaicElement, MosaicSelectionElement>,
+      MosaicIframeLikeElement | MosaicFreeDrawElement
     >
   | ({
-      type: Extract<ExcalidrawLinearElement["type"], "line">;
+      type: Extract<MosaicLinearElement["type"], "line">;
       x: number;
       y: number;
-    } & Partial<ExcalidrawLinearElement>)
+    } & Partial<MosaicLinearElement>)
   | ValidContainer
   | ValidStickyNote
   | ValidLinearElement
@@ -230,24 +230,24 @@ export type ExcalidrawElementSkeleton =
       text: string;
       x: number;
       y: number;
-      id?: ExcalidrawTextElement["id"];
-    } & Partial<ExcalidrawTextElement>)
+      id?: MosaicTextElement["id"];
+    } & Partial<MosaicTextElement>)
   | ({
-      type: Extract<ExcalidrawImageElement["type"], "image">;
+      type: Extract<MosaicImageElement["type"], "image">;
       x: number;
       y: number;
       fileId: FileId;
-    } & Partial<ExcalidrawImageElement>)
+    } & Partial<MosaicImageElement>)
   | ({
       type: "frame";
-      children: readonly ExcalidrawElement["id"][];
+      children: readonly MosaicElement["id"][];
       name?: string;
-    } & Partial<ExcalidrawFrameElement>)
+    } & Partial<MosaicFrameElement>)
   | ({
       type: "magicframe";
-      children: readonly ExcalidrawElement["id"][];
+      children: readonly MosaicElement["id"][];
       name?: string;
-    } & Partial<ExcalidrawMagicFrameElement>);
+    } & Partial<MosaicMagicFrameElement>);
 
 const DEFAULT_LINEAR_ELEMENT_PROPS = {
   width: 100,
@@ -257,7 +257,7 @@ const DEFAULT_LINEAR_ELEMENT_PROPS = {
 const DEFAULT_DIMENSION = 100;
 
 const bindTextToContainer = (
-  container: ExcalidrawElement,
+  container: MosaicElement,
   textProps: { text: string } & FragmentConstructorOpts,
   scene: Scene,
 ) => {
@@ -271,7 +271,7 @@ const bindTextToContainer = (
           : container.strokeColor,
       )
     : null;
-  const textElement: ExcalidrawTextElement = newTextElement({
+  const textElement: MosaicTextElement = newTextElement({
     x: 0,
     y: 0,
     textAlign: TEXT_ALIGN.CENTER,
@@ -300,16 +300,16 @@ const bindTextToContainer = (
 };
 
 const bindLinearElementToElement = (
-  linearElement: NonDeleted<ExcalidrawArrowElement>,
+  linearElement: NonDeleted<MosaicArrowElement>,
   start: ValidLinearElement["start"],
   end: ValidLinearElement["end"],
   elementStore: ElementStore,
   scene: Scene,
   zoom: Zoom,
 ): {
-  linearElement: ExcalidrawLinearElement;
-  startBoundElement?: ExcalidrawElement;
-  endBoundElement?: ExcalidrawElement;
+  linearElement: MosaicLinearElement;
+  startBoundElement?: MosaicElement;
+  endBoundElement?: MosaicElement;
 } => {
   let startBoundElement;
   let endBoundElement;
@@ -389,7 +389,7 @@ const bindLinearElementToElement = (
 
       bindBindingElement(
         linearElement,
-        startBoundElement as NonDeleted<ExcalidrawBindableElement>,
+        startBoundElement as NonDeleted<MosaicBindableElement>,
         "orbit",
         "start",
         scene,
@@ -466,7 +466,7 @@ const bindLinearElementToElement = (
 
       bindBindingElement(
         linearElement,
-        endBoundElement as NonDeleted<ExcalidrawBindableElement>,
+        endBoundElement as NonDeleted<MosaicBindableElement>,
         "orbit",
         "end",
         scene,
@@ -541,21 +541,21 @@ const bindLinearElementToElement = (
 };
 
 class ElementStore {
-  excalidrawElements = new Map<string, ExcalidrawElement>();
+  mosaicElements = new Map<string, MosaicElement>();
 
-  add = (ele?: ExcalidrawElement) => {
+  add = (ele?: MosaicElement) => {
     if (!ele) {
       return;
     }
 
-    this.excalidrawElements.set(ele.id, ele);
+    this.mosaicElements.set(ele.id, ele);
   };
 
   getElements = () => {
     // programmatically created elements are always non-deleted
     return syncInvalidIndices(
-      Array.from(this.excalidrawElements.values()),
-    ) as Ordered<NonDeletedExcalidrawElement>[];
+      Array.from(this.mosaicElements.values()),
+    ) as Ordered<NonDeletedMosaicElement>[];
   };
 
   getElementsMap = () => {
@@ -565,12 +565,12 @@ class ElementStore {
   };
 
   getElement = (id: string) => {
-    return this.excalidrawElements.get(id);
+    return this.mosaicElements.get(id);
   };
 }
 
-export const convertToExcalidrawElements = (
-  elementsSkeleton: ExcalidrawElementSkeleton[] | null,
+export const convertToMosaicElements = (
+  elementsSkeleton: MosaicElementSkeleton[] | null,
   opts?: { regenerateIds: boolean },
 ) => {
   if (!elementsSkeleton) {
@@ -578,7 +578,7 @@ export const convertToExcalidrawElements = (
   }
   const elements = cloneJSON(elementsSkeleton);
   const elementStore = new ElementStore();
-  const elementsWithIds = new Map<string, ExcalidrawElementSkeleton>();
+  const elementsWithIds = new Map<string, MosaicElementSkeleton>();
   const oldToNewElementIdMap = new Map<string, string>();
 
   // Create individual elements
@@ -586,7 +586,7 @@ export const convertToExcalidrawElements = (
   const created = getUpdatedTimestamp();
 
   for (const element of elements) {
-    let excalidrawElement: ExcalidrawElement;
+    let mosaicElement: MosaicElement;
     const originalId = element.id;
     if (opts?.regenerateIds !== false) {
       Object.assign(element, { id: randomId(), created });
@@ -604,7 +604,7 @@ export const convertToExcalidrawElements = (
           element?.label?.text && element.height === undefined
             ? 0
             : element?.height || DEFAULT_DIMENSION;
-        excalidrawElement = newElement({
+        mosaicElement = newElement({
           ...element,
           width,
           height,
@@ -615,7 +615,7 @@ export const convertToExcalidrawElements = (
       case "line": {
         const width = element.width || DEFAULT_LINEAR_ELEMENT_PROPS.width;
         const height = element.height || DEFAULT_LINEAR_ELEMENT_PROPS.height;
-        excalidrawElement = newLinearElement({
+        mosaicElement = newLinearElement({
           width,
           height,
           points: [pointFrom(0, 0), pointFrom(width, height)],
@@ -627,7 +627,7 @@ export const convertToExcalidrawElements = (
       case "arrow": {
         const width = element.width || DEFAULT_LINEAR_ELEMENT_PROPS.width;
         const height = element.height || DEFAULT_LINEAR_ELEMENT_PROPS.height;
-        excalidrawElement = newArrowElement({
+        mosaicElement = newArrowElement({
           width,
           height,
           endArrowhead: "arrow",
@@ -637,8 +637,8 @@ export const convertToExcalidrawElements = (
         });
 
         Object.assign(
-          excalidrawElement,
-          getSizeFromPoints(excalidrawElement.points),
+          mosaicElement,
+          getSizeFromPoints(mosaicElement.points),
         );
         break;
       }
@@ -654,7 +654,7 @@ export const convertToExcalidrawElements = (
           lineHeight,
         );
 
-        excalidrawElement = newTextElement({
+        mosaicElement = newTextElement({
           width: metrics.width,
           height: metrics.height,
           fontFamily,
@@ -664,7 +664,7 @@ export const convertToExcalidrawElements = (
         break;
       }
       case "image": {
-        excalidrawElement = newImageElement({
+        mosaicElement = newImageElement({
           width: element?.width || DEFAULT_DIMENSION,
           height: element?.height || DEFAULT_DIMENSION,
           ...element,
@@ -673,7 +673,7 @@ export const convertToExcalidrawElements = (
         break;
       }
       case "frame": {
-        excalidrawElement = newFrameElement({
+        mosaicElement = newFrameElement({
           x: 0,
           y: 0,
           ...element,
@@ -681,7 +681,7 @@ export const convertToExcalidrawElements = (
         break;
       }
       case "magicframe": {
-        excalidrawElement = newMagicFrameElement({
+        mosaicElement = newMagicFrameElement({
           x: 0,
           y: 0,
           ...element,
@@ -689,11 +689,11 @@ export const convertToExcalidrawElements = (
         break;
       }
       case "freedraw": {
-        excalidrawElement = newFreeDrawElement({ ...element });
+        mosaicElement = newFreeDrawElement({ ...element });
         break;
       }
       case "iframe": {
-        excalidrawElement = newIframeElement({ ...element });
+        mosaicElement = newIframeElement({ ...element });
         break;
       }
       case "stickynote": {
@@ -701,7 +701,7 @@ export const convertToExcalidrawElements = (
         const height = element.height || DEFAULT_STICKY_NOTE_SIZE;
         // finalized geometry (min size, baseHeight ≤ height) — only a
         // pointer-down draft is exempt from it
-        excalidrawElement = normalizeStickyNoteGeometry(
+        mosaicElement = normalizeStickyNoteGeometry(
           newStickyNoteElement({
             ...element,
             type: "stickynote",
@@ -713,12 +713,12 @@ export const convertToExcalidrawElements = (
         break;
       }
       case "embeddable": {
-        excalidrawElement = newEmbeddableElement({ ...element });
+        mosaicElement = newEmbeddableElement({ ...element });
         break;
       }
 
       default: {
-        excalidrawElement = element;
+        mosaicElement = element;
         assertNever(
           element,
           `Unhandled element type "${(element as any).type}"`,
@@ -726,14 +726,14 @@ export const convertToExcalidrawElements = (
         );
       }
     }
-    const existingElement = elementStore.getElement(excalidrawElement.id);
+    const existingElement = elementStore.getElement(mosaicElement.id);
     if (existingElement) {
-      console.error(`Duplicate id found for ${excalidrawElement.id}`);
+      console.error(`Duplicate id found for ${mosaicElement.id}`);
     } else {
-      elementStore.add(excalidrawElement);
-      elementsWithIds.set(excalidrawElement.id, element);
+      elementStore.add(mosaicElement);
+      elementsWithIds.set(mosaicElement.id, element);
       if (originalId) {
-        oldToNewElementIdMap.set(originalId, excalidrawElement.id);
+        oldToNewElementIdMap.set(originalId, mosaicElement.id);
       }
     }
   }
@@ -744,7 +744,7 @@ export const convertToExcalidrawElements = (
 
   // Add labels and arrow bindings
   for (const [id, element] of elementsWithIds) {
-    const excalidrawElement = elementStore.getElement(id)!;
+    const mosaicElement = elementStore.getElement(id)!;
 
     switch (element.type) {
       case "rectangle":
@@ -756,7 +756,7 @@ export const convertToExcalidrawElements = (
           // for a sticky note this runs the sticky fit (via
           // `redrawTextBoundingBox`): the label's font size becomes its ceiling
           let [container, text] = bindTextToContainer(
-            excalidrawElement,
+            mosaicElement,
             element?.label,
             scene,
           );
@@ -782,7 +782,7 @@ export const convertToExcalidrawElements = (
             }
             const { linearElement, startBoundElement, endBoundElement } =
               bindLinearElementToElement(
-                container as NonDeleted<ExcalidrawArrowElement>,
+                container as NonDeleted<MosaicArrowElement>,
                 originalStart,
                 originalEnd,
                 elementStore,
@@ -808,7 +808,7 @@ export const convertToExcalidrawElements = (
               }
               const { linearElement, startBoundElement, endBoundElement } =
                 bindLinearElementToElement(
-                  excalidrawElement as NonDeleted<ExcalidrawArrowElement>,
+                  mosaicElement as NonDeleted<MosaicArrowElement>,
                   start,
                   end,
                   elementStore,
@@ -828,7 +828,7 @@ export const convertToExcalidrawElements = (
     }
   }
 
-  // Once all the excalidraw elements are created, we can add frames since we
+  // Once all the mosaic elements are created, we can add frames since we
   // need to calculate coordinates and dimensions of frame which is possible after all
   // frame children are processed.
   for (const [id, element] of elementsWithIds) {
@@ -838,9 +838,9 @@ export const convertToExcalidrawElements = (
     const frame = elementStore.getElement(id);
 
     if (!frame) {
-      throw new Error(`Excalidraw element with id ${id} doesn't exist`);
+      throw new Error(`Mosaic element with id ${id} doesn't exist`);
     }
-    const childrenElements: ExcalidrawElement[] = [];
+    const childrenElements: MosaicElement[] = [];
 
     element.children.forEach((id) => {
       const newElementId = oldToNewElementIdMap.get(id);

@@ -1,26 +1,26 @@
 import React from "react";
 
-import type * as TExcalidraw from "@excalidraw/excalidraw";
-import type { ExcalidrawImperativeAPI } from "@excalidraw/excalidraw/types";
+import type * as TMosaic from "@mosaic/mosaic";
+import type { MosaicImperativeAPI } from "@mosaic/mosaic/types";
 
 import CustomFooter from "./CustomFooter";
 
 const MobileFooter = ({
-  excalidrawAPI,
-  excalidrawLib,
+  mosaicAPI,
+  mosaicLib,
 }: {
-  excalidrawAPI: ExcalidrawImperativeAPI;
-  excalidrawLib: typeof TExcalidraw;
+  mosaicAPI: MosaicImperativeAPI;
+  mosaicLib: typeof TMosaic;
 }) => {
-  const { useEditorInterface, Footer } = excalidrawLib;
+  const { useEditorInterface, Footer } = mosaicLib;
 
   const editorInterface = useEditorInterface();
   if (editorInterface.formFactor === "phone") {
     return (
       <Footer>
         <CustomFooter
-          excalidrawAPI={excalidrawAPI}
-          excalidrawLib={excalidrawLib}
+          mosaicAPI={mosaicAPI}
+          mosaicLib={mosaicLib}
         />
       </Footer>
     );

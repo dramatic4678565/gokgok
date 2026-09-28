@@ -1,22 +1,22 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
-// Set the env variable to false so the excalidraw npm package doesn't throw
+// Set the env variable to false so the mosaic npm package doesn't throw
 // process undefined as docusaurus doesn't expose env variables by default
 
 process.env.IS_PREACT = "false";
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "Excalidraw developer docs",
+  title: "Mosaic developer docs",
   tagline:
-    "For Excalidraw contributors or those integrating the Excalidraw editor",
+    "For Mosaic contributors or those integrating the Mosaic editor",
   url: "https://docs.excalidraw.com",
   baseUrl: "/",
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
   favicon: "img/favicon.png",
-  organizationName: "Excalidraw", // Usually your GitHub org/user name.
+  organizationName: "Mosaic", // Usually your GitHub org/user name.
   projectName: "excalidraw", // Usually your repo name.
 
   // Even if you don't use internalization, you can use this field to set useful
@@ -54,9 +54,9 @@ const config = {
         respectPrefersColorScheme: true,
       },
       navbar: {
-        title: "Excalidraw",
+        title: "Mosaic",
         logo: {
-          alt: "Excalidraw Logo",
+          alt: "Mosaic Logo",
           src: "img/logo.svg",
         },
         items: [

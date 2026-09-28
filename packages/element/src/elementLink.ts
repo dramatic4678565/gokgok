@@ -2,13 +2,13 @@
  * Create and link between shapes.
  */
 
-import { ELEMENT_LINK_KEY, normalizeLink } from "@excalidraw/common";
+import { ELEMENT_LINK_KEY, normalizeLink } from "@mosaic/common";
 
-import type { AppProps, AppState } from "@excalidraw/excalidraw/types";
+import type { AppProps, AppState } from "@mosaic/mosaic/types";
 
 import { elementsAreInSameGroup } from "./groups";
 
-import type { ExcalidrawElement } from "./types";
+import type { MosaicElement } from "./types";
 
 export const defaultGetElementLinkFromSelection: Exclude<
   AppProps["generateLinkForSelection"],
@@ -29,7 +29,7 @@ export const defaultGetElementLinkFromSelection: Exclude<
 };
 
 export const getLinkIdAndTypeFromSelection = (
-  selectedElements: ExcalidrawElement[],
+  selectedElements: MosaicElement[],
   appState: AppState,
 ): {
   id: string;
@@ -66,7 +66,7 @@ export const getLinkIdAndTypeFromSelection = (
 };
 
 export const canCreateLinkFromElements = (
-  selectedElements: ExcalidrawElement[],
+  selectedElements: MosaicElement[],
 ) => {
   if (selectedElements.length === 1) {
     return true;

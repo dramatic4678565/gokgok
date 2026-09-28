@@ -19,22 +19,22 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "@excalidraw/common": ["./packages/common/src/index.ts"],
-      "@excalidraw/common/*": ["./packages/common/src/*"],
-      "@excalidraw/excalidraw": ["./packages/excalidraw/index.tsx"],
-      "@excalidraw/excalidraw/*": ["./packages/excalidraw/*"],
-      "@excalidraw/element": ["./packages/element/src/index.ts"],
-      "@excalidraw/element/*": ["./packages/element/src/*"],
-      "@excalidraw/fractional-indexing": ["./packages/fractional-indexing/src/index.ts"],
-      "@excalidraw/fractional-indexing/*": ["./packages/fractional-indexing/src/*"],
-      "@excalidraw/laser-pointer": ["./packages/laser-pointer/src/index.ts"],
-      "@excalidraw/laser-pointer/*": ["./packages/laser-pointer/src/*"],
-      "@excalidraw/math": ["./packages/math/src/index.ts"],
-      "@excalidraw/math/*": ["./packages/math/src/*"],
-      "@excalidraw/utils": ["./packages/utils/src/index.ts"],
-      "@excalidraw/utils/*": ["./packages/utils/src/*"]
+      "@mosaic/common": ["./packages/common/src/index.ts"],
+      "@mosaic/common/*": ["./packages/common/src/*"],
+      "@mosaic/mosaic": ["./packages/mosaic/index.tsx"],
+      "@mosaic/mosaic/*": ["./packages/mosaic/*"],
+      "@mosaic/element": ["./packages/element/src/index.ts"],
+      "@mosaic/element/*": ["./packages/element/src/*"],
+      "@mosaic/fractional-indexing": ["./packages/fractional-indexing/src/index.ts"],
+      "@mosaic/fractional-indexing/*": ["./packages/fractional-indexing/src/*"],
+      "@mosaic/laser-pointer": ["./packages/laser-pointer/src/index.ts"],
+      "@mosaic/laser-pointer/*": ["./packages/laser-pointer/src/*"],
+      "@mosaic/math": ["./packages/math/src/index.ts"],
+      "@mosaic/math/*": ["./packages/math/src/*"],
+      "@mosaic/utils": ["./packages/utils/src/index.ts"],
+      "@mosaic/utils/*": ["./packages/utils/src/*"]
     }
   },
-  "include": ["packages", "excalidraw-app"],
+  "include": ["packages", "mosaic-app"],
   "exclude": ["examples", "dist", "types", "tests"]
 }

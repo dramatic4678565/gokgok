@@ -1,26 +1,26 @@
 import {
-  convertToExcalidrawElements,
-  Excalidraw,
-} from "@excalidraw/excalidraw";
-import { arrayToMap } from "@excalidraw/common";
+  convertToMosaicElements,
+  Mosaic,
+} from "@mosaic/mosaic";
+import { arrayToMap } from "@mosaic/common";
 
-import { API } from "@excalidraw/excalidraw/tests/helpers/api";
-import { Keyboard, Pointer, UI } from "@excalidraw/excalidraw/tests/helpers/ui";
-import { getTextEditor } from "@excalidraw/excalidraw/tests/queries/dom";
+import { API } from "@mosaic/mosaic/tests/helpers/api";
+import { Keyboard, Pointer, UI } from "@mosaic/mosaic/tests/helpers/ui";
+import { getTextEditor } from "@mosaic/mosaic/tests/queries/dom";
 import {
   getCloneByOrigId,
   render,
-} from "@excalidraw/excalidraw/tests/test-utils";
+} from "@mosaic/mosaic/tests/test-utils";
 
-import { getSelectedElements } from "@excalidraw/excalidraw/scene";
+import { getSelectedElements } from "@mosaic/mosaic/scene";
 
 import { elementOverlapsWithFrame } from "../src/frame";
 
 import type {
-  ExcalidrawElement,
-  ExcalidrawFrameLikeElement,
+  MosaicElement,
+  MosaicFrameLikeElement,
   NonDeleted,
-  NonDeletedExcalidrawElement,
+  NonDeletedMosaicElement,
 } from "../src/types";
 
 const { h } = window;
@@ -46,8 +46,8 @@ describe("adding elements to frames", () => {
   };
 
   function resizeFrameOverElement(
-    frame: ExcalidrawElement,
-    element: ExcalidrawElement,
+    frame: MosaicElement,
+    element: MosaicElement,
   ) {
     mouse.clickAt(0, 0);
     mouse.downAt(frame.x + frame.width, frame.y + frame.height);
@@ -59,8 +59,8 @@ describe("adding elements to frames", () => {
   }
 
   function dragElementIntoFrame(
-    frame: ExcalidrawElement,
-    element: ExcalidrawElement,
+    frame: MosaicElement,
+    element: MosaicElement,
   ) {
     mouse.clickAt(element.x, element.y);
     mouse.downAt(element.x + element.width / 2, element.y + element.height / 2);
@@ -69,7 +69,7 @@ describe("adding elements to frames", () => {
   }
 
   function selectElementAndDuplicate(
-    element: ExcalidrawElement,
+    element: MosaicElement,
     moveTo: [number, number] = [element.x + 25, element.y + 25],
   ) {
     const [x, y] = [
@@ -84,20 +84,20 @@ describe("adding elements to frames", () => {
     });
   }
 
-  function expectEqualIds(expected: ExcalidrawElement[]) {
+  function expectEqualIds(expected: MosaicElement[]) {
     expect(h.elements.map((x) => x.id)).toEqual(expected.map((x) => x.id));
   }
 
-  let frame: ExcalidrawElement;
-  let rect1: ExcalidrawElement;
-  let rect2: ExcalidrawElement;
-  let rect3: ExcalidrawElement;
-  let rect4: ExcalidrawElement;
-  let text: ExcalidrawElement;
-  let arrow: ExcalidrawElement;
+  let frame: MosaicElement;
+  let rect1: MosaicElement;
+  let rect2: MosaicElement;
+  let rect3: MosaicElement;
+  let rect4: MosaicElement;
+  let text: MosaicElement;
+  let arrow: MosaicElement;
 
   beforeEach(async () => {
-    await render(<Excalidraw />);
+    await render(<Mosaic />);
 
     frame = API.createElement({ id: "id0", type: "frame", x: 0, width: 150 });
     rect1 = API.createElement({
@@ -150,7 +150,7 @@ describe("adding elements to frames", () => {
     expect(
       elementOverlapsWithFrame(
         containingRect,
-        frame as ExcalidrawFrameLikeElement,
+        frame as MosaicFrameLikeElement,
         arrayToMap(h.elements),
       ),
     ).toBe(true);
@@ -512,7 +512,7 @@ describe("adding elements to frames", () => {
     initialOrder: ElementType[],
     expectedOrder: ElementType[],
   ) => {
-    await render(<Excalidraw />);
+    await render(<Mosaic />);
 
     const frame = API.createElement({ type: "frame", x: 0, y: 0 });
 
@@ -520,7 +520,7 @@ describe("adding elements to frames", () => {
       reorderElements(
         [
           frame,
-          ...convertToExcalidrawElements([
+          ...convertToMosaicElements([
             {
               type: containerType,
               x: 100,
@@ -759,7 +759,7 @@ describe("adding elements to frames", () => {
       });
 
       API.setElements([rect2, frame, frameChild]);
-      API.setSelectedElements([rect2] as NonDeletedExcalidrawElement[]);
+      API.setSelectedElements([rect2] as NonDeletedMosaicElement[]);
       API.updateElement(rect2, {
         x: 10,
         y: 10,
@@ -781,7 +781,7 @@ describe("adding elements to frames", () => {
             newElement: h.state.newElement,
             selectedElements: getSelectedElements(h.elements, h.state),
             selectedElementsAreBeingDragged,
-            frameToHighlight: frame as NonDeleted<ExcalidrawFrameLikeElement>,
+            frameToHighlight: frame as NonDeleted<MosaicFrameLikeElement>,
           })
           .visibleElements.map((element) => element.id);
       };
@@ -845,7 +845,7 @@ describe("adding elements to frames", () => {
           newElement: h.state.newElement,
           selectedElements: getSelectedElements(h.elements, h.state),
           selectedElementsAreBeingDragged: true,
-          frameToHighlight: frame as NonDeleted<ExcalidrawFrameLikeElement>,
+          frameToHighlight: frame as NonDeleted<MosaicFrameLikeElement>,
         })
         .visibleElements.map((element) => element.id);
 

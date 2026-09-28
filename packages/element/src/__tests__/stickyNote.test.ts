@@ -12,14 +12,14 @@ import {
   STICKY_NOTE_PADDING,
   VERTICAL_ALIGN,
   arrayToMap,
-} from "@excalidraw/common";
+} from "@mosaic/common";
 import {
   lineSegment,
   pointFrom,
   pointRotateRads,
   type GlobalPoint,
   type Radians,
-} from "@excalidraw/math";
+} from "@mosaic/math";
 import { vi } from "vitest";
 
 import { Scene } from "../Scene";
@@ -49,25 +49,25 @@ import {
 } from "../textElement";
 
 import type {
-  ExcalidrawElement,
-  ExcalidrawStickyNoteElement,
-  ExcalidrawTextElementWithContainer,
+  MosaicElement,
+  MosaicStickyNoteElement,
+  MosaicTextElementWithContainer,
   NonDeleted,
 } from "../types";
 
 const STICKY_FONT_SIZE = 28;
 
 const getSticky = (scene: Scene, id: string) =>
-  scene.getNonDeletedElement(id) as NonDeleted<ExcalidrawStickyNoteElement>;
+  scene.getNonDeletedElement(id) as NonDeleted<MosaicStickyNoteElement>;
 
 const getBoundText = (scene: Scene, id: string) =>
   scene.getNonDeletedElement(
     id,
-  ) as NonDeleted<ExcalidrawTextElementWithContainer>;
+  ) as NonDeleted<MosaicTextElementWithContainer>;
 
 const createStickyWithText = (
   originalText: string,
-  extraElements: ExcalidrawElement[] = [],
+  extraElements: MosaicElement[] = [],
 ) => {
   const baseSticky = newStickyNoteElement({
     type: "stickynote",
@@ -665,7 +665,7 @@ describe("sticky note text layout", () => {
     const text = getBoundText(scene, textId);
     scene.mutateElement(sticky, { angle: 0.6 as Radians });
     scene.mutateElement(text, { angle: 0.6 as Radians });
-    const topEdgeMidpoint = (element: ExcalidrawStickyNoteElement) =>
+    const topEdgeMidpoint = (element: MosaicStickyNoteElement) =>
       pointRotateRads(
         pointFrom(element.x + element.width / 2, element.y),
         pointFrom(
@@ -1083,7 +1083,7 @@ describe("sticky note ink", () => {
       label,
     ] as const;
   };
-  const inks = (elements: readonly ExcalidrawElement[]) =>
+  const inks = (elements: readonly MosaicElement[]) =>
     elements.map((element) => element.strokeColor);
 
   it("is a no-op when the note and its label agree", () => {

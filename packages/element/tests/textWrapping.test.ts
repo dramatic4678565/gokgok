@@ -13,14 +13,14 @@ describe("Test wrapText", () => {
   const font = "10px Cascadia, Segoe UI Emoji" as FontString;
 
   it("should wrap the text correctly when word length is exactly equal to max width", () => {
-    const text = "Hello Excalidraw";
-    // Length of "Excalidraw" is 100 and exacty equal to max width
+    const text = "Hello Mosaic";
+    // Length of "Mosaic" is 100 and exacty equal to max width
     const res = wrapText(text, font, 100);
-    expect(res).toEqual(`Hello\nExcalidraw`);
+    expect(res).toEqual(`Hello\nMosaic`);
   });
 
   it("should return the text as is if max width is invalid", () => {
-    const text = "Hello Excalidraw";
+    const text = "Hello Mosaic";
     expect(wrapText(text, font, NaN)).toEqual(text);
     expect(wrapText(text, font, -1)).toEqual(text);
     expect(wrapText(text, font, Infinity)).toEqual(text);
@@ -137,7 +137,7 @@ describe("Test wrapText", () => {
   });
 
   it("should retain offsets when wrapping a single long token", () => {
-    expect(getWrappedTextLines("Excalidraw", font, 50)).toEqual([
+    expect(getWrappedTextLines("Mosaic", font, 50)).toEqual([
       {
         text: "Excal",
         start: 0,
@@ -459,10 +459,10 @@ describe("Test wrapText", () => {
 
   describe("Test parseTokens", () => {
     it("should tokenize latin", () => {
-      let text = "Excalidraw is a virtual collaborative whiteboard";
+      let text = "Mosaic is a virtual collaborative whiteboard";
 
       expect(parseTokens(text)).toEqual([
-        "Excalidraw",
+        "Mosaic",
         " ",
         "is",
         " ",

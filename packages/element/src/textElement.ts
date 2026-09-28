@@ -10,11 +10,11 @@ import {
   getFontString,
   isProdEnv,
   invariant,
-} from "@excalidraw/common";
+} from "@mosaic/common";
 
-import { pointFrom, pointRotateRads, type Radians } from "@excalidraw/math";
+import { pointFrom, pointRotateRads, type Radians } from "@mosaic/math";
 
-import type { ExtractSetType } from "@excalidraw/common/utility-types";
+import type { ExtractSetType } from "@mosaic/common/utility-types";
 
 import {
   resetOriginalContainerCache,
@@ -40,17 +40,17 @@ import type { Scene } from "./Scene";
 import type { MaybeTransformHandleType } from "./transformHandles";
 import type {
   ElementsMap,
-  ExcalidrawElement,
-  ExcalidrawElementType,
-  ExcalidrawTextContainer,
-  ExcalidrawTextElement,
-  ExcalidrawTextElementWithContainer,
+  MosaicElement,
+  MosaicElementType,
+  MosaicTextContainer,
+  MosaicTextElement,
+  MosaicTextElementWithContainer,
   NonDeleted,
 } from "./types";
 
 export const redrawTextBoundingBox = (
-  textElement: ExcalidrawTextElement,
-  container: ExcalidrawElement | null,
+  textElement: MosaicTextElement,
+  container: MosaicElement | null,
   scene: Scene,
 ) => {
   const elementsMap = scene.getNonDeletedElementsMap();
@@ -113,7 +113,7 @@ export const redrawTextBoundingBox = (
   if (container) {
     const maxContainerHeight = getBoundTextMaxHeight(
       container,
-      textElement as ExcalidrawTextElementWithContainer,
+      textElement as MosaicTextElementWithContainer,
     );
     const maxContainerWidth = getBoundTextMaxWidth(container, textElement);
 
@@ -137,7 +137,7 @@ export const redrawTextBoundingBox = (
     const updatedTextElement = {
       ...textElement,
       ...boundTextUpdates,
-    } as ExcalidrawTextElementWithContainer;
+    } as MosaicTextElementWithContainer;
 
     const { x, y } = computeBoundTextPosition(
       container,
@@ -153,7 +153,7 @@ export const redrawTextBoundingBox = (
 };
 
 export const handleBindTextResize = (
-  container: ExcalidrawElement,
+  container: MosaicElement,
   scene: Scene,
   transformHandleType: MaybeTransformHandleType,
   shouldMaintainAspectRatio = false,
@@ -247,8 +247,8 @@ export const handleBindTextResize = (
 };
 
 export const computeBoundTextPosition = (
-  container: ExcalidrawElement,
-  boundTextElement: ExcalidrawTextElementWithContainer,
+  container: MosaicElement,
+  boundTextElement: MosaicTextElementWithContainer,
   elementsMap: ElementsMap,
 ) => {
   if (isArrowElement(container)) {
@@ -323,16 +323,16 @@ export const computeBoundTextPosition = (
   return { x, y };
 };
 
-export const getBoundTextElementId = (container: ExcalidrawElement | null) => {
+export const getBoundTextElementId = (container: MosaicElement | null) => {
   return container?.boundElements?.length
     ? container?.boundElements?.find((ele) => ele.type === "text")?.id || null
     : null;
 };
 
 export const getBoundTextElement = (
-  element: ExcalidrawElement | null,
+  element: MosaicElement | null,
   elementsMap: ElementsMap,
-): NonDeleted<ExcalidrawTextElementWithContainer> | null => {
+): NonDeleted<MosaicTextElementWithContainer> | null => {
   if (!element) {
     return null;
   }
@@ -340,7 +340,7 @@ export const getBoundTextElement = (
 
   if (boundTextElementId) {
     const boundTextElement = (elementsMap.get(boundTextElementId) ||
-      null) as NonDeleted<ExcalidrawTextElementWithContainer> | null;
+      null) as NonDeleted<MosaicTextElementWithContainer> | null;
 
     // SAFETY: This should never happen, but log it just in case
     if (boundTextElement && !isNonDeletedElement(boundTextElement)) {
@@ -355,8 +355,8 @@ export const getBoundTextElement = (
 };
 
 export const getContainerElement = <
-  T extends ExcalidrawTextElement,
-  R extends ExcalidrawTextContainer,
+  T extends MosaicTextElement,
+  R extends MosaicTextContainer,
 >(
   element: T | null,
   elementsMap: ElementsMap,
@@ -375,7 +375,7 @@ export const getContainerElement = <
  * point the text tool snaps a new label to.
  */
 export const getContainerCenter = (
-  container: ExcalidrawElement,
+  container: MosaicElement,
   elementsMap: ElementsMap,
 ) => {
   if (!isArrowElement(container)) {
@@ -393,7 +393,7 @@ export const getContainerCenter = (
   return { x: center[0], y: center[1] };
 };
 
-export const getContainerCoords = (container: ExcalidrawElement) => {
+export const getContainerCoords = (container: MosaicElement) => {
   const padding = isStickyNoteElement(container)
     ? STICKY_NOTE_PADDING
     : BOUND_TEXT_PADDING;
@@ -417,8 +417,8 @@ export const getContainerCoords = (container: ExcalidrawElement) => {
 };
 
 export const getTextElementAngle = (
-  textElement: ExcalidrawTextElement,
-  container: ExcalidrawTextContainer | null,
+  textElement: MosaicTextElement,
+  container: MosaicTextContainer | null,
 ) => {
   if (isArrowElement(container)) {
     return 0;
@@ -430,8 +430,8 @@ export const getTextElementAngle = (
 };
 
 export const getBoundTextElementPosition = (
-  container: ExcalidrawElement,
-  boundTextElement: ExcalidrawTextElementWithContainer,
+  container: MosaicElement,
+  boundTextElement: MosaicTextElementWithContainer,
   elementsMap: ElementsMap,
 ) => {
   if (isArrowElement(container)) {
@@ -450,7 +450,7 @@ export const getBoundTextElementPosition = (
  * consumers reading a label's coords directly must go through this helper.
  */
 export const getTextElementWithAccuratePosition = <
-  T extends ExcalidrawTextElement,
+  T extends MosaicTextElement,
 >(
   textElement: T,
   elementsMap: ElementsMap,
@@ -466,14 +466,14 @@ export const getTextElementWithAccuratePosition = <
     ...textElement,
     ...LinearElementEditor.getBoundTextElementPosition(
       container,
-      textElement as ExcalidrawTextElementWithContainer,
+      textElement as MosaicTextElementWithContainer,
       elementsMap,
     ),
   };
 };
 
 export const shouldAllowVerticalAlign = (
-  selectedElements: readonly ExcalidrawElement[],
+  selectedElements: readonly MosaicElement[],
   elementsMap: ElementsMap,
 ) => {
   return selectedElements.some((element) => {
@@ -489,7 +489,7 @@ export const shouldAllowVerticalAlign = (
 };
 
 export const suppportsHorizontalAlign = (
-  selectedElements: readonly ExcalidrawElement[],
+  selectedElements: readonly MosaicElement[],
   elementsMap: ElementsMap,
 ) => {
   return selectedElements.some((element) => {
@@ -514,8 +514,8 @@ const VALID_CONTAINER_TYPES = new Set([
 ]);
 
 export const isValidTextContainer = (element: {
-  type: ExcalidrawElementType;
-}): element is ExcalidrawTextContainer =>
+  type: MosaicElementType;
+}): element is MosaicTextContainer =>
   VALID_CONTAINER_TYPES.has(element.type);
 
 export const computeContainerDimensionForBoundText = (
@@ -538,8 +538,8 @@ export const computeContainerDimensionForBoundText = (
 };
 
 export const getBoundTextMaxWidth = (
-  container: ExcalidrawElement,
-  boundTextElement: ExcalidrawTextElement | null,
+  container: MosaicElement,
+  boundTextElement: MosaicTextElement | null,
 ) => {
   const { width } = container;
   if (isArrowElement(container)) {
@@ -569,8 +569,8 @@ export const getBoundTextMaxWidth = (
 };
 
 export const getBoundTextMaxHeight = (
-  container: ExcalidrawElement,
-  boundTextElement: ExcalidrawTextElementWithContainer,
+  container: MosaicElement,
+  boundTextElement: MosaicTextElementWithContainer,
 ) => {
   const { height } = container;
   if (isStickyNoteElement(container)) {
@@ -600,7 +600,7 @@ export const getBoundTextMaxHeight = (
 
 /** retrieves text from text elements and concatenates to a single string */
 export const getTextFromElements = (
-  elements: readonly ExcalidrawElement[],
+  elements: readonly MosaicElement[],
   separator = "\n\n",
 ) => {
   const text = elements

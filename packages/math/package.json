@@ -1,5 +1,5 @@
 {
-  "name": "@excalidraw/math",
+  "name": "@mosaic/math",
   "version": "0.18.0",
   "type": "module",
   "types": "./dist/types/math/src/index.d.ts",
@@ -22,7 +22,7 @@
   "files": [
     "dist/*"
   ],
-  "description": "Excalidraw math functions",
+  "description": "Mosaic math functions",
   "publishConfig": {
     "access": "public"
   },
@@ -61,6 +61,6 @@
     "build:esm": "rimraf dist && node ../../scripts/buildBase.js && yarn gen:types"
   },
   "dependencies": {
-    "@excalidraw/common": "0.18.0"
+    "@mosaic/common": "0.18.0"
   }
 }

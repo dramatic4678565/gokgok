@@ -6,68 +6,68 @@ export default defineConfig({
   resolve: {
     alias: [
       {
-        find: /^@excalidraw\/common$/,
+        find: /^@mosaic\/common$/,
         replacement: path.resolve(__dirname, "./packages/common/src/index.ts"),
       },
       {
-        find: /^@excalidraw\/common\/(.*?)/,
+        find: /^@mosaic\/common\/(.*?)/,
         replacement: path.resolve(__dirname, "./packages/common/src/$1"),
       },
       {
-        find: /^@excalidraw\/element$/,
+        find: /^@mosaic\/element$/,
         replacement: path.resolve(__dirname, "./packages/element/src/index.ts"),
       },
       {
-        find: /^@excalidraw\/element\/(.*?)/,
+        find: /^@mosaic\/element\/(.*?)/,
         replacement: path.resolve(__dirname, "./packages/element/src/$1"),
       },
       {
-        find: /^@excalidraw\/excalidraw$/,
-        replacement: path.resolve(__dirname, "./packages/excalidraw/index.tsx"),
+        find: /^@mosaic\/mosaic$/,
+        replacement: path.resolve(__dirname, "./packages/mosaic/index.tsx"),
       },
       {
-        find: /^@excalidraw\/excalidraw\/(.*?)/,
-        replacement: path.resolve(__dirname, "./packages/excalidraw/$1"),
+        find: /^@mosaic\/mosaic\/(.*?)/,
+        replacement: path.resolve(__dirname, "./packages/mosaic/$1"),
       },
       {
-        find: /^@excalidraw\/math$/,
+        find: /^@mosaic\/math$/,
         replacement: path.resolve(__dirname, "./packages/math/src/index.ts"),
       },
       {
-        find: /^@excalidraw\/math\/(.*?)/,
+        find: /^@mosaic\/math\/(.*?)/,
         replacement: path.resolve(__dirname, "./packages/math/src/$1"),
       },
       {
-        find: /^@excalidraw\/utils$/,
+        find: /^@mosaic\/utils$/,
         replacement: path.resolve(__dirname, "./packages/utils/src/index.ts"),
       },
       {
-        find: /^@excalidraw\/utils\/(.*?)/,
+        find: /^@mosaic\/utils\/(.*?)/,
         replacement: path.resolve(__dirname, "./packages/utils/src/$1"),
       },
       {
-        find: /^@excalidraw\/fractional-indexing$/,
+        find: /^@mosaic\/fractional-indexing$/,
         replacement: path.resolve(
           __dirname,
           "./packages/fractional-indexing/src/index.ts",
         ),
       },
       {
-        find: /^@excalidraw\/fractional-indexing\/(.*?)/,
+        find: /^@mosaic\/fractional-indexing\/(.*?)/,
         replacement: path.resolve(
           __dirname,
           "./packages/fractional-indexing/src/$1",
         ),
       },
       {
-        find: /^@excalidraw\/laser-pointer$/,
+        find: /^@mosaic\/laser-pointer$/,
         replacement: path.resolve(
           __dirname,
           "./packages/laser-pointer/src/index.ts",
         ),
       },
       {
-        find: /^@excalidraw\/laser-pointer\/(.*?)/,
+        find: /^@mosaic\/laser-pointer\/(.*?)/,
         replacement: path.resolve(__dirname, "./packages/laser-pointer/src/$1"),
       },
     ],

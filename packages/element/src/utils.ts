@@ -4,7 +4,7 @@ import {
   invariant,
   LINE_CONFIRM_THRESHOLD,
   ROUNDNESS,
-} from "@excalidraw/common";
+} from "@mosaic/common";
 
 import {
   bezierEquation,
@@ -25,15 +25,15 @@ import {
   vectorNormalize,
   vectorScale,
   type GlobalPoint,
-} from "@excalidraw/math";
+} from "@mosaic/math";
 
-import type { Curve, LineSegment, LocalPoint, Radians } from "@excalidraw/math";
+import type { Curve, LineSegment, LocalPoint, Radians } from "@mosaic/math";
 
 import type {
   AppState,
   NormalizedZoomValue,
   Zoom,
-} from "@excalidraw/excalidraw/types";
+} from "@mosaic/mosaic/types";
 
 import { elementCenterPoint, getDiamondPoints } from "./bounds";
 
@@ -52,13 +52,13 @@ import { getStickyNoteCornerRadius } from "./stickyNote";
 
 import type {
   ElementsMap,
-  ExcalidrawArrowElement,
-  ExcalidrawBindableElement,
-  ExcalidrawDiamondElement,
-  ExcalidrawElement,
-  ExcalidrawFreeDrawElement,
-  ExcalidrawLinearElement,
-  ExcalidrawRectanguloidElement,
+  MosaicArrowElement,
+  MosaicBindableElement,
+  MosaicDiamondElement,
+  MosaicElement,
+  MosaicFreeDrawElement,
+  MosaicLinearElement,
+  MosaicRectanguloidElement,
 } from "./types";
 
 export type LinearPathSegment = LineSegment<GlobalPoint> | Curve<GlobalPoint>;
@@ -66,11 +66,11 @@ export type LinearPathSegment = LineSegment<GlobalPoint> | Curve<GlobalPoint>;
 type ElementShape = [LineSegment<GlobalPoint>[], Curve<GlobalPoint>[]];
 
 const ElementShapesCache = new WeakMap<
-  ExcalidrawElement,
-  { version: ExcalidrawElement["version"]; shapes: Map<number, ElementShape> }
+  MosaicElement,
+  { version: MosaicElement["version"]; shapes: Map<number, ElementShape> }
 >();
 
-const getElementShapesCacheEntry = <T extends ExcalidrawElement>(
+const getElementShapesCacheEntry = <T extends MosaicElement>(
   element: T,
   offset: number,
 ): ElementShape | undefined => {
@@ -90,7 +90,7 @@ const getElementShapesCacheEntry = <T extends ExcalidrawElement>(
   return shapes.get(offset);
 };
 
-const setElementShapesCacheEntry = <T extends ExcalidrawElement>(
+const setElementShapesCacheEntry = <T extends MosaicElement>(
   element: T,
   shape: ElementShape,
   offset: number,
@@ -127,7 +127,7 @@ const setElementShapesCacheEntry = <T extends ExcalidrawElement>(
  * @returns The rotated in components.
  */
 export function deconstructLinearOrFreeDrawElement(
-  element: ExcalidrawLinearElement | ExcalidrawFreeDrawElement,
+  element: MosaicLinearElement | MosaicFreeDrawElement,
   elementsMap: ElementsMap,
 ): ElementShape {
   const cachedShape = getElementShapesCacheEntry(element, 0);
@@ -204,7 +204,7 @@ export function deconstructLinearOrFreeDrawElement(
 }
 
 export function getLinearElementPathSegments(
-  element: ExcalidrawLinearElement | ExcalidrawFreeDrawElement,
+  element: MosaicLinearElement | MosaicFreeDrawElement,
   elementsMap: ElementsMap,
 ): LinearPathSegment[] {
   // For now, model elbow arrows as their unrounded logical path. Rounded
@@ -243,7 +243,7 @@ export function getLinearElementPathSegments(
  * @returns Tuple of **unrotated** line segments (0) and curves (1)
  */
 export function deconstructRectanguloidElement(
-  element: ExcalidrawRectanguloidElement,
+  element: MosaicRectanguloidElement,
   offset: number = 0,
 ): ElementShape {
   const cachedShape = getElementShapesCacheEntry(element, offset);
@@ -375,7 +375,7 @@ export function deconstructRectanguloidElement(
 }
 
 export function getDiamondBaseCorners(
-  element: ExcalidrawDiamondElement,
+  element: MosaicDiamondElement,
   offset: number = 0,
 ): Curve<GlobalPoint>[] {
   const [topX, topY, rightX, rightY, bottomX, bottomY, leftX, leftY] =
@@ -455,7 +455,7 @@ export function getDiamondBaseCorners(
  * @returns Tuple of line **unrotated** segments (0) and curves (1)
  */
 export function deconstructDiamondElement(
-  element: ExcalidrawDiamondElement,
+  element: MosaicDiamondElement,
   offset: number = 0,
 ): ElementShape {
   const cachedShape = getElementShapesCacheEntry(element, offset);
@@ -510,7 +510,7 @@ export function deconstructDiamondElement(
 // Checks if the first and last point are close enough
 // to be considered a loop
 export const isPathALoop = (
-  points: ExcalidrawLinearElement["points"],
+  points: MosaicLinearElement["points"],
   /** supply if you want the loop detection to account for current zoom */
   zoomValue: Zoom["value"] = 1 as NormalizedZoomValue,
 ): boolean => {
@@ -525,7 +525,7 @@ export const isPathALoop = (
   return false;
 };
 
-export const getCornerRadius = (x: number, element: ExcalidrawElement) => {
+export const getCornerRadius = (x: number, element: MosaicElement) => {
   if (
     element.roundness?.type === ROUNDNESS.PROPORTIONAL_RADIUS ||
     element.roundness?.type === ROUNDNESS.LEGACY
@@ -549,7 +549,7 @@ export const getCornerRadius = (x: number, element: ExcalidrawElement) => {
 };
 
 const getDiagonalsForBindableElement = (
-  element: ExcalidrawElement,
+  element: MosaicElement,
   elementsMap: ElementsMap,
 ) => {
   // for rectangles, shrink the diagonals a bit because there's something
@@ -638,7 +638,7 @@ const getDiagonalsForBindableElement = (
  * and false for a diamond's edge midpoints
  */
 const getSnappedMidpointForElbowArrow = (
-  element: ExcalidrawBindableElement,
+  element: MosaicBindableElement,
   point: GlobalPoint,
   elementsMap: ElementsMap,
   center: GlobalPoint,
@@ -715,7 +715,7 @@ const getSnappedMidpointForElbowArrow = (
 };
 
 const getSnappedMidpointIndexForSimpleArrow = (
-  element: ExcalidrawBindableElement,
+  element: MosaicBindableElement,
   point: GlobalPoint,
   elementsMap: ElementsMap,
   threshold: number,
@@ -741,7 +741,7 @@ const getSnappedMidpointIndexForSimpleArrow = (
 };
 
 export const getAllMidpoints = (
-  element: ExcalidrawBindableElement,
+  element: MosaicBindableElement,
   elementsMap: ElementsMap,
 ): GlobalPoint[] => {
   const center = elementCenterPoint(element, elementsMap);
@@ -768,7 +768,7 @@ export const getAllMidpoints = (
 
 export const getElbowArrowSnapMidPoint = (
   point: GlobalPoint,
-  element: ExcalidrawBindableElement,
+  element: MosaicBindableElement,
   elementsMap: ElementsMap,
   zoom: AppState["zoom"],
 ) => {
@@ -787,7 +787,7 @@ export const getElbowArrowSnapMidPoint = (
 
 export const getSnapOutlineMidPoint = (
   point: GlobalPoint,
-  element: ExcalidrawBindableElement,
+  element: MosaicBindableElement,
   elementsMap: ElementsMap,
   zoom: AppState["zoom"],
   arrow: { elbowed: boolean },
@@ -808,9 +808,9 @@ export const getSnapOutlineMidPoint = (
 };
 
 export const projectFixedPointOntoDiagonal = (
-  arrow: ExcalidrawArrowElement,
+  arrow: MosaicArrowElement,
   point: GlobalPoint,
-  element: ExcalidrawBindableElement,
+  element: MosaicBindableElement,
   startOrEnd: "start" | "end",
   elementsMap: ElementsMap,
   zoom: AppState["zoom"],
@@ -856,7 +856,7 @@ export const projectFixedPointOntoDiagonal = (
     const otherBindable =
       otherBinding &&
       (elementsMap.get(otherBinding.elementId) as
-        | ExcalidrawBindableElement
+        | MosaicBindableElement
         | undefined);
     const otherFocusPoint =
       otherBinding &&

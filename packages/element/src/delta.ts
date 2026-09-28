@@ -6,33 +6,33 @@ import {
   isShallowEqual,
   isTestEnv,
   randomInteger,
-} from "@excalidraw/common";
+} from "@mosaic/common";
 
 import type {
-  ExcalidrawElement,
-  ExcalidrawFreeDrawElement,
-  ExcalidrawLinearElement,
-  ExcalidrawTextElement,
+  MosaicElement,
+  MosaicFreeDrawElement,
+  MosaicLinearElement,
+  MosaicTextElement,
   NonDeleted,
-  NonDeletedExcalidrawElement,
+  NonDeletedMosaicElement,
   Ordered,
-  OrderedExcalidrawElement,
+  OrderedMosaicElement,
   SceneElementsMap,
-} from "@excalidraw/element/types";
+} from "@mosaic/element/types";
 
 import type {
   DTO,
   Mutable,
   SubtypeOf,
   ValueOf,
-} from "@excalidraw/common/utility-types";
+} from "@mosaic/common/utility-types";
 
 import type {
   AppState,
   ObservedAppState,
   ObservedElementsAppState,
   ObservedStandaloneAppState,
-} from "@excalidraw/excalidraw/types";
+} from "@mosaic/mosaic/types";
 
 import { getObservedAppState } from "./store";
 
@@ -674,7 +674,7 @@ export class AppStateDelta implements DeltaContainer<AppState> {
           ? new LinearElementEditor(
               nextElements.get(
                 insertedSelectedLinearElement.elementId,
-              ) as NonDeleted<ExcalidrawLinearElement>,
+              ) as NonDeleted<MosaicLinearElement>,
               nextElements,
               insertedSelectedLinearElement.isEditing,
             )
@@ -1014,7 +1014,7 @@ export class AppStateDelta implements DeltaContainer<AppState> {
   }
 }
 
-type ElementPartial<TElement extends ExcalidrawElement = ExcalidrawElement> =
+type ElementPartial<TElement extends MosaicElement = MosaicElement> =
   Omit<Partial<Ordered<TElement>>, "id" | "updated" | "seed">;
 
 export type ApplyToOptions = {
@@ -1162,7 +1162,7 @@ export class ElementsDelta implements DeltaContainer<SceneElementsMap> {
    *
    * @returns `ElementsDelta` instance representing the `Delta` changes between the two sets of elements.
    */
-  public static calculate<T extends OrderedExcalidrawElement>(
+  public static calculate<T extends OrderedMosaicElement>(
     prevElements: Map<string, T>,
     nextElements: Map<string, T>,
   ): ElementsDelta {
@@ -1307,11 +1307,11 @@ export class ElementsDelta implements DeltaContainer<SceneElementsMap> {
   ): ElementsDelta {
     const modifier =
       (
-        prevElement: OrderedExcalidrawElement | undefined,
-        nextElement: OrderedExcalidrawElement | undefined,
+        prevElement: OrderedMosaicElement | undefined,
+        nextElement: OrderedMosaicElement | undefined,
       ) =>
       (partial: ElementPartial, partialType: "deleted" | "inserted") => {
-        let element: OrderedExcalidrawElement | undefined;
+        let element: OrderedMosaicElement | undefined;
 
         switch (partialType) {
           case "deleted":
@@ -1393,7 +1393,7 @@ export class ElementsDelta implements DeltaContainer<SceneElementsMap> {
     options?: ApplyToOptions,
   ): [SceneElementsMap, boolean] {
     let nextElements = new Map(elements) as SceneElementsMap;
-    let changedElements: Map<string, OrderedExcalidrawElement>;
+    let changedElements: Map<string, OrderedMosaicElement>;
 
     const flags: ApplyToFlags = {
       containsVisibleDifference: false,
@@ -1463,7 +1463,7 @@ export class ElementsDelta implements DeltaContainer<SceneElementsMap> {
       // copy taken now. Changed elements already have a fresh instance in
       // `nextElements`, so the instance in `elements` is their "before" as
       // is. Only `idsToCheck` is saved; the whole scene is never copied.
-      const previousElements = new Map<string, OrderedExcalidrawElement>();
+      const previousElements = new Map<string, OrderedMosaicElement>();
       for (const id of idsToCheck) {
         const previous = elements.get(id);
         const next = nextElements.get(id);
@@ -1695,7 +1695,7 @@ export class ElementsDelta implements DeltaContainer<SceneElementsMap> {
         }
 
         return acc;
-      }, new Map<string, OrderedExcalidrawElement>());
+      }, new Map<string, OrderedMosaicElement>());
     };
 
   private static createGetter =
@@ -1718,7 +1718,7 @@ export class ElementsDelta implements DeltaContainer<SceneElementsMap> {
         } else {
           // not in elements, not in snapshot? element might have been added remotely!
           element = newElementWith(
-            { id, version: 1 } as OrderedExcalidrawElement,
+            { id, version: 1 } as OrderedMosaicElement,
             {
               ...partial,
             },
@@ -1730,7 +1730,7 @@ export class ElementsDelta implements DeltaContainer<SceneElementsMap> {
     };
 
   private static applyDelta(
-    element: OrderedExcalidrawElement,
+    element: OrderedMosaicElement,
     delta: Delta<ElementPartial>,
     flags: ApplyToFlags,
     options?: ApplyToOptions,
@@ -1807,14 +1807,14 @@ export class ElementsDelta implements DeltaContainer<SceneElementsMap> {
    * lookups it serves are for elements whose labels are in that set.
    */
   private static checkForVisibleDifference(
-    previous: OrderedExcalidrawElement | undefined,
-    next: OrderedExcalidrawElement | undefined,
-    previousElements: ReadonlyMap<string, OrderedExcalidrawElement>,
-    nextElements: ReadonlyMap<string, OrderedExcalidrawElement>,
+    previous: OrderedMosaicElement | undefined,
+    next: OrderedMosaicElement | undefined,
+    previousElements: ReadonlyMap<string, OrderedMosaicElement>,
+    nextElements: ReadonlyMap<string, OrderedMosaicElement>,
   ) {
     const visibleElement = (
-      element: OrderedExcalidrawElement | undefined,
-      elements: ReadonlyMap<string, OrderedExcalidrawElement>,
+      element: OrderedMosaicElement | undefined,
+      elements: ReadonlyMap<string, OrderedMosaicElement>,
     ) => {
       if (!element || element.isDeleted) {
         return null;
@@ -1838,8 +1838,8 @@ export class ElementsDelta implements DeltaContainer<SceneElementsMap> {
     }
 
     const visibleBindings = (
-      element: OrderedExcalidrawElement,
-      elements: ReadonlyMap<string, OrderedExcalidrawElement>,
+      element: OrderedMosaicElement,
+      elements: ReadonlyMap<string, OrderedMosaicElement>,
     ) =>
       (element.boundElements ?? [])
         .filter((binding) => {
@@ -1887,10 +1887,10 @@ export class ElementsDelta implements DeltaContainer<SceneElementsMap> {
     nextElements: SceneElementsMap,
     applyDirection: "forward" | "backward" = "forward",
   ) {
-    const nextAffectedElements = new Map<string, OrderedExcalidrawElement>();
+    const nextAffectedElements = new Map<string, OrderedMosaicElement>();
     const updater = (
-      element: ExcalidrawElement,
-      updates: ElementUpdate<ExcalidrawElement>,
+      element: MosaicElement,
+      updates: ElementUpdate<MosaicElement>,
     ) => {
       const nextElement = nextElements.get(element.id); // only ever modify next element!
       if (!nextElement) {
@@ -1903,9 +1903,9 @@ export class ElementsDelta implements DeltaContainer<SceneElementsMap> {
           ? nextElement.version + 1
           : nextElement.version - 1;
 
-      const elementUpdates = updates as ElementUpdate<OrderedExcalidrawElement>;
+      const elementUpdates = updates as ElementUpdate<OrderedMosaicElement>;
 
-      let affectedElement: OrderedExcalidrawElement;
+      let affectedElement: OrderedMosaicElement;
 
       if (prevElement === nextElement) {
         // create the new element instance in case we didn't modify the element yet
@@ -1982,8 +1982,8 @@ export class ElementsDelta implements DeltaContainer<SceneElementsMap> {
     nextElements: SceneElementsMap,
     id: string,
     updater: (
-      element: ExcalidrawElement,
-      updates: ElementUpdate<ExcalidrawElement>,
+      element: MosaicElement,
+      updates: ElementUpdate<MosaicElement>,
     ) => void,
   ) {
     // the instance could have been updated, so make sure we are passing the latest element to each function below
@@ -2006,8 +2006,8 @@ export class ElementsDelta implements DeltaContainer<SceneElementsMap> {
     nextElements: SceneElementsMap,
     id: string,
     updater: (
-      element: ExcalidrawElement,
-      updates: ElementUpdate<ExcalidrawElement>,
+      element: MosaicElement,
+      updates: ElementUpdate<MosaicElement>,
     ) => void,
   ) {
     // the instance could have been updated, so make sure we are passing the latest element to each function below
@@ -2033,7 +2033,7 @@ export class ElementsDelta implements DeltaContainer<SceneElementsMap> {
 
   public static redrawElements(
     nextElements: SceneElementsMap,
-    changedElements: Map<string, OrderedExcalidrawElement>,
+    changedElements: Map<string, OrderedMosaicElement>,
   ) {
     try {
       // we don't have an up-to-date scene, as we can be just in the middle of applying history entry
@@ -2058,23 +2058,23 @@ export class ElementsDelta implements DeltaContainer<SceneElementsMap> {
 
   private static redrawTextBoundingBoxes(
     scene: Scene,
-    changed: Map<string, OrderedExcalidrawElement>,
+    changed: Map<string, OrderedMosaicElement>,
   ) {
     const elements = scene.getNonDeletedElementsMap();
     const boxesToRedraw = new Map<
       string,
-      { container: OrderedExcalidrawElement; boundText: ExcalidrawTextElement }
+      { container: OrderedMosaicElement; boundText: MosaicTextElement }
     >();
 
     for (const element of changed.values()) {
       if (isBoundToContainer(element)) {
-        const { containerId } = element as ExcalidrawTextElement;
+        const { containerId } = element as MosaicTextElement;
         const container = containerId ? elements.get(containerId) : undefined;
 
         if (container) {
           boxesToRedraw.set(container.id, {
             container,
-            boundText: element as ExcalidrawTextElement,
+            boundText: element as MosaicTextElement,
           });
         }
       }
@@ -2088,7 +2088,7 @@ export class ElementsDelta implements DeltaContainer<SceneElementsMap> {
         if (boundText) {
           boxesToRedraw.set(element.id, {
             container: element,
-            boundText: boundText as ExcalidrawTextElement,
+            boundText: boundText as MosaicTextElement,
           });
         }
       }
@@ -2106,13 +2106,13 @@ export class ElementsDelta implements DeltaContainer<SceneElementsMap> {
 
   private static redrawBoundArrows(
     scene: Scene,
-    changed: Map<string, OrderedExcalidrawElement>,
+    changed: Map<string, OrderedMosaicElement>,
   ) {
     for (const element of changed.values()) {
       if (!element.isDeleted && isBindableElement(element)) {
         // TODO: with precise bindings this is quite expensive, so consider optimisation so it's only triggered when the arrow does not intersect (imprecise) element bounds
         updateBoundElements(
-          element as NonDeletedExcalidrawElement, // NOTE: Assumed correct, no runtime check for isDeleted due to performance reasons
+          element as NonDeletedMosaicElement, // NOTE: Assumed correct, no runtime check for isDeleted due to performance reasons
           scene,
           {
             changedElements: changed,
@@ -2124,7 +2124,7 @@ export class ElementsDelta implements DeltaContainer<SceneElementsMap> {
 
   private static reorderElements(
     elements: SceneElementsMap,
-    changed: Map<string, OrderedExcalidrawElement>,
+    changed: Map<string, OrderedMosaicElement>,
     flags: {
       containsVisibleDifference: boolean;
       containsZindexDifference: boolean;
@@ -2175,14 +2175,14 @@ export class ElementsDelta implements DeltaContainer<SceneElementsMap> {
       const deletedPoints =
         (
           deleted as ElementPartial<
-            ExcalidrawFreeDrawElement | ExcalidrawLinearElement
+            MosaicFreeDrawElement | MosaicLinearElement
           >
         ).points ?? [];
 
       const insertedPoints =
         (
           inserted as ElementPartial<
-            ExcalidrawFreeDrawElement | ExcalidrawLinearElement
+            MosaicFreeDrawElement | MosaicLinearElement
           >
         ).points ?? [];
 
@@ -2204,7 +2204,7 @@ export class ElementsDelta implements DeltaContainer<SceneElementsMap> {
   }
 
   private static stripIrrelevantProps(
-    partial: Partial<OrderedExcalidrawElement>,
+    partial: Partial<OrderedMosaicElement>,
   ): ElementPartial {
     const { id, updated, ...strippedPartial } = partial;
 

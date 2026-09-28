@@ -3,10 +3,10 @@ import Script from "next/script";
 
 import "../common.scss";
 
-// Since client components get prerenderd on server as well hence importing the excalidraw stuff dynamically
+// Since client components get prerenderd on server as well hence importing the mosaic stuff dynamically
 // with ssr false
-const ExcalidrawWithClientOnly = dynamic(
-  async () => (await import("../excalidrawWrapper")).default,
+const MosaicWithClientOnly = dynamic(
+  async () => (await import("../mosaicWrapper")).default,
   {
     ssr: false,
   },
@@ -21,7 +21,7 @@ export default function Page() {
         {`window["EXCALIDRAW_ASSET_PATH"] = window.origin;`}
       </Script>
       {/* @ts-expect-error - https://github.com/vercel/next.js/issues/42292 */}
-      <ExcalidrawWithClientOnly />
+      <MosaicWithClientOnly />
     </>
   );
 }

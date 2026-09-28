@@ -1,5 +1,5 @@
 {
-  "name": "@excalidraw/element",
+  "name": "@mosaic/element",
   "version": "0.18.0",
   "type": "module",
   "types": "./dist/types/element/src/index.d.ts",
@@ -28,7 +28,7 @@
   "files": [
     "dist/*"
   ],
-  "description": "Excalidraw elements-related logic",
+  "description": "Mosaic elements-related logic",
   "publishConfig": {
     "access": "public"
   },
@@ -63,8 +63,8 @@
     "build:esm": "rimraf dist && node ../../scripts/buildBase.js && yarn gen:types"
   },
   "dependencies": {
-    "@excalidraw/common": "0.18.0",
-    "@excalidraw/math": "0.18.0",
-    "@excalidraw/fractional-indexing": "3.3.0"
+    "@mosaic/common": "0.18.0",
+    "@mosaic/math": "0.18.0",
+    "@mosaic/fractional-indexing": "3.3.0"
   }
 }
