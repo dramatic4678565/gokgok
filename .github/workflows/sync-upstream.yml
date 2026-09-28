@@ -51,7 +51,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set +e
-          ./scripts/sync-upstream.sh ${{ inputs.force && '--force' || '' }}
+          bash ./scripts/sync-upstream.sh ${{ inputs.force && '--force' || '' }}
           code=$?
           set -e
           if [ "$code" -eq 0 ]; then
