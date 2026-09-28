@@ -1,0 +1,174 @@
+name: Sync Upstream
+
+# Automatically pulls every new commit from excalidraw/excalidraw into this repo.
+# Runs on a schedule (so it happens with your PC switched off) and can also be
+# triggered manually from the Actions tab.
+
+on:
+  schedule:
+    # every 6 hours -- GitHub may delay these, that is normal
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Sync even if upstream looks unchanged"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+# Never let two syncs race each other.
+concurrency:
+  group: sync-upstream
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          fetch-depth: 0
+
+      - name: Add upstream remote
+        run: git remote add upstream https://github.com/excalidraw/excalidraw.git
+
+      - name: Fetch upstream
+        run: git fetch --no-tags upstream master
+
+      - name: Check for new upstream commits
+        id: check
+        run: |
+          git checkout -B main origin/main
+          UPSTREAM=$(git rev-parse upstream/master)
+          BASE=$(git rev-parse HEAD)
+          echo "upstream=$UPSTREAM" >> "$GITHUB_OUTPUT"
+          echo "base=$BASE" >> "$GITHUB_OUTPUT"
+          if [ "$UPSTREAM" = "$BASE" ]; then
+            if [ "${{ inputs.force }}" != "true" ]; then
+              echo "changed=false" >> "$GITHUB_OUTPUT"
+              echo "Upstream has no new commits. Nothing to do."
+            else
+              echo "changed=true" >> "$GITHUB_OUTPUT"
+              echo "Forced sync requested."
+            fi
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "New upstream commits found: $(git rev-list --count HEAD..upstream/master)"
+          fi
+
+      - name: Prepare sync branch
+        if: steps.check.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B upstream-sync
+          git push --force-with-lease origin upstream-sync || git push --force origin upstream-sync
+
+      - name: Merge upstream/master
+        if: steps.check.outputs.changed == 'true'
+        id: merge
+        run: |
+          if git merge --no-edit --no-ff upstream/master; then
+            echo "result=clean" >> "$GITHUB_OUTPUT"
+            git push --force-with-lease origin upstream-sync || git push --force origin upstream-sync
+          else
+            echo "result=conflict" >> "$GITHUB_OUTPUT"
+            CONFLICTS=$(git diff --name-only --diff-filter=U)
+            echo "conflicts<<CONFLICT_EOF" >> "$GITHUB_OUTPUT"
+            echo "$CONFLICTS" >> "$GITHUB_OUTPUT"
+            echo "CONFLICT_EOF" >> "$GITHUB_OUTPUT"
+            git merge --abort
+            echo "::error::Upstream merge has conflicts. A PR was opened for manual resolution."
+          fi
+
+      - name: Open or update pull request
+        if: steps.check.outputs.changed == 'true'
+        id: pr
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TITLE="chore: sync upstream excalidraw ($(git rev-list --count origin/main..upstream/master) new commits)"
+          BODY=$(cat <<EOF
+          Automatic sync of [excalidraw/excalidraw](https://github.com/excalidraw/excalidraw) \`master\` into this repo.
+
+          - Upstream commit: \`$(git rev-parse upstream/master)\`
+          - Merge result: **${{ steps.merge.outputs.result }}**
+          - Merged at: $(date -u +"%Y-%m-%d %H:%M UTC")
+          EOF
+          )
+          if [ "${{ steps.merge.outputs.result }}" = "conflict" ]; then
+            BODY="$BODY
+
+            ## Action required
+
+            The merge had conflicts, so it was **not** merged automatically.
+
+            Conflicting files:
+            \`\`\`
+          ${{ steps.merge.outputs.conflicts }}
+            \`\`\`
+
+            Resolve it locally:
+
+            \`\`\`powershell
+            .\\scripts\\sync-upstream.ps1 -Resolve
+            \`\`\`
+            "
+          fi
+          EXISTING=$(gh pr list --head upstream-sync --state open --json number --jq '.[0].number')
+          if [ -n "$EXISTING" ]; then
+            gh pr edit "$EXISTING" --title "$TITLE" --body "$BODY"
+            echo "number=$EXISTING" >> "$GITHUB_OUTPUT"
+          else
+            gh pr create --head upstream-sync --base main --title "$TITLE" --body "$BODY" --label sync || \
+            gh pr create --head upstream-sync --base main --title "$TITLE" --body "$BODY"
+            echo "number=$(gh pr list --head upstream-sync --state open --json number --jq '.[0].number')" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Auto-merge (clean merges only)
+        if: steps.merge.outputs.result == 'clean'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr merge "${{ steps.pr.outputs.number }}" --auto --merge --delete-branch=false || \
+          echo "::warning::Auto-merge could not be enabled. Merge this PR manually: ${{ steps.pr.outputs.number }}"
+
+      - name: Open issue when conflict needs a human
+        if: steps.merge.outputs.result == 'conflict'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          EXISTING=$(gh issue list --search "upstream sync conflict" --state open --json number --jq '.[0].number')
+          if [ -z "$EXISTING" ]; then
+            gh issue create \
+              --title "Upstream sync needs a manual merge" \
+              --body "PR #${{ steps.pr.outputs.number }} has merge conflicts with \`excalidraw/excalidraw\`.
+
+              Run \`./scripts/sync-upstream.ps1 -Resolve\` locally (or resolve it on GitHub) to finish the update.
+
+              Conflicts:
+              \`\`\`
+          ${{ steps.merge.outputs.conflicts }}
+              \`\`\`"
+          fi
+
+      - name: Summary
+        if: always()
+        run: |
+          {
+            echo "## Upstream sync"
+            echo ""
+            echo "| | |"
+            echo "|---|---|"
+            echo "| Upstream commit | \`$(git rev-parse upstream/master 2>/dev/null || echo n/a)\` |"
+            echo "| Your \`main\` before | \`${{ steps.check.outputs.base }}\` |"
+            echo "| Result | ${{ steps.merge.outputs.result || 'no changes needed' }} |"
+            echo "| PR | #${{ steps.pr.outputs.number || 'n/a' }} |"
+          } >> "$GITHUB_STEP_SUMMARY"
