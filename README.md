@@ -1,124 +1,121 @@
-<a href="https://excalidraw.com/" target="_blank" rel="noopener">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" alt="Mosaic" srcset="https://mosaic.nyc3.cdn.digitaloceanspaces.com/github/excalidraw_github_cover_2_dark.png" />
-    <img alt="Mosaic" src="https://mosaic.nyc3.cdn.digitaloceanspaces.com/github/excalidraw_github_cover_2.png" />
-  </picture>
+<a href="https://mosaic.app" target="_blank" rel="noopener">
+  <img alt="Mosaic" width="420" src="./branding/mosaic-logo.svg" />
 </a>
 
-<h4 align="center">
-  <a href="https://excalidraw.com">Mosaic Editor</a> |
-  <a href="https://plus.excalidraw.com/blog">Blog</a> |
-  <a href="https://docs.excalidraw.com">Documentation</a> |
-  <a href="https://plus.excalidraw.com">Excalidraw+</a>
-</h4>
+# Mosaic
 
-<div align="center">
-  <h2>
-    An open source virtual hand-drawn style whiteboard. </br>
-    Collaborative and end-to-end encrypted. </br>
-  <br />
-  </h2>
-</div>
-
-<br />
-<p align="center">
-  <a href="https://github.com/excalidraw/excalidraw/blob/master/LICENSE">
-    <img alt="Mosaic is released under the MIT license." src="https://img.shields.io/badge/license-MIT-blue.svg"  /></a>
-  <a href="https://www.npmjs.com/package/@mosaic/mosaic">
-    <img alt="npm downloads/month" src="https://img.shields.io/npm/dm/@mosaic/mosaic"  /></a>
-  <a href="https://docs.excalidraw.com/docs/introduction/contributing">
-    <img alt="PRs welcome!" src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat"  /></a>
-  <a href="https://discord.gg/UexuTaE">
-    <img alt="Chat on Discord" src="https://img.shields.io/discord/723672430744174682?color=738ad6&label=Chat%20on%20Discord&logo=discord&logoColor=ffffff&widget=false"/></a>
-  <a href="https://deepwiki.com/excalidraw/excalidraw">
-    <img alt="Ask DeepWiki" src="https://deepwiki.com/badge.svg" /></a>
-  <a href="https://twitter.com/excalidraw">
-    <img alt="Follow Mosaic on Twitter" src="https://img.shields.io/twitter/follow/mosaic.svg?label=follow+@mosaic&style=social&logo=twitter"/></a>
+<p>
+  <a href="https://mosaic.app">Mosaic Editor</a> &nbsp;|&nbsp;
+  <a href="https://github.com/dramatic4678565/mosaic">Repository</a> &nbsp;|&nbsp;
+  <a href="https://mosaic.app">Website</a>
 </p>
 
-<div align="center">
-  <figure>
-    <a href="https://excalidraw.com" target="_blank" rel="noopener">
-      <img src="https://mosaic.nyc3.cdn.digitaloceanspaces.com/github%2Fproduct_showcase.png" alt="Product showcase" />
-    </a>
-    <figcaption>
-      <p align="center">
-        Create beautiful hand-drawn like diagrams, wireframes, or whatever you like.
-      </p>
-    </figcaption>
-  </figure>
-</div>
+A collaborative whiteboard for sketching diagrams with a hand-drawn feel.
 
-## Features
+Mosaic is built on [excalidraw/excalidraw](https://github.com/excalidraw/excalidraw) and is kept in sync with it automatically, so you get upstream fixes and features without losing your own branding.
 
-The Mosaic editor (npm package) supports:
+---
 
-- 💯&nbsp;Free & open-source.
-- 🎨&nbsp;Infinite, canvas-based whiteboard.
-- ✍️&nbsp;Hand-drawn like style.
-- 🌓&nbsp;Dark mode.
-- 🏗️&nbsp;Customizable.
-- 📷&nbsp;Image support.
-- 😀&nbsp;Shape libraries support.
-- 🌐&nbsp;Localization (i18n) support.
-- 🖼️&nbsp;Export to PNG, SVG & clipboard.
-- 💾&nbsp;Open format - export drawings as an `.excalidraw` json file.
-- ⚒️&nbsp;Wide range of tools - rectangle, circle, diamond, arrow, line, free-draw, eraser...
-- ➡️&nbsp;Arrow-binding & labeled arrows.
-- 🔙&nbsp;Undo / Redo.
-- 🔍&nbsp;Zoom and panning support.
+## What's here
 
-## Excalidraw.com
-
-The app hosted at [excalidraw.com](https://excalidraw.com) is a minimal showcase of what you can build with Mosaic. Its [source code](https://github.com/excalidraw/excalidraw/tree/master/mosaic-app) is part of this repository as well, and the app features:
-
-- 📡&nbsp;PWA support (works offline).
-- 🤼&nbsp;Real-time collaboration.
-- 🔒&nbsp;End-to-end encryption.
-- 💾&nbsp;Local-first support (autosaves to the browser).
-- 🔗&nbsp;Shareable links (export to a readonly link you can share with others).
-
-We'll be adding these features as drop-in plugins for the npm package in the future.
+```
+mosaic-app/          the deployable web app (this is what you run)
+packages/mosaic/     the embeddable editor library
+packages/element/    shape, arrow and binding primitives
+packages/common/     shared constants, types and utilities
+packages/math/       geometry helpers
+packages/utils/      small utility exports
+branding/            logo sources and the brand source of truth
+```
 
 ## Quick start
 
-**Note:** following instructions are for installing the Mosaic [npm package](https://www.npmjs.com/package/@mosaic/mosaic) when integrating Mosaic into your own app. To run the repository locally for development, please refer to our [Development Guide](https://docs.excalidraw.com/docs/introduction/development).
-
-Use `npm` or `yarn` to install the package.
-
 ```bash
-npm install react react-dom @mosaic/mosaic
-# or
-yarn add react react-dom @mosaic/mosaic
+yarn install
+yarn start          # dev server on http://localhost:3000
+yarn build          # production build into mosaic-app/build
 ```
 
-Check out our [documentation](https://docs.excalidraw.com/docs/@mosaic/mosaic/installation) for more details!
+## Embedding the editor
+
+The library is published under the `@mosaic` scope:
+
+```bash
+npm install @mosaic/mosaic
+```
+
+```jsx
+import { Mosaic, convertToMosaicElements } from "@mosaic/mosaic";
+import "@mosaic/mosaic/index.css";
+
+export default function App() {
+  return (
+    <Mosaic
+      initialData={{
+        elements: convertToMosaicElements([
+          {
+            type: "rectangle",
+            x: 80,
+            y: 60,
+            width: 160,
+            height: 90,
+          },
+        ]),
+      }}
+    />
+  );
+}
+```
+
+Served as a self-contained bundle it works too:
+
+```html
+<script src="https://esm.sh/@mosaic/mosaic@0.18.0/dist/prod/"></script>
+```
+
+There are runnable examples in [`examples/`](./examples), and the API is documented in [`dev-docs/`](./dev-docs).
+
+### Coming from Excalidraw?
+
+The rename is soft, not a hard break. See [BRANDING.md → Backwards compatibility](./BRANDING.md#backwards-compatibility):
+
+- `@mosaic/mosaic/compatibility` re-exports the old `Excalidraw*` names
+- `window.MOSAIC_*` globals are read with `window.EXCALIDRAW_*` as a fallback
+- `.excalidraw` files, i18n keys, storage keys and CSS class names are unchanged
+
+## Features
+
+- Infinite canvas with hand-drawn elements
+- Library of reusable shapes and styles
+- Frame and element grouping
+- Arrows, elbow connectors and text binding
+- Mermaid and diagram import
+- Live collaboration
+- Export to PNG, SVG and the `.excalidraw` JSON format
+- Embeddable, and themable through CSS variables
+- PWA, offline capable
 
 ## Contributing
 
-- Missing something or found a bug? [Report here](https://github.com/excalidraw/excalidraw/issues).
-- Want to contribute? Check out our [contribution guide](https://docs.excalidraw.com/docs/introduction/contributing) or let us know on [Discord](https://discord.gg/UexuTaE).
-- Want to help with translations? See the [translation guide](https://docs.excalidraw.com/docs/introduction/contributing#translating).
+See [CONTRIBUTING.md](./CONTRIBUTING.md). The development guide lives in [`dev-docs/docs/@mosaic/mosaic/development`](./dev-docs).
 
-## Integrations
+This project follows the conventions in [AGENTS.md](./AGENTS.md).
 
-- [VScode extension](https://marketplace.visualstudio.com/items?itemName=pomdtr.excalidraw-editor)
-- [npm package](https://www.npmjs.com/package/@mosaic/mosaic)
+## Branding
 
-## Who's integrating Mosaic
+`branding/mosaic-brand.json` is the single source of truth for the name, tagline, copy, colours and asset paths. To change the identity:
 
-[Google Cloud](https://googlecloudcheatsheet.withgoogle.com/architecture) • [Meta](https://meta.com/) • [CodeSandbox](https://codesandbox.io/) • [Obsidian Mosaic](https://github.com/zsviczian/obsidian-excalidraw-plugin) • [Replit](https://replit.com/) • [Slite](https://slite.com/) • [Notion](https://notion.so/) • [HackerRank](https://www.hackerrank.com/) • and many others
+```bash
+node scripts/build-brand-assets.cjs    # regenerate the images
+node scripts/sync-brand-into-html.cjs   # bake the meta tags in
+```
 
-## Sponsors & support
+Full details, including what is deliberately _not_ renamed and why, are in [BRANDING.md](./BRANDING.md).
 
-If you like the project, you can become a sponsor at [Open Collective](https://opencollective.com/excalidraw) or use [Excalidraw+](https://plus.excalidraw.com/).
+## Keeping up with upstream
 
-## Thank you for supporting Mosaic
+An automated workflow merges new upstream commits into this repository every six hours, opening a pull request and auto-merging when the merge is clean. When it conflicts, it stops and opens an issue for a human. See [MOSAIC-SYNC-GUIDE.md](./MOSAIC-SYNC-GUIDE.md) for the local workflow.
 
-[<img src="https://opencollective.com/excalidraw/tiers/sponsors/0/avatar.svg?avatarHeight=120"/>](https://opencollective.com/excalidraw/tiers/sponsors/0/website) [<img src="https://opencollective.com/excalidraw/tiers/sponsors/1/avatar.svg?avatarHeight=120"/>](https://opencollective.com/excalidraw/tiers/sponsors/1/website) [<img src="https://opencollective.com/excalidraw/tiers/sponsors/2/avatar.svg?avatarHeight=120"/>](https://opencollective.com/excalidraw/tiers/sponsors/2/website) [<img src="https://opencollective.com/excalidraw/tiers/sponsors/3/avatar.svg?avatarHeight=120"/>](https://opencollective.com/excalidraw/tiers/sponsors/3/website) [<img src="https://opencollective.com/excalidraw/tiers/sponsors/4/avatar.svg?avatarHeight=120"/>](https://opencollective.com/excalidraw/tiers/sponsors/4/website) [<img src="https://opencollective.com/excalidraw/tiers/sponsors/5/avatar.svg?avatarHeight=120"/>](https://opencollective.com/excalidraw/tiers/sponsors/5/website) [<img src="https://opencollective.com/excalidraw/tiers/sponsors/6/avatar.svg?avatarHeight=120"/>](https://opencollective.com/excalidraw/tiers/sponsors/6/website) [<img src="https://opencollective.com/excalidraw/tiers/sponsors/7/avatar.svg?avatarHeight=120"/>](https://opencollective.com/excalidraw/tiers/sponsors/7/website) [<img src="https://opencollective.com/excalidraw/tiers/sponsors/8/avatar.svg?avatarHeight=120"/>](https://opencollective.com/excalidraw/tiers/sponsors/8/website) [<img src="https://opencollective.com/excalidraw/tiers/sponsors/9/avatar.svg?avatarHeight=120"/>](https://opencollective.com/excalidraw/tiers/sponsors/9/website) [<img src="https://opencollective.com/excalidraw/tiers/sponsors/10/avatar.svg?avatarHeight=120"/>](https://opencollective.com/excalidraw/tiers/sponsors/10/website)
+## License
 
-<a href="https://opencollective.com/excalidraw#category-CONTRIBUTE" target="_blank"><img src="https://opencollective.com/excalidraw/tiers/backers.svg?avatarHeight=32"/></a>
-
-Last but not least, we're thankful to these companies for offering their services for free:
-
-[![Vercel](./.github/assets/vercel.svg)](https://vercel.com) [![Sentry](./.github/assets/sentry.svg)](https://sentry.io) [![Crowdin](./.github/assets/crowdin.svg)](https://crowdin.com)
+[MIT](./LICENSE), inherited from upstream excalidraw. Copyright (c) 2020 Excalidraw.
