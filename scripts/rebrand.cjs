@@ -61,8 +61,15 @@ const SKIP_FILE = [
   /^\.github\/FUNDING\.yml$/,
   /mosaic-brand-directions\.zip$/,
   /^MOSAIC-SYNC-GUIDE\.md$/,
+  /^BRANDING\.md$/,
+  // The rebrand tooling must never rewrite itself, or the protected-string
+  // patterns in these files would be renamed out from under themselves.
   /^scripts\/rebrand\.cjs$/,
   /^scripts\/audit-leftovers\.cjs$/,
+  /^scripts\/fix-rebrand-consistency\.cjs$/,
+  /^scripts\/build-brand-assets\.cjs$/,
+  /^scripts\/sync-brand-into-html\.cjs$/,
+  /^branding\//,
   /^scripts\/sync-upstream\./,
   /^\.github\/workflows\/sync-upstream\.yml$/,
   /\.woff2$|\.png$|\.ico$|\.zip$|\.excalidrawlib$|\.webp$|\.jpg$/i,
@@ -196,6 +203,22 @@ const PROTECT = [
   // stay coherent with each other and with the tests that target them.
   /excalidraw[-_]{1,2}[\w-]*/g,
   /(["'`])excalidraw(?=["'`\s])/g,
+
+  // -- format constant *keys*, which are really file extensions -------------
+  // MIME_TYPES.excalidraw === "application/vnd.excalidraw+json": the key is the
+  // extension, so it has to keep spelling out the extension.
+  /(\b(?:MIME|STRING_MIME|EXPORT_DATA)_?TYPES\.)\w*(?=[,;\s])/g,
+  /\bVERSIONS\.\w*(?=[,;\s])/g,
+  /excalidraw\.svg\b/g,
+  /excalidraw\.png\b/g,
+
+  // -- symbols owned by the third-party mermaid-to-excalidraw package -------
+  // Our call sites must use the names that package actually exports.
+  /parseMermaidTo\w+/g,
+  /MermaidTo\w+Result/g,
+  /MermaidTo\w+Config/g,
+  /toolBar\.mermaidTo\w+/g,
+  /labels\.excalidrawLib\b/g,
 ];
 
 /* -------------------------------------------------------------------------- */

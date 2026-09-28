@@ -59,7 +59,7 @@ for (const f of [
   "packages/mosaic/components/TTDDialog/TTDDialog.tsx",
   "packages/mosaic/tests/helpers/mocks.ts",
   "packages/mosaic/tests/clipboard.test.tsx",
-  "packages/mosaic/tests/MermaidToExcalidraw.test.tsx",
+  "packages/mosaic/tests/MermaidToMosaic.test.tsx",
 ]) {
   edit(f, MERMAID);
 }
@@ -72,7 +72,7 @@ for (const f of [
 ]) {
   edit(f, [["toolBar.mermaidToMosaic", "toolBar.mermaidToExcalidraw"]]);
 }
-// t("labels.excalidrawLib") is a locale key, not the mosaicLib prop.
+// t("labels.mosaicLib") is a locale key, not the mosaicLib prop.
 for (const f of [
   "packages/mosaic/components/LibraryMenuItems.tsx",
   "packages/mosaic/components/LibraryMenuHeaderContent.tsx",
@@ -80,7 +80,7 @@ for (const f of [
   edit(f, [["labels.mosaicLib", "labels.excalidrawLib"]]);
 }
 
-console.log("\n4. relative imports that walk into packages/excalidraw");
+console.log("\n4. relative imports that walk into packages/mosaic");
 edit("packages/tsconfig.base.json", [
   ['"./excalidraw/index.tsx"', '"./mosaic/index.tsx"'],
 ]);
