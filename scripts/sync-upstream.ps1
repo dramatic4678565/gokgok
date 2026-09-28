@@ -42,17 +42,30 @@ function Write-Fail  { param($m) Write-Host "    $m" -ForegroundColor Red }
 
 function Invoke-Git {
   param([string[]]$GitArgs, [switch]$AllowFailure)
-  $out = & git @GitArgs 2>&1
-  $code = $LASTEXITCODE
+  # git writes progress and branch-switch notices to stderr. With
+  # $ErrorActionPreference = 'Stop' PowerShell turns that into a terminating
+  # NativeCommandError, so it has to be relaxed for the call itself.
+  $prev = $ErrorActionPreference
+  $ErrorActionPreference = 'Continue'
+  try {
+    $out = & git @GitArgs 2>&1
+    $code = $LASTEXITCODE
+  }
+  finally {
+    $ErrorActionPreference = $prev
+  }
+  $text = ($out | ForEach-Object { if ($_ -is [System.Management.Automation.ErrorRecord]) { $_.ToString() } else { "$_" } }) -join "`n"
   if ($code -ne 0 -and -not $AllowFailure) {
-    $out | ForEach-Object { Write-Host "    $_" -ForegroundColor Red }
+    $text -split "`n" | Where-Object { $_ } | ForEach-Object { Write-Host "    $_" -ForegroundColor Red }
     throw "git $($GitArgs -join ' ') failed with exit code $code"
   }
-  return @{ Output = ($out -join "`n"); Code = $code }
+  return @{ Output = $text; Code = $code }
 }
 
 function Test-Dirty {
-  $r = Invoke-Git @('status', '--porcelain')
+  # Untracked files are ignored: they do not block a merge (unless the incoming
+  # commit has the same path), and they are normal while you are working.
+  $r = Invoke-Git @('status', '--porcelain', '--untracked-files=no')
   return -not [string]::IsNullOrWhiteSpace($r.Output)
 }
 
@@ -74,9 +87,12 @@ if ($remotes -notcontains 'origin') {
   Pop-Location; exit 1
 }
 
-if (Test-Dirty) {
+# -Status is read only, and -PushResolve is *meant* to run with staged changes,
+# so only -Sync and -Resolve need a clean tree (they perform merges).
+$needsCleanTree = ($Sync -or (-not $Resolve -and -not $PushResolve -and -not $Status))
+
+if ($needsCleanTree -and (Test-Dirty)) {
   Write-Fail "You have uncommitted changes. Commit or stash them first, then run this again."
-  Invoke-Git @('status', '--short') | Out-Null
   $s = Invoke-Git @('status', '--short')
   $s.Output | ForEach-Object { Write-Host "    $_" }
   Pop-Location; exit 1
@@ -116,10 +132,34 @@ try {
   elseif ($Resolve) {
     Write-Step "Preparing to resolve the sync conflicts"
     Invoke-Git @('fetch', 'origin', 'main', 'upstream-sync') -AllowFailure | Out-Null
+
+    # Resetting to origin/upstream-sync would silently drop any local commits on
+    # this branch, so refuse instead of destroying work.
+    $localBranch = (Invoke-Git @('rev-parse', '--verify', 'refs/heads/upstream-sync') -AllowFailure)
+    if ($localBranch.Code -eq 0) {
+      $ahead = (Invoke-Git @('rev-list', '--count', 'origin/upstream-sync..upstream-sync') -AllowFailure)
+      $n = 0
+      if ($ahead.Code -eq 0) { [void][int]::TryParse($ahead.Output.Trim(), [ref]$n) }
+      if ($n -gt 0) {
+        Write-Fail "You have $n unpushed commit(s) on upstream-sync. This would be thrown away."
+        Invoke-Git @('log', '--oneline', 'origin/upstream-sync..upstream-sync') | Out-Null
+        $l = Invoke-Git @('log', '--oneline', 'origin/upstream-sync..upstream-sync')
+        $l.Output | ForEach-Object { Write-Host "      $_" }
+        Write-Host ""
+        Write-Host "    Push them first, or move them to a different branch, then run this again."
+        Pop-Location; exit 1
+      }
+    }
+
     Invoke-Git @('checkout', '-B', 'upstream-sync', 'origin/upstream-sync') | Out-Null
     Write-Ok "checked out upstream-sync"
 
-    $m = Invoke-Git @('merge', '--no-edit', '--no-ff', 'origin/main') -AllowFailure
+    # The conflict is between our main and upstream's master, so that is the
+    # merge that has to be resolved. upstream-sync was branched from main, so
+    # merging upstream/master here reproduces the CI conflict and lets you fix
+    # it. Merging origin/main instead would be a no-op and resolve nothing.
+    Invoke-Git @('fetch', 'upstream', 'master') -AllowFailure | Out-Null
+    $m = Invoke-Git @('merge', '--no-edit', '--no-ff', 'upstream/master') -AllowFailure
     if ($m.Code -ne 0) {
       Write-Fail "Conflicts found. Fix these files, then `git add` them:"
       $c = Invoke-Git @('diff', '--name-only', '--diff-filter=U')
@@ -147,9 +187,22 @@ try {
     Invoke-Git @('commit', '-m', 'fix: resolve upstream sync conflicts') | Out-Null
     Invoke-Git @('push', 'origin', 'upstream-sync') | Out-Null
     Write-Ok "pushed to origin/upstream-sync"
+
+    # Guard against a false "all done": if upstream's commits are not actually
+    # in this branch, the pull request will still show conflicts.
+    Invoke-Git @('fetch', 'upstream', 'master') -AllowFailure | Out-Null
+    $has = Invoke-Git @('merge-base', '--is-ancestor', 'upstream/master', 'HEAD') -AllowFailure
     Write-Host ""
-    Write-Host "    Your pull request is now ready to merge."
-    Write-Host "    Merge it here: https://github.com/dramatic4678565/mosaic/pulls"
+    if ($has.Code -eq 0) {
+      Write-Ok "This branch now includes everything from excalidraw/excalidraw."
+      Write-Host "    Your pull request is ready to merge."
+      Write-Host "    Merge it here: https://github.com/dramatic4678565/mosaic/pulls"
+    }
+    else {
+      Write-Warn "Heads up: this branch does NOT include the latest excalidraw commits."
+      Write-Host "    The pull request will still show conflicts. Run -Resolve, fix the"
+      Write-Host "    files, stage them, then run -PushResolve again."
+    }
   }
   else {
     # -Sync (default)
