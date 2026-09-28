@@ -1,9 +1,4 @@
-import {
-  invariant,
-  isDevEnv,
-  isTestEnv,
-  type Bounds,
-} from "@mosaic/common";
+import { invariant, isDevEnv, isTestEnv, type Bounds } from "@mosaic/common";
 
 import {
   pointFrom,
@@ -17,12 +12,7 @@ import {
   vectorScale,
 } from "@mosaic/math";
 
-import type {
-  LocalPoint,
-  GlobalPoint,
-  Triangle,
-  Vector,
-} from "@mosaic/math";
+import type { LocalPoint, GlobalPoint, Triangle, Vector } from "@mosaic/math";
 
 import { getCenterForBounds } from "./bounds";
 

@@ -8,10 +8,7 @@ import {
 import { encodePngMetadata } from "@mosaic/mosaic/data/image";
 import { getNonDeletedElements } from "@mosaic/element";
 import { serializeAsJSON } from "@mosaic/mosaic/data/json";
-import {
-  restoreAppState,
-  restoreElements,
-} from "@mosaic/mosaic/data/restore";
+import { restoreAppState, restoreElements } from "@mosaic/mosaic/data/restore";
 import {
   exportToCanvas as _exportToCanvas,
   exportToSvg as _exportToSvg,

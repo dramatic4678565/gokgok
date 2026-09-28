@@ -898,9 +898,7 @@ export const actionChangeFreedrawMode = register<StrokeVariability>({
   },
 });
 
-export const actionChangeStrokeStyle = register<
-  MosaicElement["strokeStyle"]
->({
+export const actionChangeStrokeStyle = register<MosaicElement["strokeStyle"]>({
   name: "changeStrokeStyle",
   label: "labels.strokeStyle",
   trackEvent: false,
@@ -996,101 +994,99 @@ export const actionChangeOpacity = register<MosaicElement["opacity"]>({
   },
 });
 
-export const actionChangeFontSize = register<MosaicTextElement["fontSize"]>(
-  {
-    name: "changeFontSize",
-    label: "labels.fontSize",
-    trackEvent: false,
-    perform: (elements, appState, value, app) => {
-      return changeFontSize(
-        elements,
-        appState,
-        app,
-        () => {
-          invariant(value, "actionChangeFontSize: Expected a font size value");
-          return value;
-        },
-        value,
-      );
-    },
-    PanelComponent: ({ elements, appState, updateData, app, data }) => {
-      const { isCompact } = getStylesPanelInfo(app);
-
-      return (
-        <fieldset>
-          <legend>{t("labels.fontSize")}</legend>
-          <div className="buttonList">
-            <RadioSelection
-              group="font-size"
-              options={[
-                {
-                  value: FONT_SIZES.sm,
-                  text: t("labels.small"),
-                  icon: FontSizeSmallIcon,
-                  testId: "fontSize-small",
-                },
-                {
-                  value: FONT_SIZES.md,
-                  text: t("labels.medium"),
-                  icon: FontSizeMediumIcon,
-                  testId: "fontSize-medium",
-                },
-                {
-                  value: FONT_SIZES.lg,
-                  text: t("labels.large"),
-                  icon: FontSizeLargeIcon,
-                  testId: "fontSize-large",
-                },
-                {
-                  value: FONT_SIZES.xl,
-                  text: t("labels.veryLarge"),
-                  icon: FontSizeExtraLargeIcon,
-                  testId: "fontSize-veryLarge",
-                },
-              ]}
-              value={getFormValue(
-                elements,
-                app,
-                (element) => {
-                  const elementsMap = app.scene.getNonDeletedElementsMap();
-                  if (isTextElement(element)) {
-                    return getBaseFontSize(element, elementsMap);
-                  }
-                  const boundTextElement = getBoundTextElement(
-                    element,
-                    elementsMap,
-                  );
-                  if (boundTextElement) {
-                    return getBaseFontSize(boundTextElement, elementsMap);
-                  }
-                  return null;
-                },
-                (element) =>
-                  isTextElement(element) ||
-                  getBoundTextElement(
-                    element,
-                    app.scene.getNonDeletedElementsMap(),
-                  ) !== null,
-                (hasSelection) =>
-                  hasSelection
-                    ? null
-                    : appState.currentItemFontSize || DEFAULT_FONT_SIZE,
-              )}
-              onChange={(value) => {
-                withCaretPositionPreservation(
-                  () => updateData(value),
-                  isCompact,
-                  !!appState.editingTextElement,
-                  data?.onPreventClose,
-                );
-              }}
-            />
-          </div>
-        </fieldset>
-      );
-    },
+export const actionChangeFontSize = register<MosaicTextElement["fontSize"]>({
+  name: "changeFontSize",
+  label: "labels.fontSize",
+  trackEvent: false,
+  perform: (elements, appState, value, app) => {
+    return changeFontSize(
+      elements,
+      appState,
+      app,
+      () => {
+        invariant(value, "actionChangeFontSize: Expected a font size value");
+        return value;
+      },
+      value,
+    );
   },
-);
+  PanelComponent: ({ elements, appState, updateData, app, data }) => {
+    const { isCompact } = getStylesPanelInfo(app);
+
+    return (
+      <fieldset>
+        <legend>{t("labels.fontSize")}</legend>
+        <div className="buttonList">
+          <RadioSelection
+            group="font-size"
+            options={[
+              {
+                value: FONT_SIZES.sm,
+                text: t("labels.small"),
+                icon: FontSizeSmallIcon,
+                testId: "fontSize-small",
+              },
+              {
+                value: FONT_SIZES.md,
+                text: t("labels.medium"),
+                icon: FontSizeMediumIcon,
+                testId: "fontSize-medium",
+              },
+              {
+                value: FONT_SIZES.lg,
+                text: t("labels.large"),
+                icon: FontSizeLargeIcon,
+                testId: "fontSize-large",
+              },
+              {
+                value: FONT_SIZES.xl,
+                text: t("labels.veryLarge"),
+                icon: FontSizeExtraLargeIcon,
+                testId: "fontSize-veryLarge",
+              },
+            ]}
+            value={getFormValue(
+              elements,
+              app,
+              (element) => {
+                const elementsMap = app.scene.getNonDeletedElementsMap();
+                if (isTextElement(element)) {
+                  return getBaseFontSize(element, elementsMap);
+                }
+                const boundTextElement = getBoundTextElement(
+                  element,
+                  elementsMap,
+                );
+                if (boundTextElement) {
+                  return getBaseFontSize(boundTextElement, elementsMap);
+                }
+                return null;
+              },
+              (element) =>
+                isTextElement(element) ||
+                getBoundTextElement(
+                  element,
+                  app.scene.getNonDeletedElementsMap(),
+                ) !== null,
+              (hasSelection) =>
+                hasSelection
+                  ? null
+                  : appState.currentItemFontSize || DEFAULT_FONT_SIZE,
+            )}
+            onChange={(value) => {
+              withCaretPositionPreservation(
+                () => updateData(value),
+                isCompact,
+                !!appState.editingTextElement,
+                data?.onPreventClose,
+              );
+            }}
+          />
+        </div>
+      </fieldset>
+    );
+  },
+});
 
 export const actionDecreaseFontSize = register({
   name: "decreaseFontSize",
@@ -1281,13 +1277,10 @@ export const actionChangeFontFamily = register<{
               (oldElement.fontFamily !== nextFontFamily ||
                 currentItemFontFamily) // force update on selection
             ) {
-              const newElement: MosaicTextElement = newElementWith(
-                oldElement,
-                {
-                  fontFamily: nextFontFamily,
-                  lineHeight: getLineHeight(nextFontFamily!),
-                },
-              );
+              const newElement: MosaicTextElement = newElementWith(oldElement, {
+                fontFamily: nextFontFamily,
+                lineHeight: getLineHeight(nextFontFamily!),
+              });
 
               const cachedContainer =
                 cachedElements?.get(oldElement.containerId || "") || {};
@@ -1555,10 +1548,9 @@ export const actionChangeTextAlign = register<TextAlign>({
         appState,
         (oldElement) => {
           if (isTextElement(oldElement)) {
-            const newElement: MosaicTextElement = newElementWith(
-              oldElement,
-              { textAlign: value },
-            );
+            const newElement: MosaicTextElement = newElementWith(oldElement, {
+              textAlign: value,
+            });
             redrawTextBoundingBox(
               newElement,
               app.scene.getContainerElement(oldElement),
@@ -1656,10 +1648,9 @@ export const actionChangeVerticalAlign = register<VerticalAlign>({
         appState,
         (oldElement) => {
           if (isTextElement(oldElement)) {
-            const newElement: MosaicTextElement = newElementWith(
-              oldElement,
-              { verticalAlign: value },
-            );
+            const newElement: MosaicTextElement = newElementWith(oldElement, {
+              verticalAlign: value,
+            });
 
             redrawTextBoundingBox(
               newElement,

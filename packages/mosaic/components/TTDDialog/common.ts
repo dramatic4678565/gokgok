@@ -1,17 +1,10 @@
-import {
-  DEFAULT_EXPORT_PADDING,
-  EDITOR_LS_KEYS,
-  THEME,
-} from "@mosaic/common";
+import { DEFAULT_EXPORT_PADDING, EDITOR_LS_KEYS, THEME } from "@mosaic/common";
 
 import { convertToMosaicElements } from "@mosaic/element";
 
 import { exportToCanvas } from "@mosaic/utils";
 
-import type {
-  NonDeletedMosaicElement,
-  Theme,
-} from "@mosaic/element/types";
+import type { NonDeletedMosaicElement, Theme } from "@mosaic/element/types";
 
 import { EditorLocalStorage } from "../../data/EditorLocalStorage";
 
@@ -130,10 +123,7 @@ export const convertMermaidToMosaic = async ({
   }
 };
 export const saveMermaidDataToStorage = (mermaidDefinition: string) => {
-  EditorLocalStorage.set(
-    EDITOR_LS_KEYS.MERMAID_TO_MOSAIC,
-    mermaidDefinition,
-  );
+  EditorLocalStorage.set(EDITOR_LS_KEYS.MERMAID_TO_MOSAIC, mermaidDefinition);
 };
 
 export const insertToEditor = ({

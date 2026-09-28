@@ -59,11 +59,7 @@ type LogoProps = {
   isNotLink?: boolean;
 };
 
-export const MosaicLogo = ({
-  style,
-  size = "small",
-  withText,
-}: LogoProps) => {
+export const MosaicLogo = ({ style, size = "small", withText }: LogoProps) => {
   return (
     <div className={`MosaicLogo is-${size}`} style={style}>
       <LogoIcon />

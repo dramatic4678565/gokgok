@@ -18,9 +18,7 @@ export const updateOriginalContainerCache = (
   return data;
 };
 
-export const resetOriginalContainerCache = (
-  id: MosaicTextContainer["id"],
-) => {
+export const resetOriginalContainerCache = (id: MosaicTextContainer["id"]) => {
   if (originalContainerCache[id]) {
     delete originalContainerCache[id];
   }

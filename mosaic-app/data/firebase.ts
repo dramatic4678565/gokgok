@@ -1,10 +1,7 @@
 import { reconcileElements } from "@mosaic/mosaic";
 import { MIME_TYPES, toBrandedType } from "@mosaic/common";
 import { decompressData } from "@mosaic/mosaic/data/encode";
-import {
-  encryptData,
-  decryptData,
-} from "@mosaic/mosaic/data/encryption";
+import { encryptData, decryptData } from "@mosaic/mosaic/data/encryption";
 import { restoreElements } from "@mosaic/mosaic/data/restore";
 import { getSceneVersion } from "@mosaic/element";
 import { initializeApp } from "firebase/app";
@@ -120,10 +117,7 @@ class FirebaseSceneVersionCache {
   static get = (socket: Socket) => {
     return FirebaseSceneVersionCache.cache.get(socket);
   };
-  static set = (
-    socket: Socket,
-    elements: readonly SyncableMosaicElement[],
-  ) => {
+  static set = (socket: Socket, elements: readonly SyncableMosaicElement[]) => {
     FirebaseSceneVersionCache.cache.set(socket, getSceneVersion(elements));
   };
 }

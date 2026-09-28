@@ -1,7 +1,4 @@
-import {
-  compressData,
-  decompressData,
-} from "@mosaic/mosaic/data/encode";
+import { compressData, decompressData } from "@mosaic/mosaic/data/encode";
 import {
   decryptData,
   generateEncryptionKey,

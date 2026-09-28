@@ -112,8 +112,6 @@ export const normalizeBoundElementsOrder = <T extends MosaicElement>(
   return [...sortedElements];
 };
 
-export const normalizeElementOrder = (
-  elements: readonly MosaicElement[],
-) => {
+export const normalizeElementOrder = (elements: readonly MosaicElement[]) => {
   return normalizeBoundElementsOrder(defragmentGroups(elements));
 };

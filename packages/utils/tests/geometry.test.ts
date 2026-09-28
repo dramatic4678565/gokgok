@@ -7,12 +7,7 @@ import {
   segmentsIntersectAt,
 } from "@mosaic/math";
 
-import type {
-  GlobalPoint,
-  LineSegment,
-  Polygon,
-  Radians,
-} from "@mosaic/math";
+import type { GlobalPoint, LineSegment, Polygon, Radians } from "@mosaic/math";
 
 import { pointInEllipse, pointOnEllipse, type Ellipse } from "../src/shape";
 

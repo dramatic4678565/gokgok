@@ -17,10 +17,7 @@ import {
 
 import { getCommonBounds, getElementAbsoluteCoords } from "@mosaic/element";
 
-import {
-  getInitializedImageElements,
-  updateImageCache,
-} from "@mosaic/element";
+import { getInitializedImageElements, updateImageCache } from "@mosaic/element";
 
 import { newElementWith } from "@mosaic/element";
 
@@ -109,19 +106,18 @@ const addFrameLabelsAsTextElements = (
   const nextElements: NonDeletedMosaicElement[] = [];
   for (const element of elements) {
     if (isFrameLikeElement(element)) {
-      let textElement: Mutable<NonDeleted<MosaicTextElement>> =
-        newTextElement({
-          x: element.x,
-          y: element.y - FRAME_STYLE.nameOffsetY,
-          fontFamily: FONT_FAMILY.Helvetica,
-          fontSize: FRAME_STYLE.nameFontSize,
-          lineHeight:
-            FRAME_STYLE.nameLineHeight as MosaicTextElement["lineHeight"],
-          strokeColor: opts.exportWithDarkMode
-            ? FRAME_STYLE.nameColorDarkTheme
-            : FRAME_STYLE.nameColorLightTheme,
-          text: getFrameLikeTitle(element),
-        });
+      let textElement: Mutable<NonDeleted<MosaicTextElement>> = newTextElement({
+        x: element.x,
+        y: element.y - FRAME_STYLE.nameOffsetY,
+        fontFamily: FONT_FAMILY.Helvetica,
+        fontSize: FRAME_STYLE.nameFontSize,
+        lineHeight:
+          FRAME_STYLE.nameLineHeight as MosaicTextElement["lineHeight"],
+        strokeColor: opts.exportWithDarkMode
+          ? FRAME_STYLE.nameColorDarkTheme
+          : FRAME_STYLE.nameColorLightTheme,
+        text: getFrameLikeTitle(element),
+      });
       textElement.y -= textElement.height;
 
       textElement = truncateText(textElement, element.width);

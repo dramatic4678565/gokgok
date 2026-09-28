@@ -224,10 +224,7 @@ export const groupsAreCompletelyOutOfFrame = (
  * Returns a map of frameId to frame elements. Includes empty frames.
  */
 export const groupByFrameLikes = (elements: readonly MosaicElement[]) => {
-  const frameElementsMap = new Map<
-    MosaicElement["id"],
-    MosaicElement[]
-  >();
+  const frameElementsMap = new Map<MosaicElement["id"], MosaicElement[]>();
 
   for (const element of elements) {
     const frameId = isFrameLikeElement(element) ? element.id : element.frameId;
@@ -638,10 +635,7 @@ export const removeElementsFromFrame = (
   elementsToRemove: ReadonlySetLike<MosaicElement>,
   elementsMap: ElementsMap,
 ) => {
-  const _elementsToRemove = new Map<
-    MosaicElement["id"],
-    MosaicElement
-  >();
+  const _elementsToRemove = new Map<MosaicElement["id"], MosaicElement>();
 
   const toRemoveElementsByFrame = new Map<
     MosaicFrameLikeElement["id"],

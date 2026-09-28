@@ -61,10 +61,7 @@ import {
 
 import type { EditorInterface } from "@mosaic/common";
 
-import type {
-  TransformHandles,
-  TransformHandleType,
-} from "@mosaic/element";
+import type { TransformHandles, TransformHandleType } from "@mosaic/element";
 
 import type {
   ElementsMap,

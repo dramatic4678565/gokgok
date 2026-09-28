@@ -29,10 +29,7 @@ import {
   updateBoundElements,
 } from "@mosaic/element";
 
-import {
-  getBoundTextElement,
-  redrawTextBoundingBox,
-} from "@mosaic/element";
+import { getBoundTextElement, redrawTextBoundingBox } from "@mosaic/element";
 
 import { CaptureUpdateAction } from "@mosaic/element";
 
@@ -134,8 +131,7 @@ export const actionPasteStyles = register({
             });
 
             if (isTextElement(newElement)) {
-              const sourceText =
-                elementStylesToCopyFrom as MosaicTextElement;
+              const sourceText = elementStylesToCopyFrom as MosaicTextElement;
               const fontSize =
                 (isTextElement(elementStylesToCopyFrom)
                   ? getBaseFontSize(elementStylesToCopyFrom, copiedElementsMap)

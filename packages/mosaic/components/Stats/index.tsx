@@ -34,11 +34,7 @@ import { getAtomicUnits } from "./utils";
 
 import "./Stats.scss";
 
-import type {
-  AppClassProperties,
-  AppState,
-  MosaicProps,
-} from "../../types";
+import type { AppClassProperties, AppState, MosaicProps } from "../../types";
 
 interface StatsProps {
   app: AppClassProperties;

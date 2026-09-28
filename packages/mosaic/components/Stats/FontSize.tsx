@@ -6,10 +6,7 @@ import {
 } from "@mosaic/element";
 import { hasBoundTextElement, isTextElement } from "@mosaic/element";
 
-import type {
-  MosaicElement,
-  MosaicTextElement,
-} from "@mosaic/element/types";
+import type { MosaicElement, MosaicTextElement } from "@mosaic/element/types";
 
 import type { Scene } from "@mosaic/element";
 

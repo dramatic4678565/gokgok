@@ -6,10 +6,7 @@ import throttle from "lodash.throttle";
 
 import type { UserIdleState } from "@mosaic/common";
 import type { OrderedMosaicElement } from "@mosaic/element/types";
-import type {
-  OnUserFollowedPayload,
-  SocketId,
-} from "@mosaic/mosaic/types";
+import type { OnUserFollowedPayload, SocketId } from "@mosaic/mosaic/types";
 
 import { WS_EVENTS, FILE_UPLOAD_TIMEOUT, WS_SUBTYPES } from "../app_constants";
 import { isSyncableElement } from "../data";

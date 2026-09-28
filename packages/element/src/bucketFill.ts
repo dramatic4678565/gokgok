@@ -584,8 +584,7 @@ const FILL_BOUNDARY_TYPES = new Set<MosaicElement["type"]>([
 ]);
 
 /** fully invisible elements never participate in a fill */
-const isInvisible = (element: MosaicElement): boolean =>
-  element.opacity <= 0;
+const isInvisible = (element: MosaicElement): boolean => element.opacity <= 0;
 
 /**
  * Whether the element renders any pixels at all: a visible stroke (doubles

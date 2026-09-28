@@ -1595,10 +1595,7 @@ describe("Test Linear Elements", () => {
       API.setElements([h.elements[0], text]);
 
       const container = h.elements[0];
-      API.setSelectedElements([
-        container,
-        text,
-      ] as NonDeletedMosaicElement[]);
+      API.setSelectedElements([container, text] as NonDeletedMosaicElement[]);
       fireEvent.contextMenu(GlobalTestState.interactiveCanvas, {
         button: 2,
         clientX: 20,
@@ -1765,9 +1762,9 @@ describe("Test Linear Elements", () => {
         expect(
           (h.elements[1] as MosaicTextElementWithContainer).labelPosition,
         ).toBe(1);
-        expect(
-          (h.elements[0] as MosaicLinearElement).points[1][0],
-        ).toBeCloseTo(p2[0] - p1[0] + 40);
+        expect((h.elements[0] as MosaicLinearElement).points[1][0]).toBeCloseTo(
+          p2[0] - p1[0] + 40,
+        );
       });
 
       it("keeps the arrow selected when a point handle is grabbed beyond the arrow's tip", () => {
@@ -1797,9 +1794,9 @@ describe("Test Linear Elements", () => {
         expect(h.state.selectionElement).toBeNull();
         expect(h.state.selectedElementIds[arrow.id]).toBe(true);
         expect(h.state.selectedLinearElement?.elementId).toBe(arrow.id);
-        expect(
-          (h.elements[0] as MosaicLinearElement).points[1][0],
-        ).toBeCloseTo(p2[0] - p1[0] + 40);
+        expect((h.elements[0] as MosaicLinearElement).points[1][0]).toBeCloseTo(
+          p2[0] - p1[0] + 40,
+        );
       });
 
       it("grabs the label when the covering element is below the arrow", () => {
@@ -1892,17 +1889,13 @@ describe("Test Linear Elements", () => {
         mouse.reset();
         mouse.clickAt(p1[0], p1[1]);
         expect(h.state.selectedLinearElement?.elementId).toBe(arrow.id);
-        expect((h.elements[0] as MosaicLinearElement).points.length).toBe(
-          2,
-        );
+        expect((h.elements[0] as MosaicLinearElement).points.length).toBe(2);
 
         // the label sits centered on the midpoint knob; dragging there must
         // bend the arrow, not slide the label
         drag(midpoint, pointFrom<GlobalPoint>(midpoint[0], midpoint[1] + 40));
 
-        expect((h.elements[0] as MosaicLinearElement).points.length).toBe(
-          3,
-        );
+        expect((h.elements[0] as MosaicLinearElement).points.length).toBe(3);
         expect(
           (h.elements[1] as MosaicTextElementWithContainer).labelPosition,
         ).toBe(0.5);
@@ -1915,9 +1908,7 @@ describe("Test Linear Elements", () => {
         mouse.reset();
         mouse.clickAt(p1[0], p1[1]);
         expect(h.state.selectedLinearElement?.elementId).toBe(arrow.id);
-        expect((h.elements[0] as MosaicLinearElement).points.length).toBe(
-          2,
-        );
+        expect((h.elements[0] as MosaicLinearElement).points.length).toBe(2);
 
         // the midpoint handle sits under the label, which is itself covered
         drag(midpoint, pointFrom<GlobalPoint>(midpoint[0], midpoint[1] + 40));
@@ -1925,9 +1916,7 @@ describe("Test Linear Elements", () => {
         expect(
           h.state.selectedLinearElement?.initialState.segmentMidpoint.value,
         ).not.toBeNull();
-        expect((h.elements[0] as MosaicLinearElement).points.length).toBe(
-          3,
-        );
+        expect((h.elements[0] as MosaicLinearElement).points.length).toBe(3);
         expect(
           (h.elements[1] as MosaicTextElementWithContainer).labelPosition,
         ).toBe(0.5);

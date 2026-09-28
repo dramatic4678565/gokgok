@@ -7,10 +7,7 @@ import {
   type LocalPoint,
 } from "@mosaic/math";
 
-import type {
-  AppState,
-  PendingMosaicElements,
-} from "@mosaic/mosaic/types";
+import type { AppState, PendingMosaicElements } from "@mosaic/mosaic/types";
 
 import { bindBindingElement } from "./binding";
 import { updateElbowArrowPoints } from "./elbowArrow";
@@ -261,10 +258,7 @@ const cloneFlowchartNode = (
           ...commonNodeProps,
         });
 
-  invariant(
-    isFlowchartNodeElement(node),
-    "not an MosaicFlowchartNodeElement",
-  );
+  invariant(isFlowchartNodeElement(node), "not an MosaicFlowchartNodeElement");
 
   return node;
 };
@@ -411,10 +405,7 @@ const createBindingArrow = (
     endBindingElement.id,
     endBindingElement as OrderedMosaicElement,
   );
-  changedElements.set(
-    bindingArrow.id,
-    bindingArrow as OrderedMosaicElement,
-  );
+  changedElements.set(bindingArrow.id, bindingArrow as OrderedMosaicElement);
 
   LinearElementEditor.movePoints(
     bindingArrow,
@@ -586,10 +577,7 @@ export class FlowChartNavigator {
     direction: LinkDirection,
   ) {
     const items = [...elementsMap.values()].reduce(
-      (
-        acc: { relative: MosaicBindableElement; heading: Heading }[],
-        el,
-      ) => {
+      (acc: { relative: MosaicBindableElement; heading: Heading }[], el) => {
         let oppositeBinding;
         if (
           isElbowArrow(el) &&
@@ -722,10 +710,7 @@ export class FlowChartCreator {
     if (startNode.frameId) {
       const frame = elementsMap.get(startNode.frameId);
 
-      invariant(
-        frame && isFrameElement(frame),
-        "not an MosaicFrameElement",
-      );
+      invariant(frame && isFrameElement(frame), "not an MosaicFrameElement");
 
       if (
         frame &&

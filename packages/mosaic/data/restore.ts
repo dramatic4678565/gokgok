@@ -1,9 +1,4 @@
-import {
-  clamp,
-  isFiniteNumber,
-  isValidPoint,
-  pointFrom,
-} from "@mosaic/math";
+import { clamp, isFiniteNumber, isValidPoint, pointFrom } from "@mosaic/math";
 
 import {
   colorToHex,
@@ -45,10 +40,7 @@ import {
   isNonDeletedElement,
 } from "@mosaic/element";
 import { normalizeFixedPoint } from "@mosaic/element";
-import {
-  updateElbowArrowPoints,
-  validateElbowPoints,
-} from "@mosaic/element";
+import { updateElbowArrowPoints, validateElbowPoints } from "@mosaic/element";
 import { LinearElementEditor } from "@mosaic/element";
 import {
   bumpVersion,
@@ -769,10 +761,7 @@ const repairContainerElement = (
     // dedupe bindings & fix boundElement.containerId if not set already
     const boundIds = new Set<MosaicElement["id"]>();
     container.boundElements = boundElements.reduce(
-      (
-        acc: Mutable<NonNullable<MosaicElement["boundElements"]>>,
-        binding,
-      ) => {
+      (acc: Mutable<NonNullable<MosaicElement["boundElements"]>>, binding) => {
         const boundElement = elementsMap.get(binding.id);
         if (boundElement && !boundIds.has(binding.id)) {
           boundIds.add(binding.id);
@@ -846,9 +835,7 @@ const repairBoundElement = (
  *
  * NOTE mutates indices of reordered bound text elements.
  */
-const repairBoundTextElementOrder = (
-  elements: readonly MosaicElement[],
-) => {
+const repairBoundTextElementOrder = (elements: readonly MosaicElement[]) => {
   const originalPositions = new Map(
     elements.map((element, index) => [element.id, index]),
   );
@@ -1010,10 +997,7 @@ export const restoreElements = <T extends MosaicElement>(
   );
 
   if (!opts?.repairBindings) {
-    return restoredElements as CombineBrandsIfNeeded<
-      T,
-      OrderedMosaicElement
-    >;
+    return restoredElements as CombineBrandsIfNeeded<T, OrderedMosaicElement>;
   }
 
   // repair binding. Mutates elements.

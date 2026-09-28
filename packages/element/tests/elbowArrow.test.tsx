@@ -107,9 +107,7 @@ describe("elbow arrow segment move", () => {
     mouse.moveTo(130, 100);
     mouse.up();
 
-    const arrow = h.scene.getSelectedElements(
-      h.state,
-    )[0] as MosaicArrowElement;
+    const arrow = h.scene.getSelectedElements(h.state)[0] as MosaicArrowElement;
 
     expect(arrow.points).toCloselyEqualPoints([
       [0, 0],
@@ -260,9 +258,7 @@ describe("elbow arrow ui", () => {
     mouse.moveTo(53, 99);
     mouse.click();
 
-    const arrow = h.scene.getSelectedElements(
-      h.state,
-    )[0] as MosaicArrowElement;
+    const arrow = h.scene.getSelectedElements(h.state)[0] as MosaicArrowElement;
 
     expect(arrow.type).toBe("arrow");
     expect(arrow.elbowed).toBe(true);
@@ -297,9 +293,7 @@ describe("elbow arrow ui", () => {
     mouse.moveTo(53, 99);
     mouse.click();
 
-    const arrow = h.scene.getSelectedElements(
-      h.state,
-    )[0] as MosaicArrowElement;
+    const arrow = h.scene.getSelectedElements(h.state)[0] as MosaicArrowElement;
 
     mouse.click(51, 51);
 
@@ -341,9 +335,7 @@ describe("elbow arrow ui", () => {
     mouse.moveTo(53, 99);
     mouse.click();
 
-    const arrow = h.scene.getSelectedElements(
-      h.state,
-    )[0] as MosaicArrowElement;
+    const arrow = h.scene.getSelectedElements(h.state)[0] as MosaicArrowElement;
     const originalArrowId = arrow.id;
 
     expect(arrow.startBinding).not.toBe(null);
@@ -399,9 +391,7 @@ describe("elbow arrow ui", () => {
     mouse.moveTo(53, 99);
     mouse.click();
 
-    const arrow = h.scene.getSelectedElements(
-      h.state,
-    )[0] as MosaicArrowElement;
+    const arrow = h.scene.getSelectedElements(h.state)[0] as MosaicArrowElement;
     const originalArrowId = arrow.id;
 
     expect(arrow.startBinding).not.toBe(null);

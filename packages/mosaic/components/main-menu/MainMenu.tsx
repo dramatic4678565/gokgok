@@ -5,11 +5,7 @@ import { composeEventHandlers } from "@mosaic/common";
 import { useTunnels } from "../../context/tunnels";
 import { useUIAppState } from "../../context/ui-appState";
 import { t } from "../../i18n";
-import {
-  useAppProps,
-  useEditorInterface,
-  useMosaicSetAppState,
-} from "../App";
+import { useAppProps, useEditorInterface, useMosaicSetAppState } from "../App";
 import { UserList } from "../UserList";
 import DropdownMenu from "../dropdownMenu/DropdownMenu";
 import DropdownMenuSub from "../dropdownMenu/DropdownMenuSub";

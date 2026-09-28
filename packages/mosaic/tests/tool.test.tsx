@@ -27,9 +27,7 @@ describe("setActiveTool()", () => {
   beforeEach(async () => {
     const mosaicAPIPromise = resolvablePromise<MosaicImperativeAPI>();
     await render(
-      <Mosaic
-        onMosaicAPI={(api) => mosaicAPIPromise.resolve(api as any)}
-      />,
+      <Mosaic onMosaicAPI={(api) => mosaicAPIPromise.resolve(api as any)} />,
     );
     mosaicAPI = await mosaicAPIPromise;
   });
@@ -332,9 +330,7 @@ describe("props.activeTool (forced tool)", () => {
 
   it("forcing a non-activatable tool resolves to selection until activatable", async () => {
     const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
-    await render(
-      <Mosaic activeTool={{ type: "laser" }} interaction={false} />,
-    );
+    await render(<Mosaic activeTool={{ type: "laser" }} interaction={false} />);
     expect(h.state.activeTool.type).toBe("selection");
     expect(warnSpy).toHaveBeenCalled();
 

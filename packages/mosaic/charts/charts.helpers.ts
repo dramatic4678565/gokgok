@@ -22,10 +22,7 @@ import {
   wrapText,
 } from "@mosaic/element";
 
-import type {
-  ChartType,
-  MosaicTextElement,
-} from "@mosaic/element/types";
+import type { ChartType, MosaicTextElement } from "@mosaic/element/types";
 import type { NonDeletedMosaicElement } from "@mosaic/element/types";
 
 import {

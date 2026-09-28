@@ -1,8 +1,4 @@
-import {
-  type GlobalPoint,
-  type LineSegment,
-  pointFrom,
-} from "@mosaic/math";
+import { type GlobalPoint, type LineSegment, pointFrom } from "@mosaic/math";
 
 import { getElementLineSegments } from "@mosaic/element";
 import { LinearElementEditor } from "@mosaic/element";

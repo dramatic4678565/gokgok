@@ -18,10 +18,7 @@ const MobileFooter = ({
   if (editorInterface.formFactor === "phone") {
     return (
       <Footer>
-        <CustomFooter
-          mosaicAPI={mosaicAPI}
-          mosaicLib={mosaicLib}
-        />
+        <CustomFooter mosaicAPI={mosaicAPI} mosaicLib={mosaicLib} />
       </Footer>
     );
   }

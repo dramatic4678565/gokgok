@@ -14,10 +14,7 @@ import {
   vectorScale,
 } from "@mosaic/math";
 
-import {
-  ellipse,
-  ellipseSegmentInterceptPoints,
-} from "@mosaic/math/ellipse";
+import { ellipse, ellipseSegmentInterceptPoints } from "@mosaic/math/ellipse";
 
 import type {
   Curve,

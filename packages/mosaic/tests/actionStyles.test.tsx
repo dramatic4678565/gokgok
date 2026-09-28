@@ -1,11 +1,6 @@
 import React from "react";
 
-import {
-  CODES,
-  COLOR_PALETTE,
-  ROUNDNESS,
-  STROKE_WIDTH,
-} from "@mosaic/common";
+import { CODES, COLOR_PALETTE, ROUNDNESS, STROKE_WIDTH } from "@mosaic/common";
 
 import type { NonDeletedMosaicElement } from "@mosaic/element/types";
 

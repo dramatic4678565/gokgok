@@ -4,10 +4,7 @@ import { Mosaic } from "@mosaic/mosaic";
 
 import { API } from "@mosaic/mosaic/tests/helpers/api";
 import { UI, Keyboard, Pointer } from "@mosaic/mosaic/tests/helpers/ui";
-import {
-  render,
-  unmountComponent,
-} from "@mosaic/mosaic/tests/test-utils";
+import { render, unmountComponent } from "@mosaic/mosaic/tests/test-utils";
 
 import type { NonDeletedMosaicElement } from "@mosaic/element/types";
 

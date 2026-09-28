@@ -1014,8 +1014,10 @@ export class AppStateDelta implements DeltaContainer<AppState> {
   }
 }
 
-type ElementPartial<TElement extends MosaicElement = MosaicElement> =
-  Omit<Partial<Ordered<TElement>>, "id" | "updated" | "seed">;
+type ElementPartial<TElement extends MosaicElement = MosaicElement> = Omit<
+  Partial<Ordered<TElement>>,
+  "id" | "updated" | "seed"
+>;
 
 export type ApplyToOptions = {
   excludedProperties?: Set<keyof ElementPartial>;
@@ -1717,12 +1719,9 @@ export class ElementsDelta implements DeltaContainer<SceneElementsMap> {
           flags.containsZindexDifference = true;
         } else {
           // not in elements, not in snapshot? element might have been added remotely!
-          element = newElementWith(
-            { id, version: 1 } as OrderedMosaicElement,
-            {
-              ...partial,
-            },
-          );
+          element = newElementWith({ id, version: 1 } as OrderedMosaicElement, {
+            ...partial,
+          });
         }
       }
 
@@ -2173,11 +2172,8 @@ export class ElementsDelta implements DeltaContainer<SceneElementsMap> {
       // - we can't ensure the multiplayer order consistency without fractional index on each point
       // - we prefer to not merge the points, as it might just lead to unexpected / incosistent results
       const deletedPoints =
-        (
-          deleted as ElementPartial<
-            MosaicFreeDrawElement | MosaicLinearElement
-          >
-        ).points ?? [];
+        (deleted as ElementPartial<MosaicFreeDrawElement | MosaicLinearElement>)
+          .points ?? [];
 
       const insertedPoints =
         (

@@ -1,7 +1,4 @@
-import {
-  getNonDeletedElements,
-  isEmbeddableElement,
-} from "@mosaic/element";
+import { getNonDeletedElements, isEmbeddableElement } from "@mosaic/element";
 
 import { KEYS } from "@mosaic/common";
 

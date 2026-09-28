@@ -1947,9 +1947,7 @@ describe("computeBucketFillPolygon", () => {
       height: 138,
       points: BLOB_POINTS.map((p) => pointFrom<LocalPoint>(p[0], p[1])),
     });
-    const { elements, elementsMap } = setup([
-      blob as NonDeletedMosaicElement,
-    ]);
+    const { elements, elementsMap } = setup([blob as NonDeletedMosaicElement]);
 
     const result = computeBucketFillPolygon({
       point: pointFrom<GlobalPoint>(126, 69),

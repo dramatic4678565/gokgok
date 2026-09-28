@@ -48,11 +48,7 @@ import { measureText } from "@mosaic/element";
 
 import { LinearElementEditor } from "@mosaic/element";
 
-import {
-  newArrowElement,
-  newElement,
-  newLinearElement,
-} from "@mosaic/element";
+import { newArrowElement, newElement, newLinearElement } from "@mosaic/element";
 
 import { ShapeCache } from "@mosaic/element";
 
@@ -684,14 +680,9 @@ const filterGenericConvetibleElements = <T extends MosaicElement>(
   elements.filter((element) => isConvertibleGenericType(element.type)) as Array<
     T extends NonDeletedMosaicElement
       ? NonDeleted<
-          | MosaicRectangleElement
-          | MosaicDiamondElement
-          | MosaicEllipseElement
+          MosaicRectangleElement | MosaicDiamondElement | MosaicEllipseElement
         >
-      :
-          | MosaicRectangleElement
-          | MosaicDiamondElement
-          | MosaicEllipseElement
+      : MosaicRectangleElement | MosaicDiamondElement | MosaicEllipseElement
   >;
 
 const filterLinearConvertibleElements = <T extends MosaicElement>(
@@ -831,10 +822,7 @@ const sanitizePoints = (points: readonly LocalPoint[]): LocalPoint[] => {
  *   e.g. elbow arrow -> line
  */
 const convertElementType = <
-  TElement extends Exclude<
-    NonDeletedMosaicElement,
-    MosaicSelectionElement
-  >,
+  TElement extends Exclude<NonDeletedMosaicElement, MosaicSelectionElement>,
 >(
   element: TElement,
   targetType: ConvertibleTypes,

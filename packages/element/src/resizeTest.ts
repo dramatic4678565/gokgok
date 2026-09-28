@@ -5,10 +5,7 @@ import {
   type Radians,
 } from "@mosaic/math";
 
-import {
-  SIDE_RESIZING_THRESHOLD,
-  type EditorInterface,
-} from "@mosaic/common";
+import { SIDE_RESIZING_THRESHOLD, type EditorInterface } from "@mosaic/common";
 
 import type { GlobalPoint, LineSegment, LocalPoint } from "@mosaic/math";
 

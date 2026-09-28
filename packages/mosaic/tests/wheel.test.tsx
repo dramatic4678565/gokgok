@@ -2,11 +2,7 @@ import React from "react";
 import { fireEvent, waitFor } from "@testing-library/react";
 import { vi } from "vitest";
 
-import {
-  CLASSES,
-  MIN_ZOOM,
-  viewportCoordsToSceneCoords,
-} from "@mosaic/common";
+import { CLASSES, MIN_ZOOM, viewportCoordsToSceneCoords } from "@mosaic/common";
 
 import { resolveInputDevice } from "../appState";
 import { Mosaic } from "../index";

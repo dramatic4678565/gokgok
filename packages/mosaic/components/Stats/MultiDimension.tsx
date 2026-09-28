@@ -15,10 +15,7 @@ import {
   isStickyNoteElement,
   updateStickyNoteLayout,
 } from "@mosaic/element";
-import {
-  rescalePointsInElement,
-  resizeSingleElement,
-} from "@mosaic/element";
+import { rescalePointsInElement, resizeSingleElement } from "@mosaic/element";
 import { getBoundTextElement, handleBindTextResize } from "@mosaic/element";
 
 import { isTextElement } from "@mosaic/element";

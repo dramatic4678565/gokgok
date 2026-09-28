@@ -15,10 +15,7 @@ import { serializeAsJSON } from "@mosaic/mosaic/data/json";
 import { isInitializedImageElement } from "@mosaic/element";
 import { useI18n } from "@mosaic/mosaic/i18n";
 
-import type {
-  FileId,
-  NonDeletedMosaicElement,
-} from "@mosaic/element/types";
+import type { FileId, NonDeletedMosaicElement } from "@mosaic/element/types";
 import type {
   AppState,
   BinaryFileData,
@@ -81,9 +78,7 @@ export const exportToMosaicPlus = async (
   }
 
   window.open(
-    `${
-      import.meta.env.VITE_APP_PLUS_APP
-    }/import?mosaic=${id},${encryptionKey}`,
+    `${import.meta.env.VITE_APP_PLUS_APP}/import?mosaic=${id},${encryptionKey}`,
   );
 };
 

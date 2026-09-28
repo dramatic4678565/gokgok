@@ -4,12 +4,9 @@ import "../common.scss";
 
 // Since client components get prerenderd on server as well hence importing the mosaic stuff dynamically
 // with ssr false
-const Mosaic = dynamic(
-  async () => (await import("../mosaicWrapper")).default,
-  {
-    ssr: false,
-  },
-);
+const Mosaic = dynamic(async () => (await import("../mosaicWrapper")).default, {
+  ssr: false,
+});
 
 export default function Page() {
   return (

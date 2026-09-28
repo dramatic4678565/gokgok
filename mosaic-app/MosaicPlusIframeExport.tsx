@@ -2,10 +2,7 @@ import { base64urlToString } from "@mosaic/mosaic/data/encode";
 import { MosaicError } from "@mosaic/mosaic/errors";
 import { useLayoutEffect, useRef } from "react";
 
-import type {
-  FileId,
-  OrderedMosaicElement,
-} from "@mosaic/element/types";
+import type { FileId, OrderedMosaicElement } from "@mosaic/element/types";
 import type { AppState, BinaryFileData } from "@mosaic/mosaic/types";
 
 import { STORAGE_KEYS } from "./app_constants";
@@ -51,9 +48,7 @@ const parseSceneData = async ({
   }
 
   try {
-    const elements = JSON.parse(
-      rawElementsString,
-    ) as OrderedMosaicElement[];
+    const elements = JSON.parse(rawElementsString) as OrderedMosaicElement[];
 
     if (!elements.length) {
       throw new MosaicError("Scene is empty, nothing to export.");

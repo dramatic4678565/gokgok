@@ -91,10 +91,7 @@ import { resetBrowserStateVersions } from "../data/tabSync";
 import { collabErrorIndicatorAtom } from "./CollabError";
 import Portal from "./Portal";
 
-import type {
-  SocketUpdateDataSource,
-  SyncableMosaicElement,
-} from "../data";
+import type { SocketUpdateDataSource, SyncableMosaicElement } from "../data";
 
 export const collabAPIAtom = atom<CollabAPI | null>(null);
 export const isCollaboratingAtom = atom(false);
@@ -369,9 +366,7 @@ class Collab extends PureComponent<CollabProps, CollabState> {
     this.resetErrorIndicator(true);
 
     this.saveCollabRoomToFirebase(
-      getSyncableElements(
-        this.mosaicAPI.getSceneElementsIncludingDeleted(),
-      ),
+      getSyncableElements(this.mosaicAPI.getSceneElementsIncludingDeleted()),
     );
 
     if (this.portal.socket && this.fallbackInitializationHandler) {
@@ -508,8 +503,7 @@ class Collab extends PureComponent<CollabProps, CollabState> {
 
     // TODO: `ImportedDataState` type here seems abused
     const scenePromise = resolvablePromise<
-      | (ImportedDataState & { elements: readonly OrderedMosaicElement[] })
-      | null
+      (ImportedDataState & { elements: readonly OrderedMosaicElement[] }) | null
     >();
 
     this.setIsCollaborating(true);
@@ -807,9 +801,7 @@ class Collab extends PureComponent<CollabProps, CollabState> {
     });
   }, LOAD_IMAGES_TIMEOUT);
 
-  private handleRemoteSceneUpdate = (
-    elements: ReconciledMosaicElement[],
-  ) => {
+  private handleRemoteSceneUpdate = (elements: ReconciledMosaicElement[]) => {
     this.mosaicAPI.updateScene({
       elements,
       captureUpdate: CaptureUpdateAction.NEVER,

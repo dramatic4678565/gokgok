@@ -449,9 +449,7 @@ export const getBoundTextElementPosition = (
  * sync on the element itself (see getBoundTextElementPosition), so
  * consumers reading a label's coords directly must go through this helper.
  */
-export const getTextElementWithAccuratePosition = <
-  T extends MosaicTextElement,
->(
+export const getTextElementWithAccuratePosition = <T extends MosaicTextElement>(
   textElement: T,
   elementsMap: ElementsMap,
 ): T => {
@@ -515,8 +513,7 @@ const VALID_CONTAINER_TYPES = new Set([
 
 export const isValidTextContainer = (element: {
   type: MosaicElementType;
-}): element is MosaicTextContainer =>
-  VALID_CONTAINER_TYPES.has(element.type);
+}): element is MosaicTextContainer => VALID_CONTAINER_TYPES.has(element.type);
 
 export const computeContainerDimensionForBoundText = (
   dimension: number,

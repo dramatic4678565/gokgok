@@ -252,9 +252,7 @@ describe("box-selection overlap mode", () => {
 
   beforeEach(async () => {
     await render(
-      <Mosaic
-        initialData={{ appState: { boxSelectionMode: "overlap" } }}
-      />,
+      <Mosaic initialData={{ appState: { boxSelectionMode: "overlap" } }} />,
     );
   });
 

@@ -73,9 +73,7 @@ export const dragSelectedElements = (
   // we do not want a frame and its elements to be selected at the same time
   // but when it happens (due to some bug), we want to avoid updating element
   // in the frame twice, hence the use of set
-  const elementsToUpdate = new Set<NonDeletedMosaicElement>(
-    selectedElements,
-  );
+  const elementsToUpdate = new Set<NonDeletedMosaicElement>(selectedElements);
   const frames = selectedElements
     .filter((e) => isFrameLikeElement(e))
     .map((f) => f.id);

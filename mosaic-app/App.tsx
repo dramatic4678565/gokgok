@@ -693,9 +693,7 @@ const MosaicWrapper = () => {
 
       if (
         mosaicAPI &&
-        LocalData.fileStorage.shouldPreventUnload(
-          mosaicAPI.getSceneElements(),
-        )
+        LocalData.fileStorage.shouldPreventUnload(mosaicAPI.getSceneElements())
       ) {
         if (import.meta.env.VITE_APP_DISABLE_PREVENT_UNLOAD !== "true") {
           preventUnload(event);
@@ -1000,9 +998,7 @@ const MosaicWrapper = () => {
           return (
             <div className="excalidraw-ui-top-right">
               {mosaicAPI?.getEditorInterface().formFactor === "desktop" && (
-                <MosaicPlusPromoBanner
-                  isSignedIn={isMosaicPlusSignedUser}
-                />
+                <MosaicPlusPromoBanner isSignedIn={isMosaicPlusSignedUser} />
               )}
 
               {collabError.message && <CollabError collabError={collabError} />}
@@ -1079,9 +1075,7 @@ const MosaicWrapper = () => {
             setErrorMessage={setErrorMessage}
           />
         )}
-        {mosaicAPI && !isCollabDisabled && (
-          <Collab mosaicAPI={mosaicAPI} />
-        )}
+        {mosaicAPI && !isCollabDisabled && <Collab mosaicAPI={mosaicAPI} />}
 
         <ShareDialog
           collabAPI={collabAPI}

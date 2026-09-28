@@ -581,9 +581,7 @@ describe("restoreElements", () => {
       deleteInvisibleElements: true,
     });
 
-    const restoredArrow = restoredElements[0] as
-      | MosaicArrowElement
-      | undefined;
+    const restoredArrow = restoredElements[0] as MosaicArrowElement | undefined;
 
     expect(restoredArrow).not.toBeUndefined();
     expect(restoredArrow?.isDeleted).toBe(true);
@@ -652,9 +650,7 @@ describe("restoreElements", () => {
     const restoredLinear = restoredElements[0] as
       | MosaicLinearElement
       | undefined;
-    const restoredArrow = restoredElements[1] as
-      | MosaicArrowElement
-      | undefined;
+    const restoredArrow = restoredElements[1] as MosaicArrowElement | undefined;
 
     expect(restoredLinear?.type).toBe("line");
     expect(restoredLinear?.points).toEqual([

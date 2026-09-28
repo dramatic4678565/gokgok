@@ -20,9 +20,7 @@ describe("event callbacks", () => {
   beforeEach(async () => {
     const mosaicAPIPromise = resolvablePromise<MosaicImperativeAPI>();
     await render(
-      <Mosaic
-        onMosaicAPI={(api) => mosaicAPIPromise.resolve(api as any)}
-      />,
+      <Mosaic onMosaicAPI={(api) => mosaicAPIPromise.resolve(api as any)} />,
     );
     mosaicAPI = await mosaicAPIPromise;
   });

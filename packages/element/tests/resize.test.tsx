@@ -16,11 +16,7 @@ import {
 
 import { API } from "@mosaic/mosaic/tests/helpers/api";
 import { UI, Keyboard, Pointer } from "@mosaic/mosaic/tests/helpers/ui";
-import {
-  act,
-  render,
-  unmountComponent,
-} from "@mosaic/mosaic/tests/test-utils";
+import { act, render, unmountComponent } from "@mosaic/mosaic/tests/test-utils";
 
 import type { GlobalPoint } from "@mosaic/math";
 

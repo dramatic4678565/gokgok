@@ -11,11 +11,7 @@
  */
 
 import { clearAppStateForLocalStorage } from "@mosaic/mosaic/appState";
-import {
-  CANVAS_SEARCH_TAB,
-  DEFAULT_SIDEBAR,
-  debounce,
-} from "@mosaic/common";
+import { CANVAS_SEARCH_TAB, DEFAULT_SIDEBAR, debounce } from "@mosaic/common";
 import {
   createStore,
   entries,

@@ -210,9 +210,7 @@ const pointAtDistance = (
   };
 };
 
-export const getStickyNoteCornerRadius = (
-  element: MosaicStickyNoteElement,
-) => {
+export const getStickyNoteCornerRadius = (element: MosaicStickyNoteElement) => {
   if (!element.roundness) {
     return 0;
   }

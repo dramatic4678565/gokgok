@@ -69,8 +69,7 @@ export const selectGroupsForSelectedElements = (function () {
     "selectedGroupIds" | "editingGroupId" | "selectedElementIds"
   >;
 
-  let lastSelectedElements: readonly NonDeletedMosaicElement[] | null =
-    null;
+  let lastSelectedElements: readonly NonDeletedMosaicElement[] | null = null;
   let lastElements: readonly NonDeletedMosaicElement[] | null = null;
   let lastReturnValue: SelectGroupsReturnType | null = null;
 
@@ -373,9 +372,7 @@ export const getNonDeletedGroupIds = (elements: ElementsMap) => {
   return nonDeletedGroupIds;
 };
 
-export const elementsAreInSameGroup = (
-  elements: readonly MosaicElement[],
-) => {
+export const elementsAreInSameGroup = (elements: readonly MosaicElement[]) => {
   const allGroups = elements.flatMap((element) => element.groupIds);
   const groupCount = new Map<string, number>();
   let maxGroup = 0;

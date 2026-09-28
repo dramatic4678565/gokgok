@@ -38,16 +38,11 @@ describe("Test Transform", () => {
         id: "rect-1",
       },
     ];
-    let data = convertToMosaicElements(
-      elements as MosaicElementSkeleton[],
-    );
+    let data = convertToMosaicElements(elements as MosaicElementSkeleton[]);
     expect(data.length).toBe(1);
     expect(data[0].id).toBe("id0");
 
-    data = convertToMosaicElements(
-      elements as MosaicElementSkeleton[],
-      opts,
-    );
+    data = convertToMosaicElements(elements as MosaicElementSkeleton[], opts);
     expect(data[0].id).toBe("rect-1");
   });
 
@@ -102,16 +97,15 @@ describe("Test Transform", () => {
       },
     ];
 
-    convertToMosaicElements(
-      elements as MosaicElementSkeleton[],
-      opts,
-    ).forEach((ele) => {
-      expect(ele).toMatchSnapshot({
-        seed: expect.any(Number),
-        versionNonce: expect.any(Number),
-        id: expect.any(String),
-      });
-    });
+    convertToMosaicElements(elements as MosaicElementSkeleton[], opts).forEach(
+      (ele) => {
+        expect(ele).toMatchSnapshot({
+          seed: expect.any(Number),
+          versionNonce: expect.any(Number),
+          id: expect.any(String),
+        });
+      },
+    );
   });
 
   it("should transform text element", () => {
@@ -131,16 +125,15 @@ describe("Test Transform", () => {
         strokeColor: "#5f3dc4",
       },
     ];
-    convertToMosaicElements(
-      elements as MosaicElementSkeleton[],
-      opts,
-    ).forEach((ele) => {
-      expect(ele).toMatchSnapshot({
-        seed: expect.any(Number),
-        versionNonce: expect.any(Number),
-        id: expect.any(String),
-      });
-    });
+    convertToMosaicElements(elements as MosaicElementSkeleton[], opts).forEach(
+      (ele) => {
+        expect(ele).toMatchSnapshot({
+          seed: expect.any(Number),
+          versionNonce: expect.any(Number),
+          id: expect.any(String),
+        });
+      },
+    );
   });
 
   it("should transform linear elements", () => {
@@ -363,10 +356,7 @@ describe("Test Transform", () => {
           name: "My frame",
         },
       ];
-      const mosaicElements = convertToMosaicElements(
-        elementsSkeleton,
-        opts,
-      );
+      const mosaicElements = convertToMosaicElements(elementsSkeleton, opts);
       expect(mosaicElements.length).toBe(4);
 
       mosaicElements.forEach((ele) => {
@@ -389,10 +379,7 @@ describe("Test Transform", () => {
           height: 100,
         },
       ];
-      const mosaicElements = convertToMosaicElements(
-        elementsSkeleton,
-        opts,
-      );
+      const mosaicElements = convertToMosaicElements(elementsSkeleton, opts);
       const frame = mosaicElements.find((ele) => ele.type === "frame")!;
       expect(frame.width).toBe(800);
       expect(frame.height).toBe(100);
@@ -409,10 +396,7 @@ describe("Test Transform", () => {
           y: 300,
         },
       ];
-      const mosaicElements = convertToMosaicElements(
-        elementsSkeleton,
-        opts,
-      );
+      const mosaicElements = convertToMosaicElements(elementsSkeleton, opts);
       const frame = mosaicElements.find((ele) => ele.type === "frame")!;
       expect(frame.x).toBe(100);
       expect(frame.y).toBe(300);
@@ -1069,9 +1053,7 @@ describe("Test Transform", () => {
   });
 
   describe("sticky notes", () => {
-    const find = <
-      T extends MosaicStickyNoteElement | MosaicTextElement,
-    >(
+    const find = <T extends MosaicStickyNoteElement | MosaicTextElement>(
       elements: readonly { type: string }[],
       type: T["type"],
     ) => elements.find((element) => element.type === type) as T;

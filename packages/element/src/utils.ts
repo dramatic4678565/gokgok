@@ -29,11 +29,7 @@ import {
 
 import type { Curve, LineSegment, LocalPoint, Radians } from "@mosaic/math";
 
-import type {
-  AppState,
-  NormalizedZoomValue,
-  Zoom,
-} from "@mosaic/mosaic/types";
+import type { AppState, NormalizedZoomValue, Zoom } from "@mosaic/mosaic/types";
 
 import { elementCenterPoint, getDiamondPoints } from "./bounds";
 

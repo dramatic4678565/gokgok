@@ -320,9 +320,7 @@ describe("browser zoom prevention (non-interactive)", () => {
     fireEvent.keyDown(document, { ctrlKey: true, code: CODES.EQUAL });
 
   it("prevents ctrl+wheel & keyboard zoom by default, keeps page scroll", async () => {
-    await render(
-      <Mosaic interaction={false} handleKeyboardGlobally={true} />,
-    );
+    await render(<Mosaic interaction={false} handleKeyboardGlobally={true} />);
 
     // browser zoom vectors get preventDefault-ed...
     expect(firesCtrlWheel()).toBe(false);
@@ -354,9 +352,7 @@ describe("browser zoom prevention (non-interactive)", () => {
   });
 
   it("toggling enabled.browserZoom at runtime re-attaches listeners", async () => {
-    await render(
-      <Mosaic interaction={false} handleKeyboardGlobally={true} />,
-    );
+    await render(<Mosaic interaction={false} handleKeyboardGlobally={true} />);
     expect(firesCtrlWheel()).toBe(false);
 
     GlobalTestState.renderResult.rerender(
@@ -1356,9 +1352,7 @@ describe("interaction={{ enabled: { tools } }}", () => {
     });
   };
 
-  const rerenderWithInteraction = (
-    interaction: MosaicProps["interaction"],
-  ) => {
+  const rerenderWithInteraction = (interaction: MosaicProps["interaction"]) => {
     GlobalTestState.renderResult.rerender(
       <Mosaic
         interaction={interaction}

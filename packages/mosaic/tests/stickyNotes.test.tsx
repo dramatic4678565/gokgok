@@ -60,10 +60,7 @@ const LONG_TEXT = Array(40).fill("abcdefghijklmnopqrstuvwx").join("\n");
 const RED = COLOR_PALETTE.red[4];
 
 const getElement = <
-  T extends
-    | MosaicStickyNoteElement
-    | MosaicTextElement
-    | MosaicArrowElement,
+  T extends MosaicStickyNoteElement | MosaicTextElement | MosaicArrowElement,
 >(
   id: string,
 ) => h.elements.find((element) => element.id === id) as NonDeleted<T>;
@@ -164,9 +161,7 @@ describe("sticky notes", () => {
     API.setElements([note, label, arrow]);
     layoutNotes(note.id);
 
-    const heightBefore = getElement<MosaicStickyNoteElement>(
-      note.id,
-    ).height;
+    const heightBefore = getElement<MosaicStickyNoteElement>(note.id).height;
     const endYBefore = arrowEndY(arrow.id);
     expect(heightBefore).toBe(DEFAULT_STICKY_NOTE_SIZE);
 
@@ -736,9 +731,9 @@ describe("sticky notes", () => {
       API.setSelectedElements([getElement(target.note.id)]);
       API.executeAction(actionPasteStyles);
 
-      expect(
-        getElement<MosaicTextElement>(target.label.id).baseFontSize,
-      ).toBe(28);
+      expect(getElement<MosaicTextElement>(target.label.id).baseFontSize).toBe(
+        28,
+      );
     });
 
     it("gives a note one ink when the copied styles carry two colors", () => {

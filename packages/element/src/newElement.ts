@@ -202,9 +202,7 @@ export const normalizeStickyNoteStyle = <T extends MosaicStickyNoteElement>(
  * its true dragged size; pointer-up, restore, the skeleton path and the
  * action post-passes enforce this.
  */
-export const normalizeStickyNoteGeometry = <
-  T extends MosaicStickyNoteElement,
->(
+export const normalizeStickyNoteGeometry = <T extends MosaicStickyNoteElement>(
   element: T,
 ): T => {
   const width = Math.max(element.width, STICKY_NOTE_MIN_SIZE);

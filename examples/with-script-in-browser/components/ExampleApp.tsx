@@ -131,8 +131,7 @@ export default function ExampleApp({
       resolvablePromise<MosaicInitialDataState | null>();
   }
 
-  const [mosaicAPI, setMosaicAPI] =
-    useState<MosaicImperativeAPI | null>(null);
+  const [mosaicAPI, setMosaicAPI] = useState<MosaicImperativeAPI | null>(null);
 
   useCustom(mosaicAPI, customArgs);
 
@@ -186,10 +185,7 @@ export default function ExampleApp({
       {
         mosaicAPI: (api: MosaicImperativeAPI) => setMosaicAPI(api),
         initialData: initialStatePromiseRef.current.promise,
-        onChange: (
-          elements: NonDeletedMosaicElement[],
-          state: AppState,
-        ) => {
+        onChange: (elements: NonDeletedMosaicElement[], state: AppState) => {
           console.info("Elements :", elements, "State : ", state);
         },
         onPointerUpdate: (payload: {
@@ -229,10 +225,7 @@ export default function ExampleApp({
       <>
         {mosaicAPI && (
           <Footer>
-            <CustomFooter
-              mosaicAPI={mosaicAPI}
-              mosaicLib={mosaicLib}
-            />
+            <CustomFooter mosaicAPI={mosaicAPI} mosaicLib={mosaicLib} />
           </Footer>
         )}
         <WelcomeScreen />
@@ -654,10 +647,7 @@ export default function ExampleApp({
         <MainMenu.DefaultItems.Help />
 
         {mosaicAPI && (
-          <MobileFooter
-            mosaicLib={mosaicLib}
-            mosaicAPI={mosaicAPI}
-          />
+          <MobileFooter mosaicLib={mosaicLib} mosaicAPI={mosaicAPI} />
         )}
       </MainMenu>
     );

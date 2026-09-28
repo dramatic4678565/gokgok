@@ -7,10 +7,7 @@ import { pointFrom, pointRotateRads } from "@mosaic/math";
 
 import type { Radians } from "@mosaic/math";
 
-import type {
-  InteractiveCanvasAppState,
-  Zoom,
-} from "@mosaic/mosaic/types";
+import type { InteractiveCanvasAppState, Zoom } from "@mosaic/mosaic/types";
 import type { Bounds } from "@mosaic/common";
 
 import { getElementAbsoluteCoords } from "./bounds";

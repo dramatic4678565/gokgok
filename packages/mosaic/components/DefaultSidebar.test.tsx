@@ -3,11 +3,7 @@ import React from "react";
 import { DEFAULT_SIDEBAR } from "@mosaic/common";
 
 import { DefaultSidebar } from "../index";
-import {
-  fireEvent,
-  waitFor,
-  withMosaicDimensions,
-} from "../tests/test-utils";
+import { fireEvent, waitFor, withMosaicDimensions } from "../tests/test-utils";
 
 import {
   assertMosaicWithSidebar,
@@ -94,14 +90,11 @@ describe("DefaultSidebar", () => {
       <DefaultSidebar onDock={false} />,
       DEFAULT_SIDEBAR.name,
       async () => {
-        await withMosaicDimensions(
-          { width: 1920, height: 1080 },
-          async () => {
-            expect(h.state.defaultSidebarDockedPreference).toBe(false);
+        await withMosaicDimensions({ width: 1920, height: 1080 }, async () => {
+          expect(h.state.defaultSidebarDockedPreference).toBe(false);
 
-            await assertSidebarDockButton(false);
-          },
-        );
+          await assertSidebarDockButton(false);
+        });
       },
     );
   });

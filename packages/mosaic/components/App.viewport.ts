@@ -141,8 +141,11 @@ const resolveViewportTarget = (
 
   // widening to null values in case the host app doesn't have
   // noUncheckedIndexedAccess enabled
-  const targetElements: (MosaicElement | undefined | null)[] =
-    Array.isArray(target) ? target : [target];
+  const targetElements: (MosaicElement | undefined | null)[] = Array.isArray(
+    target,
+  )
+    ? target
+    : [target];
   const elements = targetElements.reduce<NonDeleted<MosaicElement>[]>(
     (acc, element) => {
       if (element && !element.isDeleted) {
@@ -536,8 +539,7 @@ export class AppViewport {
    */
   getOffsets = (opts?: ViewportOffsetsOptions): Offsets => {
     const mosaicContainer = this.dependencies.getContainer();
-    const mosaicContainerRect =
-      mosaicContainer?.getBoundingClientRect();
+    const mosaicContainerRect = mosaicContainer?.getBoundingClientRect();
     const isRTL = getLanguage().rtl;
 
     const measuredOffsets = { top: 0, right: 0, bottom: 0, left: 0 };

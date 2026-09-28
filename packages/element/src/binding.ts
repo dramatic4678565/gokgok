@@ -1443,9 +1443,7 @@ const updateArrowBindings = (
   const binding = latestElement[startOrEnd];
   const bindableElement =
     binding &&
-    (elementsMap.get(
-      binding.elementId,
-    ) as NonDeleted<MosaicBindableElement>);
+    (elementsMap.get(binding.elementId) as NonDeleted<MosaicBindableElement>);
   const point = LinearElementEditor.getPointAtIndexGlobalCoordinates(
     latestElement,
     startOrEnd === "startBinding" ? 0 : -1,
@@ -2350,9 +2348,7 @@ const newBoundElements = (
   nextBoundElements.push(
     ...elementsToAdd.map(
       (x) =>
-        ({ id: x.id, type: x.type } as
-          | MosaicArrowElement
-          | MosaicTextElement),
+        ({ id: x.id, type: x.type } as MosaicArrowElement | MosaicTextElement),
     ),
   );
 

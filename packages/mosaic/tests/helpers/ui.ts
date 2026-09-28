@@ -568,9 +568,10 @@ export class UI {
     return proxy(origElement);
   }
 
-  static async editText<
-    T extends MosaicTextElement | MosaicTextContainer,
-  >(element: T, text: string) {
+  static async editText<T extends MosaicTextElement | MosaicTextContainer>(
+    element: T,
+    text: string,
+  ) {
     const openedEditor =
       document.querySelector<HTMLTextAreaElement>(TEXT_EDITOR_SELECTOR);
 
@@ -592,9 +593,7 @@ export class UI {
     return isTextElement(element)
       ? element
       : proxy(
-          h.elements[
-            h.elements.length - 1
-          ] as MosaicTextElementWithContainer,
+          h.elements[h.elements.length - 1] as MosaicTextElementWithContainer,
         );
   }
 

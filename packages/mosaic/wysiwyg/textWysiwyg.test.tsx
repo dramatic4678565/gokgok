@@ -1710,9 +1710,7 @@ describe("textWysiwyg", () => {
       const contextMenu = document.querySelector(".context-menu");
       fireEvent.click(queryByText(contextMenu as HTMLElement, "Unbind text")!);
       expect(h.elements[0].boundElements).toEqual([]);
-      expect((h.elements[1] as MosaicTextElement).containerId).toEqual(
-        null,
-      );
+      expect((h.elements[1] as MosaicTextElement).containerId).toEqual(null);
     });
 
     it("shouldn't bind to container if container has bound text", async () => {
@@ -1861,8 +1859,7 @@ describe("textWysiwyg", () => {
       });
       expect(h.elements.length).toBe(4);
       const duplicatedRectangle = h.elements[0];
-      const duplicatedText = h
-        .elements[1] as MosaicTextElementWithContainer;
+      const duplicatedText = h.elements[1] as MosaicTextElementWithContainer;
       const originalRect = h.elements[2];
       const originalText = h.elements[3] as MosaicTextElementWithContainer;
       expect(originalRect.boundElements).toStrictEqual([

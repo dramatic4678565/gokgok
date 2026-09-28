@@ -51,10 +51,7 @@ export type DragFinishedCallbackType<E = MosaicElement> = (props: {
   originalAppState: AppState;
 }) => void;
 
-interface StatsDragInputProps<
-  T extends StatsInputProperty,
-  E = MosaicElement,
-> {
+interface StatsDragInputProps<T extends StatsInputProperty, E = MosaicElement> {
   label: string | React.ReactNode;
   icon?: React.ReactNode;
   value: number | "Mixed";

@@ -14,10 +14,7 @@ import {
   isShallowEqual,
 } from "@mosaic/common";
 
-import App, {
-  MosaicAPIContext,
-  MosaicAPISetContext,
-} from "./components/App";
+import App, { MosaicAPIContext, MosaicAPISetContext } from "./components/App";
 import { InitializeApp } from "./components/InitializeApp";
 import Footer from "./components/footer/FooterCenter";
 import LiveCollaborationTrigger from "./components/live-collaboration/LiveCollaborationTrigger";
@@ -451,11 +448,7 @@ export {
   throttleRAF,
 } from "@mosaic/common";
 
-export {
-  mutateElement,
-  newElementWith,
-  bumpVersion,
-} from "@mosaic/element";
+export { mutateElement, newElementWith, bumpVersion } from "@mosaic/element";
 
 export { CaptureUpdateAction } from "@mosaic/element";
 

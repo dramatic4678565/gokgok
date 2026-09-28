@@ -705,9 +705,7 @@ describe("binding text to an arrow endpoint", () => {
       UI.createElement("arrow", { x: 100, y: 300, width: 0, height: -200 });
       const arrowId = h.elements[0].id;
       const arrow = () =>
-        h.elements.find(
-          (el): el is MosaicArrowElement => el.id === arrowId,
-        )!;
+        h.elements.find((el): el is MosaicArrowElement => el.id === arrowId)!;
 
       const editor = await bindTextAt(100, 100, "bound");
       Keyboard.exitTextEditor(editor);
@@ -734,9 +732,7 @@ describe("binding text to an arrow endpoint", () => {
       UI.createElement("arrow", { x: 100, y: 300, width: 0, height: -200 });
       const arrowId = h.elements[0].id;
       const arrow = () =>
-        h.elements.find(
-          (el): el is MosaicArrowElement => el.id === arrowId,
-        )!;
+        h.elements.find((el): el is MosaicArrowElement => el.id === arrowId)!;
 
       const editor = await bindTextAt(100, 100, "bound");
       Keyboard.exitTextEditor(editor);

@@ -10,10 +10,7 @@ import {
 
 import { mutateElement } from "@mosaic/element";
 import { deepCopyElement } from "@mosaic/element";
-import {
-  isFrameLikeElement,
-  isInitializedImageElement,
-} from "@mosaic/element";
+import { isFrameLikeElement, isInitializedImageElement } from "@mosaic/element";
 
 import { getContainingFrame } from "@mosaic/element";
 

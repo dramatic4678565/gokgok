@@ -34,11 +34,7 @@ import type {
   Ordered,
 } from "@mosaic/element/types";
 
-import type {
-  Assert,
-  Mutable,
-  SameType,
-} from "@mosaic/common/utility-types";
+import type { Assert, Mutable, SameType } from "@mosaic/common/utility-types";
 
 import type { AppState } from "../../mosaic/types";
 
@@ -55,10 +51,7 @@ const getNonDeletedElements = <T extends MosaicElement>(
   for (const element of allElements) {
     if (!element.isDeleted) {
       elements.push(element as NonDeleted<T>);
-      elementsMap.set(
-        element.id,
-        element as Ordered<NonDeletedMosaicElement>,
-      );
+      elementsMap.set(element.id, element as Ordered<NonDeletedMosaicElement>);
     }
   }
   return { elementsMap, elements };
@@ -112,8 +105,7 @@ export class Scene {
 
   private callbacks: Set<SceneStateCallback> = new Set();
 
-  private nonDeletedElements: readonly Ordered<NonDeletedMosaicElement>[] =
-    [];
+  private nonDeletedElements: readonly Ordered<NonDeletedMosaicElement>[] = [];
   private nonDeletedElementsMap = toBrandedType<NonDeletedSceneElementsMap>(
     new Map(),
   );
@@ -251,9 +243,7 @@ export class Scene {
    *
    * @returns whether a change was made
    */
-  mapElements(
-    iteratee: (element: MosaicElement) => MosaicElement,
-  ): boolean {
+  mapElements(iteratee: (element: MosaicElement) => MosaicElement): boolean {
     let didChange = false;
     const newElements = this.elements.map((element) => {
       const nextElement = iteratee(element);

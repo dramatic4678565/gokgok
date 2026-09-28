@@ -61,9 +61,7 @@ const getSticky = (scene: Scene, id: string) =>
   scene.getNonDeletedElement(id) as NonDeleted<MosaicStickyNoteElement>;
 
 const getBoundText = (scene: Scene, id: string) =>
-  scene.getNonDeletedElement(
-    id,
-  ) as NonDeleted<MosaicTextElementWithContainer>;
+  scene.getNonDeletedElement(id) as NonDeleted<MosaicTextElementWithContainer>;
 
 const createStickyWithText = (
   originalText: string,

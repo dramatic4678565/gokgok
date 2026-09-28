@@ -51,9 +51,7 @@ const excludeElementsFromFrames = <T extends MosaicElement>(
  * we only keep the frames.
  * @param selectedElements
  */
-export const excludeElementsInFramesFromSelection = <
-  T extends MosaicElement,
->(
+export const excludeElementsInFramesFromSelection = <T extends MosaicElement>(
   selectedElements: readonly T[],
 ) => {
   const framesInSelection = new Set<T["id"]>();

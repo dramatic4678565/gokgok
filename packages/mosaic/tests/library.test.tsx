@@ -6,10 +6,7 @@ import { KEYS, MIME_TYPES, ORIG_ID } from "@mosaic/common";
 
 import { getCommonBoundingBox } from "@mosaic/element";
 
-import type {
-  MosaicGenericElement,
-  NonDeleted,
-} from "@mosaic/element/types";
+import type { MosaicGenericElement, NonDeleted } from "@mosaic/element/types";
 
 import { parseLibraryJSON } from "../data/blob";
 import { serializeLibraryAsJSON } from "../data/json";

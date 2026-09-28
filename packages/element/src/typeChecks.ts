@@ -252,9 +252,7 @@ export const isTextBindableContainer = <T extends MosaicElement>(
   );
 };
 
-export const isMosaicElement = (
-  element: any,
-): element is MosaicElement => {
+export const isMosaicElement = (element: any): element is MosaicElement => {
   const type: MosaicElementType | undefined = element?.type;
   if (!type) {
     return false;
@@ -296,8 +294,7 @@ export const isFlowchartNodeElement = <T extends MosaicElement>(
 
 export const hasBoundTextElement = <T extends MosaicElement>(
   element: T | null,
-): element is T &
-  MarkNonNullable<MosaicBindableElement, "boundElements"> => {
+): element is T & MarkNonNullable<MosaicBindableElement, "boundElements"> => {
   return (
     isTextBindableContainer(element) &&
     !!element.boundElements?.some(({ type }) => type === "text")
@@ -354,9 +351,7 @@ export const canApplyRoundnessTypeToElement = (
   return false;
 };
 
-export const getDefaultRoundnessTypeForElement = (
-  element: MosaicElement,
-) => {
+export const getDefaultRoundnessTypeForElement = (element: MosaicElement) => {
   if (isUsingProportionalRadius(element.type)) {
     return {
       type: ROUNDNESS.PROPORTIONAL_RADIUS,

@@ -125,10 +125,7 @@ export class Renderer {
       const documentVisible = this.getVisibleSet(visibleElements);
       const added = new Set<NonDeletedMosaicElement>();
       const removed = new Set<NonDeletedMosaicElement>();
-      const update = (
-        element: NonDeletedMosaicElement,
-        visible: boolean,
-      ) => {
+      const update = (element: NonDeletedMosaicElement, visible: boolean) => {
         if (documentVisible.has(element) !== visible) {
           (visible ? added : removed).add(element);
         }
@@ -186,9 +183,7 @@ export class Renderer {
     Set<NonDeletedMosaicElement>
   >();
 
-  private getVisibleSet(
-    visibleElements: readonly NonDeletedMosaicElement[],
-  ) {
+  private getVisibleSet(visibleElements: readonly NonDeletedMosaicElement[]) {
     let set = this.visibleSets.get(visibleElements);
     if (!set) {
       set = new Set(visibleElements);
@@ -269,9 +264,7 @@ export class Renderer {
     return { elementsMap, newElementCanvasElement };
   }
 
-  private sortSelectedElementsIntoHighlightedFrame<
-    T extends MosaicElement,
-  >({
+  private sortSelectedElementsIntoHighlightedFrame<T extends MosaicElement>({
     visibleElements,
     selectedElements,
     frameToHighlight,

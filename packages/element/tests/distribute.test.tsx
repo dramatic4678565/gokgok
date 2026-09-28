@@ -7,11 +7,7 @@ import { Mosaic } from "@mosaic/mosaic";
 
 import { API } from "@mosaic/mosaic/tests/helpers/api";
 import { UI, Pointer, Keyboard } from "@mosaic/mosaic/tests/helpers/ui";
-import {
-  act,
-  unmountComponent,
-  render,
-} from "@mosaic/mosaic/tests/test-utils";
+import { act, unmountComponent, render } from "@mosaic/mosaic/tests/test-utils";
 
 const mouse = new Pointer("mouse");
 

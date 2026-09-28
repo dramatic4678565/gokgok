@@ -1,8 +1,4 @@
-import {
-  loginIcon,
-  ExcalLogo,
-  eyeIcon,
-} from "@mosaic/mosaic/components/icons";
+import { loginIcon, ExcalLogo, eyeIcon } from "@mosaic/mosaic/components/icons";
 import { useI18n } from "@mosaic/mosaic/i18n";
 import { MainMenu } from "@mosaic/mosaic/index";
 import React from "react";

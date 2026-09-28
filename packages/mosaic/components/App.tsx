@@ -292,10 +292,7 @@ import type {
   MosaicBindableElement,
 } from "@mosaic/element/types";
 
-import type {
-  ArrowEndpoint,
-  TransformHandleDirection,
-} from "@mosaic/element";
+import type { ArrowEndpoint, TransformHandleDirection } from "@mosaic/element";
 
 import type { Mutable, ValueOf } from "@mosaic/common/utility-types";
 
@@ -571,13 +568,12 @@ const MosaicSetAppStateContext = React.createContext<
 });
 MosaicSetAppStateContext.displayName = "MosaicSetAppStateContext";
 
-const MosaicActionManagerContext = React.createContext<ActionManager>(
-  null!,
-);
+const MosaicActionManagerContext = React.createContext<ActionManager>(null!);
 MosaicActionManagerContext.displayName = "MosaicActionManagerContext";
 
-export const MosaicAPIContext =
-  React.createContext<MosaicImperativeAPI | null>(null);
+export const MosaicAPIContext = React.createContext<MosaicImperativeAPI | null>(
+  null,
+);
 MosaicAPIContext.displayName = "MosaicAPIContext";
 
 export const MosaicAPISetContext = React.createContext<
@@ -591,14 +587,10 @@ export const useEditorInterface = () =>
   useContext<EditorInterface>(EditorInterfaceContext);
 export const useStylesPanelMode = () =>
   deriveStylesPanelMode(useEditorInterface());
-export const useMosaicContainer = () =>
-  useContext(MosaicContainerContext);
-export const useMosaicElements = () =>
-  useContext(MosaicElementsContext);
-export const useMosaicAppState = () =>
-  useContext(MosaicAppStateContext);
-export const useMosaicSetAppState = () =>
-  useContext(MosaicSetAppStateContext);
+export const useMosaicContainer = () => useContext(MosaicContainerContext);
+export const useMosaicElements = () => useContext(MosaicElementsContext);
+export const useMosaicAppState = () => useContext(MosaicAppStateContext);
+export const useMosaicSetAppState = () => useContext(MosaicSetAppStateContext);
 export const useMosaicActionManager = () =>
   useContext(MosaicActionManagerContext);
 /**
@@ -768,11 +760,7 @@ class App extends React.Component<AppProps, AppState> {
   cursorHints = new CursorHints(this);
 
   onChangeEmitter = new Emitter<
-    [
-      elements: readonly MosaicElement[],
-      appState: AppState,
-      files: BinaryFiles,
-    ]
+    [elements: readonly MosaicElement[], appState: AppState, files: BinaryFiles]
   >();
 
   onPointerDownEmitter = new Emitter<
@@ -1296,8 +1284,7 @@ class App extends React.Component<AppProps, AppState> {
     }
   }
 
-  private previousHoveredBindableElement: NonDeletedMosaicElement | null =
-    null;
+  private previousHoveredBindableElement: NonDeletedMosaicElement | null = null;
 
   private handleDelayedBindModeChange(
     arrow: MosaicArrowElement,
@@ -2480,9 +2467,7 @@ class App extends React.Component<AppProps, AppState> {
                 value={this.mosaicContainerValue}
               >
                 <EditorInterfaceContext.Provider value={this.editorInterface}>
-                  <MosaicSetAppStateContext.Provider
-                    value={this.setAppState}
-                  >
+                  <MosaicSetAppStateContext.Provider value={this.setAppState}>
                     <MosaicAppStateContext.Provider value={this.state}>
                       <MosaicElementsContext.Provider
                         value={this.scene.getNonDeletedElements()}
@@ -3030,9 +3015,7 @@ class App extends React.Component<AppProps, AppState> {
       this.setActiveTool({ type: TOOL_TYPE.magicframe });
       trackEvent("ai", "tool-select (empty-selection)", "d2c");
     } else {
-      const selectedMagicFrame:
-        | NonDeleted<MosaicMagicFrameElement>
-        | false =
+      const selectedMagicFrame: NonDeleted<MosaicMagicFrameElement> | false =
         selectedElements.length === 1 &&
         isMagicFrameElement(selectedElements[0]) &&
         selectedElements[0];
@@ -3833,8 +3816,7 @@ class App extends React.Component<AppProps, AppState> {
     this.unmounted = false;
     this.api = this.createMosaicAPI();
 
-    this.mosaicContainerValue.container =
-      this.mosaicContainerRef.current;
+    this.mosaicContainerValue.container = this.mosaicContainerRef.current;
 
     if (isTestEnv() || isDevEnv()) {
       const setState = this.setState.bind(this);
@@ -4739,9 +4721,7 @@ class App extends React.Component<AppProps, AppState> {
     if (data.elements) {
       const elements = (
         data.programmaticAPI
-          ? convertToMosaicElements(
-              data.elements as MosaicElementSkeleton[],
-            )
+          ? convertToMosaicElements(data.elements as MosaicElementSkeleton[])
           : data.elements
       ) as readonly MosaicElement[];
       // TODO: remove formatting from elements if isPlainPaste
@@ -4846,8 +4826,7 @@ class App extends React.Component<AppProps, AppState> {
 
       // #686
       const target = this.ownerDocument.activeElement;
-      const isMosaicActive =
-        this.mosaicContainerRef.current?.contains(target);
+      const isMosaicActive = this.mosaicContainerRef.current?.contains(target);
       if (event && !isMosaicActive) {
         return;
       }
@@ -5098,56 +5077,52 @@ class App extends React.Component<AppProps, AppState> {
     let currentY = y;
 
     const lines = isPlainPaste ? [text] : text.split("\n");
-    const textElements = lines.reduce(
-      (acc: MosaicTextElement[], line, idx) => {
-        const originalText = normalizeText(line).trim();
-        if (originalText.length) {
-          const topLayerFrame = this.getTopLayerFrameAtSceneCoords({
-            x,
-            y: currentY,
-          });
+    const textElements = lines.reduce((acc: MosaicTextElement[], line, idx) => {
+      const originalText = normalizeText(line).trim();
+      if (originalText.length) {
+        const topLayerFrame = this.getTopLayerFrameAtSceneCoords({
+          x,
+          y: currentY,
+        });
 
-          let metrics = measureText(originalText, fontString, lineHeight);
-          const isTextUnwrapped = metrics.width > maxTextWidth;
+        let metrics = measureText(originalText, fontString, lineHeight);
+        const isTextUnwrapped = metrics.width > maxTextWidth;
 
-          const text = isTextUnwrapped
-            ? wrapText(originalText, fontString, maxTextWidth)
-            : originalText;
+        const text = isTextUnwrapped
+          ? wrapText(originalText, fontString, maxTextWidth)
+          : originalText;
 
-          metrics = isTextUnwrapped
-            ? measureText(text, fontString, lineHeight)
-            : metrics;
+        metrics = isTextUnwrapped
+          ? measureText(text, fontString, lineHeight)
+          : metrics;
 
-          const startX = x - metrics.width / 2;
-          const startY = currentY - metrics.height / 2;
+        const startX = x - metrics.width / 2;
+        const startY = currentY - metrics.height / 2;
 
-          const element = newTextElement({
-            ...textElementProps,
-            x: startX,
-            y: startY,
-            text,
-            originalText,
-            lineHeight,
-            autoResize: !isTextUnwrapped,
-            frameId: topLayerFrame ? topLayerFrame.id : null,
-          });
-          acc.push(element);
-          currentY += element.height + LINE_GAP;
-        } else {
-          const prevLine = lines[idx - 1]?.trim();
-          // add paragraph only if previous line was not empty, IOW don't add
-          // more than one empty line
-          if (prevLine) {
-            currentY +=
-              getLineHeightInPx(textElementProps.fontSize, lineHeight) +
-              LINE_GAP;
-          }
+        const element = newTextElement({
+          ...textElementProps,
+          x: startX,
+          y: startY,
+          text,
+          originalText,
+          lineHeight,
+          autoResize: !isTextUnwrapped,
+          frameId: topLayerFrame ? topLayerFrame.id : null,
+        });
+        acc.push(element);
+        currentY += element.height + LINE_GAP;
+      } else {
+        const prevLine = lines[idx - 1]?.trim();
+        // add paragraph only if previous line was not empty, IOW don't add
+        // more than one empty line
+        if (prevLine) {
+          currentY +=
+            getLineHeightInPx(textElementProps.fontSize, lineHeight) + LINE_GAP;
         }
+      }
 
-        return acc;
-      },
-      [],
-    );
+      return acc;
+    }, []);
 
     if (textElements.length === 0) {
       return;
@@ -7391,8 +7366,7 @@ class App extends React.Component<AppProps, AppState> {
     );
 
     if (selectedElements.length === 1 && isLinearElement(selectedElements[0])) {
-      const selectedLinearElement: MosaicLinearElement =
-        selectedElements[0];
+      const selectedLinearElement: MosaicLinearElement = selectedElements[0];
 
       if (
         ((event[KEYS.CTRL_OR_CMD] && isSimpleArrow(selectedLinearElement)) ||
@@ -11691,10 +11665,7 @@ class App extends React.Component<AppProps, AppState> {
             this.scene.getNonDeletedElementsMap(),
           );
           if (element) {
-            this.scene.mutateElement(
-              element as MosaicElbowArrowElement,
-              {},
-            );
+            this.scene.mutateElement(element as MosaicElbowArrowElement, {});
           }
         }
 

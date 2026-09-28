@@ -27,10 +27,7 @@ import { isCurve } from "@mosaic/math/curve";
 import React from "react";
 
 import type { Curve } from "@mosaic/math";
-import type {
-  DebugElement,
-  DebugPolygon,
-} from "@mosaic/element/visualdebug";
+import type { DebugElement, DebugPolygon } from "@mosaic/element/visualdebug";
 import type {
   ElementsMap,
   MosaicArrowElement,
@@ -142,9 +139,7 @@ const _renderBinding = (
     return;
   }
 
-  const bindable = elementsMap.get(
-    binding.elementId,
-  ) as MosaicBindableElement;
+  const bindable = elementsMap.get(binding.elementId) as MosaicBindableElement;
   const [x, y] = getGlobalFixedPointForBindableElement(
     binding.fixedPoint,
     bindable,
@@ -177,9 +172,7 @@ const _renderBindableBinding = (
   height: number,
   color: string,
 ) => {
-  const bindable = elementsMap.get(
-    binding.elementId,
-  ) as MosaicBindableElement;
+  const bindable = elementsMap.get(binding.elementId) as MosaicBindableElement;
   if (!binding.fixedPoint) {
     console.warn("Binding must have a fixedPoint");
     return;
@@ -267,9 +260,7 @@ const renderBindings = (
           return;
         }
 
-        const arrow = elementsMap.get(
-          boundElement.id,
-        ) as MosaicArrowElement;
+        const arrow = elementsMap.get(boundElement.id) as MosaicArrowElement;
 
         if (arrow && arrow.startBinding?.elementId === element.id) {
           _renderBindableBinding(

@@ -909,9 +909,7 @@ export const getArrowheadPoints = (
 };
 
 // TODO reuse shape.ts
-const generateLinearElementShape = (
-  element: MosaicLinearElement,
-): Drawable => {
+const generateLinearElementShape = (element: MosaicLinearElement): Drawable => {
   const generator = rough.generator();
   const options = generateRoughOptions(element);
 
@@ -1126,9 +1124,7 @@ export interface BoundingBox {
 }
 
 export const getCommonBoundingBox = (
-  elements:
-    | readonly MosaicElement[]
-    | readonly NonDeleted<MosaicElement>[],
+  elements: readonly MosaicElement[] | readonly NonDeleted<MosaicElement>[],
 ): BoundingBox => {
   const [minX, minY, maxX, maxY] = getCommonBounds(elements);
   return {

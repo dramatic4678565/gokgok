@@ -18,10 +18,7 @@ import {
   ShapeCache,
 } from "@mosaic/element";
 
-import type {
-  NonDeletedMosaicElement,
-  Theme,
-} from "@mosaic/element/types";
+import type { NonDeletedMosaicElement, Theme } from "@mosaic/element/types";
 
 import { actionChangeBucketFillBackgroundColor } from "../actions";
 import { editorJotaiStore } from "../editor-jotai";

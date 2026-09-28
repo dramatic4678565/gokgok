@@ -9,8 +9,7 @@ process.env.IS_PREACT = "false";
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: "Mosaic developer docs",
-  tagline:
-    "For Mosaic contributors or those integrating the Mosaic editor",
+  tagline: "For Mosaic contributors or those integrating the Mosaic editor",
   url: "https://docs.excalidraw.com",
   baseUrl: "/",
   onBrokenLinks: "throw",

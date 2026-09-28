@@ -18,9 +18,7 @@ describe("laser tool interactions", () => {
 
   it("opens links while using the laser tool", async () => {
     const onLinkOpenSpy = vi.fn();
-    const onLinkOpen: NonNullable<MosaicProps["onLinkOpen"]> = (
-      ...args
-    ) => {
+    const onLinkOpen: NonNullable<MosaicProps["onLinkOpen"]> = (...args) => {
       onLinkOpenSpy(...args);
       args[1].preventDefault();
     };

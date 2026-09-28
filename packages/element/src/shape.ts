@@ -35,10 +35,7 @@ import type { GlobalPoint, Polygon } from "@mosaic/math";
 
 import type { Mutable } from "@mosaic/common/utility-types";
 
-import type {
-  AppState,
-  EmbedsValidationStatus,
-} from "@mosaic/mosaic/types";
+import type { AppState, EmbedsValidationStatus } from "@mosaic/mosaic/types";
 import type {
   ElementShape,
   ElementShapes,
@@ -1284,9 +1281,7 @@ export const getFreedrawOutlinePoints = (
  * around the first point from an outline point of the last one (reaching
  * sqrt(size² + 3²)), and a single point gets a synthetic neighbor 1px away.
  */
-export const getFreedrawMaxStrokeRadius = (
-  element: MosaicFreeDrawElement,
-) =>
+export const getFreedrawMaxStrokeRadius = (element: MosaicFreeDrawElement) =>
   element.strokeOptions?.variability === "constant"
     ? element.strokeWidth * CONSTANT_WIDTH_FREEDRAW.SIZE_FACTOR
     : element.strokeWidth * VARIABLE_WIDTH_FREEDRAW.SIZE_FACTOR + 3;

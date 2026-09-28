@@ -8,11 +8,7 @@ import {
   ROUGHNESS,
 } from "@mosaic/common";
 
-import {
-  measureText,
-  newLinearElement,
-  newTextElement,
-} from "@mosaic/element";
+import { measureText, newLinearElement, newTextElement } from "@mosaic/element";
 
 import type { LocalPoint } from "@mosaic/math";
 

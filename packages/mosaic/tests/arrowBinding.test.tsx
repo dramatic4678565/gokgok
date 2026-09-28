@@ -1,8 +1,5 @@
 import { reseed } from "@mosaic/common";
-import {
-  isElbowArrow,
-  projectFixedPointOntoDiagonal,
-} from "@mosaic/element";
+import { isElbowArrow, projectFixedPointOntoDiagonal } from "@mosaic/element";
 
 import { pointFrom } from "@mosaic/math";
 
@@ -450,8 +447,7 @@ describe("Arrow binding – non-default case (bindingPreference: disabled)", () 
 
       await waitFor(() => {
         const arrow = h.elements.find(
-          (element): element is MosaicArrowElement =>
-            element.type === "arrow",
+          (element): element is MosaicArrowElement => element.type === "arrow",
         );
         expect(arrow).toBeDefined();
         expect(arrow!.endBinding?.elementId).toBe(rect.id);
@@ -491,8 +487,7 @@ describe("Arrow binding – non-default case (bindingPreference: disabled)", () 
 
       await waitFor(() => {
         const arrow = h.elements.find(
-          (element): element is MosaicArrowElement =>
-            element.type === "arrow",
+          (element): element is MosaicArrowElement => element.type === "arrow",
         );
         expect(arrow).toBeDefined();
         expect(arrow!.endBinding?.elementId).toBe(ellipse.id);

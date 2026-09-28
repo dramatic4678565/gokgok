@@ -22,15 +22,9 @@ type FileVersion = Required<BinaryFileData>["version"];
 export class FileManager {
   /** files being fetched */
   private fetchingFiles = new Map<MosaicImageElement["fileId"], true>();
-  private erroredFiles_fetch = new Map<
-    MosaicImageElement["fileId"],
-    true
-  >();
+  private erroredFiles_fetch = new Map<MosaicImageElement["fileId"], true>();
   /** files being saved */
-  private savingFiles = new Map<
-    MosaicImageElement["fileId"],
-    FileVersion
-  >();
+  private savingFiles = new Map<MosaicImageElement["fileId"], FileVersion>();
   /* files already saved to persistent storage */
   private savedFiles = new Map<MosaicImageElement["fileId"], FileVersion>();
   private erroredFiles_save = new Map<

@@ -73,18 +73,12 @@ export type OnDuplicateData = {
    * id of an original -> id of its duplicate (e.g. to remap element ids you
    * keep in `customData`, which the duplicate copied from its original)
    */
-  origIdToDuplicateId: ReadonlyMap<
-    MosaicElement["id"],
-    MosaicElement["id"]
-  >;
+  origIdToDuplicateId: ReadonlyMap<MosaicElement["id"], MosaicElement["id"]>;
   /**
    * id of a duplicate -> id of its original (e.g. to look up the original in
    * `originalElements` while modifying the duplicate)
    */
-  duplicateIdToOrigId: ReadonlyMap<
-    MosaicElement["id"],
-    MosaicElement["id"]
-  >;
+  duplicateIdToOrigId: ReadonlyMap<MosaicElement["id"], MosaicElement["id"]>;
 };
 
 /**
@@ -140,10 +134,7 @@ export const duplicateElements = (
     overrides?: (data: {
       duplicateElement: MosaicElement;
       origElement: MosaicElement;
-      origIdToDuplicateId: Map<
-        MosaicElement["id"],
-        MosaicElement["id"]
-      >;
+      origIdToDuplicateId: Map<MosaicElement["id"], MosaicElement["id"]>;
     }) => Partial<MosaicElement>;
   } & (
     | {
@@ -167,10 +158,7 @@ export const duplicateElements = (
          * such as alt-drag or on duplicate action.
          */
         type: "in-place";
-        idsOfElementsToDuplicate: Map<
-          MosaicElement["id"],
-          MosaicElement
-        >;
+        idsOfElementsToDuplicate: Map<MosaicElement["id"], MosaicElement>;
         appState: {
           editingGroupId: AppState["editingGroupId"];
           selectedGroupIds: AppState["selectedGroupIds"];
@@ -240,55 +228,48 @@ export const duplicateElements = (
   // an element with bound text etc.
   const copyElements = <T extends MosaicElement | MosaicElement[]>(
     element: T,
-  ): T extends MosaicElement[]
-    ? MosaicElement[]
-    : MosaicElement | null => {
+  ): T extends MosaicElement[] ? MosaicElement[] : MosaicElement | null => {
     const elements = castArray(element);
 
-    const _newElements = elements.reduce(
-      (acc: MosaicElement[], element) => {
-        if (processedIds.has(element.id)) {
-          return acc;
-        }
-
-        processedIds.set(element.id, true);
-
-        // SAFETY: this should never happen, but we
-        // want to make sure we log it if it does
-        if (!isNonDeletedElement(element)) {
-          console.error(
-            "[NONDELETED][INVARIANT] Element to duplicate should be non-deleted",
-          );
-        }
-
-        const newElement = duplicateElement(
-          appState.editingGroupId,
-          groupIdMap,
-          element,
-          opts.randomizeSeed,
-        ) as NonDeletedMosaicElement;
-
-        processedIds.set(newElement.id, true);
-
-        duplicateElementsMap.set(newElement.id, newElement);
-        origElementsMap.set(element.id, element);
-        origIdToDuplicateId.set(element.id, newElement.id);
-        duplicateIdToOrigId.set(newElement.id, element.id);
-
-        origElements.push(element);
-        duplicatedElements.push(newElement);
-
-        acc.push(newElement);
+    const _newElements = elements.reduce((acc: MosaicElement[], element) => {
+      if (processedIds.has(element.id)) {
         return acc;
-      },
-      [],
-    );
+      }
+
+      processedIds.set(element.id, true);
+
+      // SAFETY: this should never happen, but we
+      // want to make sure we log it if it does
+      if (!isNonDeletedElement(element)) {
+        console.error(
+          "[NONDELETED][INVARIANT] Element to duplicate should be non-deleted",
+        );
+      }
+
+      const newElement = duplicateElement(
+        appState.editingGroupId,
+        groupIdMap,
+        element,
+        opts.randomizeSeed,
+      ) as NonDeletedMosaicElement;
+
+      processedIds.set(newElement.id, true);
+
+      duplicateElementsMap.set(newElement.id, newElement);
+      origElementsMap.set(element.id, element);
+      origIdToDuplicateId.set(element.id, newElement.id);
+      duplicateIdToOrigId.set(newElement.id, element.id);
+
+      origElements.push(element);
+      duplicatedElements.push(newElement);
+
+      acc.push(newElement);
+      return acc;
+    }, []);
 
     return (
       Array.isArray(element) ? _newElements : _newElements[0] || null
-    ) as T extends MosaicElement[]
-      ? MosaicElement[]
-      : MosaicElement | null;
+    ) as T extends MosaicElement[] ? MosaicElement[] : MosaicElement | null;
   };
 
   // Helper to position cloned elements in the Z-order the product needs it
@@ -502,9 +483,7 @@ export const duplicateElements = (
  *
  * @returns next elements, and the duplicates that weren't vetoed
  */
-export const reconcileDuplicatedElements = <
-  TDuplicate extends MosaicElement,
->(
+export const reconcileDuplicatedElements = <TDuplicate extends MosaicElement>(
   /** what the host returned from `props.onDuplicate`, if anything */
   hostElements: readonly MosaicElement[] | void | false,
   /** elements that were passed to the host */

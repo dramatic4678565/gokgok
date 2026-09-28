@@ -6,10 +6,7 @@ const mosaicDir = `${__dirname}/../packages/mosaic`;
 const mosaicPackage = `${mosaicDir}/package.json`;
 const pkg = require(mosaicPackage);
 const lastVersion = pkg.version;
-const existingChangeLog = fs.readFileSync(
-  `${mosaicDir}/CHANGELOG.md`,
-  "utf8",
-);
+const existingChangeLog = fs.readFileSync(`${mosaicDir}/CHANGELOG.md`, "utf8");
 
 const supportedTypes = ["feat", "fix", "style", "refactor", "perf", "build"];
 const headerForType = {

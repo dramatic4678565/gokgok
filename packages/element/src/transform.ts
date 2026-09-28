@@ -636,10 +636,7 @@ export const convertToMosaicElements = (
           type: "arrow",
         });
 
-        Object.assign(
-          mosaicElement,
-          getSizeFromPoints(mosaicElement.points),
-        );
+        Object.assign(mosaicElement, getSizeFromPoints(mosaicElement.points));
         break;
       }
       case "text": {

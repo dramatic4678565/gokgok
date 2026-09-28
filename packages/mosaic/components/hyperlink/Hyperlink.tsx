@@ -60,10 +60,7 @@ const AUTO_HIDE_TIMEOUT = 500;
 
 let IS_HYPERLINK_TOOLTIP_VISIBLE = false;
 
-const embeddableLinkCache = new Map<
-  MosaicEmbeddableElement["id"],
-  string
->();
+const embeddableLinkCache = new Map<MosaicEmbeddableElement["id"], string>();
 
 export const Hyperlink = ({
   element,

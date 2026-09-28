@@ -865,9 +865,7 @@ export const textWysiwyg = ({
     // it'd get stuck in an infinite loop of blur→onSubmit after we re-focus the
     // wysiwyg on update
     cleanup();
-    const updateElement = app.scene.getElement(
-      element.id,
-    ) as MosaicTextElement;
+    const updateElement = app.scene.getElement(element.id) as MosaicTextElement;
     if (!updateElement) {
       return;
     }
@@ -894,9 +892,7 @@ export const textWysiwyg = ({
         app.scene.mutateElement(container, {
           boundElements: container.boundElements?.filter(
             (ele) =>
-              !isTextElement(
-                ele as MosaicTextElement | MosaicLinearElement,
-              ),
+              !isTextElement(ele as MosaicTextElement | MosaicLinearElement),
           ),
         });
       }

@@ -1,10 +1,6 @@
 import { Emitter } from "@mosaic/common";
 
-import {
-  CaptureUpdateAction,
-  StoreChange,
-  StoreDelta,
-} from "@mosaic/element";
+import { CaptureUpdateAction, StoreChange, StoreDelta } from "@mosaic/element";
 
 import type { StoreSnapshot, Store } from "@mosaic/element";
 

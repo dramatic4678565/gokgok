@@ -3,11 +3,7 @@ import { vi } from "vitest";
 
 import { KEYS, cloneJSON } from "@mosaic/common";
 
-import {
-  Mosaic,
-  exportToCanvas,
-  exportToSvg,
-} from "@mosaic/mosaic";
+import { Mosaic, exportToCanvas, exportToSvg } from "@mosaic/mosaic";
 import {
   actionFlipHorizontal,
   actionFlipVertical,
@@ -26,11 +22,7 @@ import type { NormalizedZoomValue } from "@mosaic/mosaic/types";
 
 import { duplicateElement } from "../src/duplicate";
 
-import type {
-  MosaicImageElement,
-  ImageCrop,
-  NonDeleted,
-} from "../src/types";
+import type { MosaicImageElement, ImageCrop, NonDeleted } from "../src/types";
 
 const { h } = window;
 const mouse = new Pointer("mouse");

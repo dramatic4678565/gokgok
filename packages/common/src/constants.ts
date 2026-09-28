@@ -1,7 +1,4 @@
-import type {
-  MosaicElement,
-  FontFamilyValues,
-} from "@mosaic/element/types";
+import type { MosaicElement, FontFamilyValues } from "@mosaic/element/types";
 import type {
   AppProps,
   AppState,

@@ -120,9 +120,7 @@ describe("<Mosaic/>", () => {
     });
 
     it('should not show grid mode in context menu when gridModeEnabled is not "undefined"', async () => {
-      const { container } = await render(
-        <Mosaic gridModeEnabled={false} />,
-      );
+      const { container } = await render(<Mosaic gridModeEnabled={false} />);
       expect(h.state.gridModeEnabled).toBe(false);
 
       expect(
@@ -142,9 +140,7 @@ describe("<Mosaic/>", () => {
   describe("Test UIOptions prop", () => {
     describe("Test canvasActions", () => {
       it('should render menu with default items when "UIOPtions" is "undefined"', async () => {
-        const { container } = await render(
-          <Mosaic UIOptions={undefined} />,
-        );
+        const { container } = await render(<Mosaic UIOptions={undefined} />);
         //open menu
         toggleMenu(container);
         expect(queryByTestId(container, "dropdown-menu")).toMatchSnapshot();
@@ -198,9 +194,7 @@ describe("<Mosaic/>", () => {
 
       it("should hide save button when saveToActiveFile is false", async () => {
         const { container } = await render(
-          <Mosaic
-            UIOptions={{ canvasActions: { saveToActiveFile: false } }}
-          />,
+          <Mosaic UIOptions={{ canvasActions: { saveToActiveFile: false } }} />,
         );
         //open menu
         toggleMenu(container);
@@ -489,12 +483,8 @@ describe("<Mosaic/>", () => {
   });
 
   it("should apply a custom class name to the editor root", async () => {
-    const { container } = await render(
-      <Mosaic className="custom-mosaic" />,
-    );
+    const { container } = await render(<Mosaic className="custom-mosaic" />);
 
-    expect(container.querySelector(".excalidraw")).toHaveClass(
-      "custom-mosaic",
-    );
+    expect(container.querySelector(".excalidraw")).toHaveClass("custom-mosaic");
   });
 });

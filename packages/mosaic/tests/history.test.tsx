@@ -762,9 +762,7 @@ describe("history", () => {
     });
 
     it("should create new history entry on embeddable link paste", async () => {
-      await render(
-        <Mosaic autoFocus={true} handleKeyboardGlobally={true} />,
-      );
+      await render(<Mosaic autoFocus={true} handleKeyboardGlobally={true} />);
 
       const link = "https://www.youtube.com/watch?v=gkGMXY0wekg";
 
@@ -4598,8 +4596,7 @@ describe("history", () => {
         mouse.up();
 
         expect(
-          (h.elements[2] as MosaicElbowArrowElement).startBinding
-            ?.fixedPoint,
+          (h.elements[2] as MosaicElbowArrowElement).startBinding?.fixedPoint,
         ).toEqual([1, 0.5001]);
         expect(
           (h.elements[2] as MosaicElbowArrowElement).startBinding?.mode,

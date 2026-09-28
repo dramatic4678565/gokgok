@@ -8,11 +8,7 @@ import { Mosaic, isLinearElement } from "@mosaic/mosaic";
 
 import { API } from "@mosaic/mosaic/tests/helpers/api";
 import { UI, Pointer, Keyboard } from "@mosaic/mosaic/tests/helpers/ui";
-import {
-  act,
-  fireEvent,
-  render,
-} from "@mosaic/mosaic/tests/test-utils";
+import { act, fireEvent, render } from "@mosaic/mosaic/tests/test-utils";
 
 import { defaultLang, setLanguage } from "@mosaic/mosaic/i18n";
 
@@ -413,9 +409,7 @@ describe("binding for simple arrows", () => {
           mouse.moveTo(left[0] - 4, left[1] + 2);
           mouse.up();
 
-          const arrow = h.elements[
-            h.elements.length - 1
-          ] as MosaicArrowElement;
+          const arrow = h.elements[h.elements.length - 1] as MosaicArrowElement;
           const [endX, endY] = arrow.points[arrow.points.length - 1];
 
           expect(arrow.endBinding?.elementId).toBe(diamond.id);
@@ -450,9 +444,7 @@ describe("binding for simple arrows", () => {
         mouse.moveTo(top[0] + 3, top[1] + 10);
         mouse.up();
 
-        const arrow = h.elements[
-          h.elements.length - 1
-        ] as MosaicArrowElement;
+        const arrow = h.elements[h.elements.length - 1] as MosaicArrowElement;
         const points = arrow.points;
         const [endX, endY] = points[points.length - 1];
 

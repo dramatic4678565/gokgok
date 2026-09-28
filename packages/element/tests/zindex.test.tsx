@@ -37,10 +37,7 @@ beforeEach(() => {
 
 const { h } = window;
 
-type MosaicElementType = Exclude<
-  MosaicElement,
-  MosaicSelectionElement
->["type"];
+type MosaicElementType = Exclude<MosaicElement, MosaicSelectionElement>["type"];
 
 const populateElements = (
   elements: {

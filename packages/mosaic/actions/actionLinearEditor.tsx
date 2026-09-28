@@ -1,14 +1,7 @@
-import {
-  isElbowArrow,
-  isLinearElement,
-  isLineElement,
-} from "@mosaic/element";
+import { isElbowArrow, isLinearElement, isLineElement } from "@mosaic/element";
 import { arrayToMap, invariant } from "@mosaic/common";
 
-import {
-  toggleLinePolygonState,
-  CaptureUpdateAction,
-} from "@mosaic/element";
+import { toggleLinePolygonState, CaptureUpdateAction } from "@mosaic/element";
 
 import type {
   MosaicLinearElement,

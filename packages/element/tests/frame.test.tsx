@@ -1,16 +1,10 @@
-import {
-  convertToMosaicElements,
-  Mosaic,
-} from "@mosaic/mosaic";
+import { convertToMosaicElements, Mosaic } from "@mosaic/mosaic";
 import { arrayToMap } from "@mosaic/common";
 
 import { API } from "@mosaic/mosaic/tests/helpers/api";
 import { Keyboard, Pointer, UI } from "@mosaic/mosaic/tests/helpers/ui";
 import { getTextEditor } from "@mosaic/mosaic/tests/queries/dom";
-import {
-  getCloneByOrigId,
-  render,
-} from "@mosaic/mosaic/tests/test-utils";
+import { getCloneByOrigId, render } from "@mosaic/mosaic/tests/test-utils";
 
 import { getSelectedElements } from "@mosaic/mosaic/scene";
 
@@ -58,10 +52,7 @@ describe("adding elements to frames", () => {
     mouse.up();
   }
 
-  function dragElementIntoFrame(
-    frame: MosaicElement,
-    element: MosaicElement,
-  ) {
+  function dragElementIntoFrame(frame: MosaicElement, element: MosaicElement) {
     mouse.clickAt(element.x, element.y);
     mouse.downAt(element.x + element.width / 2, element.y + element.height / 2);
     mouse.moveTo(frame.x + frame.width / 2, frame.y + frame.height / 2);
