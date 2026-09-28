@@ -20,10 +20,10 @@ yarn add react react-dom @mosaic/mosaic
 
 By default, Mosaic will try to download all the used fonts from the [CDN](https://esm.run/@mosaic/mosaic/dist/prod).
 
-For self-hosting purposes, you'll have to copy the content of the folder `node_modules/@mosaic/mosaic/dist/prod/fonts` to the path where your assets should be served from (i.e. `public/` directory in your project). In that case, you should also set `window.EXCALIDRAW_ASSET_PATH` to the very same path, i.e. `/` in case it's in the root:
+For self-hosting purposes, you'll have to copy the content of the folder `node_modules/@mosaic/mosaic/dist/prod/fonts` to the path where your assets should be served from (i.e. `public/` directory in your project). In that case, you should also set `window.MOSAIC_ASSET_PATH` to the very same path, i.e. `/` in case it's in the root:
 
 ```js
-window.EXCALIDRAW_ASSET_PATH = "/";
+window.MOSAIC_ASSET_PATH = "/";
 ```
 
 or, if you serve your assets from the root of your CDN, you would do:
@@ -32,7 +32,7 @@ or, if you serve your assets from the root of your CDN, you would do:
 // Vanilla
 <head>
     <script>
-        window.EXCALIDRAW_ASSET_PATH = "https://my.cdn.com/assets/";
+        window.MOSAIC_ASSET_PATH = "https://my.cdn.com/assets/";
     </script>    
 </head>
 ```
@@ -42,7 +42,7 @@ or, if you prefer the path to be dynamicly set based on the `location.origin`, y
 ```jsx
 // Next.js
 <Script id="load-env-variables" strategy="beforeInteractive" >
-    { `window["EXCALIDRAW_ASSET_PATH"] = location.origin;` } // or use just "/"!
+    { `window["MOSAIC_ASSET_PATH"] = location.origin;` } // or use just "/"!
 </Script>
 ```
 

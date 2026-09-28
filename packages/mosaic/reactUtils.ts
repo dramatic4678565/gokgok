@@ -45,7 +45,10 @@ export const isRenderThrottlingEnabled = (() => {
   let hasWarned = false;
 
   return () => {
-    if (window.EXCALIDRAW_THROTTLE_RENDER === true) {
+    if (
+      (window.MOSAIC_THROTTLE_RENDER ?? window.EXCALIDRAW_THROTTLE_RENDER) ===
+      true
+    ) {
       if (!IS_REACT_18_AND_UP) {
         if (!hasWarned) {
           hasWarned = true;

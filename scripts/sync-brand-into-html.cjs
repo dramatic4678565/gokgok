@@ -25,39 +25,30 @@ const escapeAttr = (s) => String(s).replace(/&/g, "&amp;").replace(/"/g, "&quot;
 const url = brand.siteUrl.replace(/\/$/, "");
 const ogImage = `${url}/${brand.assets.ogImage}`;
 
+const meta = (attr, name, content) =>
+  `    <meta ${attr}="${name}" content="${content}" />`;
+
 const block = `    <!-- Primary Meta Tags -->
-    <meta name="title" content="${escapeAttr(
-  `${brand.shortDescription} | ${brand.name}`
-)}" />
-    <meta name="description" content="${escapeAttr(brand.description)}" />
-    <meta name="image" content="${escapeAttr(ogImage)}" />
+${meta("name", "title", escapeAttr(`${brand.shortDescription} | ${brand.name}`))}
+${meta("name", "description", escapeAttr(brand.description))}
+${meta("name", "image", escapeAttr(ogImage))}
 
     <!-- Open Graph / Facebook -->
-    <meta property="og:site_name" content="${escapeAttr(brand.name)}" />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="${escapeAttr(url)}" />
-    <meta property="og:title" content="${escapeAttr(
-  `${brand.name} — ${brand.tagline}`
-)}" />
-    <meta property="og:image:alt" content="${escapeAttr(
-  `${brand.name} logo`
-)}" />
-    <meta property="og:description" content="${escapeAttr(brand.description)}" />
-    <meta property="og:image" content="${escapeAttr(ogImage)}" />
+${meta("property", "og:site_name", escapeAttr(brand.name))}
+${meta("property", "og:type", escapeAttr("website"))}
+${meta("property", "og:url", escapeAttr(url))}
+${meta("property", "og:title", escapeAttr(`${brand.name} — ${brand.tagline}`))}
+${meta("property", "og:image:alt", escapeAttr(`${brand.name} logo`))}
+${meta("property", "og:description", escapeAttr(brand.description))}
+${meta("property", "og:image", escapeAttr(ogImage))}
 
     <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:site" content="${escapeAttr(
-  brand.social.twitter
-)}" />
-    <meta property="twitter:url" content="${escapeAttr(url)}" />
-    <meta property="twitter:title" content="${escapeAttr(
-  `${brand.name} — ${brand.tagline}`
-)}" />
-    <meta property="twitter:description" content="${escapeAttr(
-  brand.description
-)}" />
-    <meta property="twitter:image" content="${escapeAttr(ogImage)}" />
+${meta("property", "twitter:card", escapeAttr("summary_large_image"))}
+${meta("property", "twitter:site", escapeAttr(brand.social.twitter))}
+${meta("property", "twitter:url", escapeAttr(url))}
+${meta("property", "twitter:title", escapeAttr(`${brand.name} — ${brand.tagline}`))}
+${meta("property", "twitter:description", escapeAttr(brand.description))}
+${meta("property", "twitter:image", escapeAttr(ogImage))}
 
     <link rel="canonical" href="${escapeAttr(url)}" />
 `;
@@ -77,18 +68,45 @@ const next = `${head}${BEGIN} generated from branding/mosaic-brand.json by
          scripts/sync-brand-into-html.cjs -- do not edit by hand -->
 ${block}${tail}`;
 
+const { execFileSync } = require("child_process");
+
+/** Format with the repo's own Prettier so this script and the linter agree. */
+const format = (source) => {
+  // Resolved rather than hard-coded: Prettier's bin filename differs between
+  // major versions (bin-prettier.js in 2.x, bin/prettier.cjs in 3.x).
+  let bin;
+  try {
+    bin = require.resolve("prettier/bin-prettier.js");
+  } catch {
+    bin = require.resolve("prettier");
+  }
+  try {
+    return execFileSync(
+      process.execPath,
+      [bin, "--parser", "html"],
+      { input: source, cwd: ROOT, encoding: "utf8" },
+    );
+  } catch (e) {
+    console.warn(`  (prettier unavailable, writing unformatted: ${e.message})`);
+    return source;
+  }
+};
+
 if (process.argv.includes("--check")) {
-  if (next !== html) {
+  if (format(next) !== html) {
     console.error(
       "index.html branding is out of date with branding/mosaic-brand.json.\n" +
-        "Run: node scripts/sync-brand-into-html.cjs"
+        "Run: node scripts/sync-brand-into-html.cjs",
     );
     process.exit(1);
   }
   console.log("index.html branding is in sync");
-} else if (next === html) {
-  console.log("index.html branding already in sync");
 } else {
-  fs.writeFileSync(file, next, "utf8");
-  console.log("updated mosaic-app/index.html branding block");
+  const formatted = format(next);
+  if (formatted === html) {
+    console.log("index.html branding already in sync");
+  } else {
+    fs.writeFileSync(file, formatted, "utf8");
+    console.log("updated mosaic-app/index.html branding block");
+  }
 }

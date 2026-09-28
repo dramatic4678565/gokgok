@@ -150,14 +150,16 @@ export class MosaicFontFace {
     const assetUrl: string = uri.replace(/^\/+/, "");
     const urls: URL[] = [];
 
-    if (typeof window.EXCALIDRAW_ASSET_PATH === "string") {
-      const normalizedBaseUrl = this.normalizeBaseUrl(
-        window.EXCALIDRAW_ASSET_PATH,
-      );
+    // MOSAIC_ASSET_PATH wins; the upstream name is kept as a fallback so that
+    // host pages written against the old bundle keep resolving their assets.
+    const assetPath = window.MOSAIC_ASSET_PATH ?? window.EXCALIDRAW_ASSET_PATH;
+
+    if (typeof assetPath === "string") {
+      const normalizedBaseUrl = this.normalizeBaseUrl(assetPath);
 
       urls.push(new URL(assetUrl, normalizedBaseUrl));
-    } else if (Array.isArray(window.EXCALIDRAW_ASSET_PATH)) {
-      window.EXCALIDRAW_ASSET_PATH.forEach((path) => {
+    } else if (Array.isArray(assetPath)) {
+      assetPath.forEach((path) => {
         const normalizedBaseUrl = this.normalizeBaseUrl(path);
         urls.push(new URL(assetUrl, normalizedBaseUrl));
       });

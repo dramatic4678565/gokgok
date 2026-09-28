@@ -806,7 +806,7 @@ describe("text element", () => {
   // text can be resized from sides
   it("can be resized from e", async () => {
     const text = UI.createElement("text");
-    await UI.editText(text, "Mosaic\nEditor");
+    await UI.editText(text, "Excalidraw\nEditor");
 
     const width = text.width;
     const height = text.height;
@@ -822,7 +822,7 @@ describe("text element", () => {
 
   it("can be resized from w", async () => {
     const text = UI.createElement("text");
-    await UI.editText(text, "Mosaic\nEditor");
+    await UI.editText(text, "Excalidraw\nEditor");
 
     const width = text.width;
     const height = text.height;
@@ -838,7 +838,7 @@ describe("text element", () => {
 
   it("wraps when width is narrower than texts inside", async () => {
     const text = UI.createElement("text");
-    await UI.editText(text, "Mosaic\nEditor");
+    await UI.editText(text, "Excalidraw\nEditor");
 
     const prevWidth = text.width;
     const prevHeight = text.height;
@@ -871,7 +871,7 @@ describe("text element", () => {
 
   it("keeps properties when wrapped", async () => {
     const text = UI.createElement("text");
-    await UI.editText(text, "Mosaic\nEditor");
+    await UI.editText(text, "Excalidraw\nEditor");
 
     const alignment = text.textAlign;
     const fontSize = text.fontSize;
@@ -892,7 +892,7 @@ describe("text element", () => {
 
   it("has a minimum width when wrapped", async () => {
     const text = UI.createElement("text");
-    await UI.editText(text, "Mosaic\nEditor");
+    await UI.editText(text, "Excalidraw\nEditor");
 
     const width = text.width;
 

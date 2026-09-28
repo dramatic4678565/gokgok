@@ -94,7 +94,7 @@ Object.defineProperty(document, "fonts", {
   },
 });
 
-Object.defineProperty(window, "EXCALIDRAW_ASSET_PATH", {
+Object.defineProperty(window, "MOSAIC_ASSET_PATH", {
   value: `file://${__dirname}/`,
 });
 

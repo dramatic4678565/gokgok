@@ -10,7 +10,7 @@ These are pure Javascript functions exported from the @mosaic/mosaic [`@mosaic/m
 
 Takes the scene elements and state and returns a JSON string. `Deleted` elements as well as most properties from `AppState` are removed from the resulting JSON. (see [`serializeAsJSON()`](https://github.com/excalidraw/excalidraw/blob/master/packages/mosaic/data/json.ts#L42) source for details).
 
-If you want to overwrite the `source` field in the `JSON` string, you can set `window.EXCALIDRAW_EXPORT_SOURCE` to the desired value.
+If you want to overwrite the `source` field in the `JSON` string, you can set `window.MOSAIC_EXPORT_SOURCE` to the desired value.
 
 **_Signature_**
 
@@ -31,7 +31,7 @@ import { serializeAsJSON } from "@mosaic/mosaic";
 
 Takes the `library` items and returns a `JSON` string.
 
-If you want to overwrite the source field in the JSON string, you can set `window.EXCALIDRAW_EXPORT_SOURCE` to the desired value.
+If you want to overwrite the source field in the JSON string, you can set `window.MOSAIC_EXPORT_SOURCE` to the desired value.
 
 **_Signature_**
 

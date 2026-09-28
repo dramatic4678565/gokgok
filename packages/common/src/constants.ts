@@ -346,7 +346,9 @@ export const EXPORT_DATA_TYPES = {
 } as const;
 
 export const getExportSource = () =>
-  window.EXCALIDRAW_EXPORT_SOURCE || window.location.origin;
+  window.MOSAIC_EXPORT_SOURCE ||
+  window.EXCALIDRAW_EXPORT_SOURCE ||
+  window.location.origin;
 
 // time in milliseconds
 export const IMAGE_RENDER_TIMEOUT = 500;

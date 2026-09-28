@@ -684,7 +684,7 @@ describe("textWysiwyg", () => {
     it("should keep width when editing a wrapped text", async () => {
       const text = API.createElement({
         type: "text",
-        text: "Mosaic\nEditor",
+        text: "Excalidraw\nEditor",
       });
 
       API.setElements([text]);
@@ -728,7 +728,7 @@ describe("textWysiwyg", () => {
     });
 
     it("should restore original text after unwrapping a wrapped text", async () => {
-      const originalText = "Mosaic\neditor\nis great!";
+      const originalText = "Excalidraw\neditor\nis great!";
       const text = API.createElement({
         type: "text",
         text: originalText,
@@ -1017,7 +1017,7 @@ describe("textWysiwyg", () => {
       Keyboard.exitTextEditor(textarea);
       // already wider than the 800x400 viewport: such a text keeps growing
       const line =
-        "Mosaic is an opensource virtual collaborative whiteboard for sketching hand-drawn like diagrams!";
+        "Excalidraw is an opensource virtual collaborative whiteboard for sketching hand-drawn like diagrams!";
       const wide = API.createElement({ type: "text", text: line, width: 1000 });
       API.setElements([wide]);
       API.setSelectedElements([wide]);
@@ -1042,7 +1042,7 @@ describe("textWysiwyg", () => {
       // the 800px wide view, less some room at each side
       const maxWidth = 800 - 2 * TEXT_VIEWPORT_PADDING;
       const line =
-        "Mosaic is an opensource virtual collaborative whiteboard for sketching hand-drawn like diagrams!";
+        "Excalidraw is an opensource virtual collaborative whiteboard for sketching hand-drawn like diagrams!";
       updateTextEditor(textarea, line);
 
       let text = h.elements[0] as MosaicTextElement;
@@ -1068,7 +1068,7 @@ describe("textWysiwyg", () => {
 
       updateTextEditor(
         textarea,
-        "Mosaic is an opensource virtual collaborative whiteboard",
+        "Excalidraw is an opensource virtual collaborative whiteboard",
       );
       // the canvas left of the sidebar, less the room, in scene units
       expect(h.elements[0].width).toBe(
@@ -1086,7 +1086,7 @@ describe("textWysiwyg", () => {
       // starts at 300px: it would stop growing well past the right edge
       updateTextEditor(
         textarea,
-        "Mosaic is an opensource virtual collaborative whiteboard for sketching hand-drawn like diagrams!",
+        "Excalidraw is an opensource virtual collaborative whiteboard for sketching hand-drawn like diagrams!",
       );
 
       const text = h.app.scene.getElement(
@@ -1146,7 +1146,7 @@ describe("textWysiwyg", () => {
 
       updateTextEditor(
         textarea,
-        "Mosaic is an opensource virtual collaborative whiteboard for sketching hand-drawn like diagrams!",
+        "Excalidraw is an opensource virtual collaborative whiteboard for sketching hand-drawn like diagrams!",
       );
       const text = h.elements[0] as MosaicTextElement;
       expect(text.autoResize).toBe(false);
@@ -1561,7 +1561,7 @@ describe("textWysiwyg", () => {
 
       updateTextEditor(
         editor,
-        "Mosaic is an opensource virtual collaborative whiteboard",
+        "Excalidraw is an opensource virtual collaborative whiteboard",
       );
       expect(h.elements.length).toBe(2);
       expect(h.elements[1].type).toBe("text");
@@ -2206,7 +2206,7 @@ describe("textWysiwyg", () => {
 
       updateTextEditor(
         editor,
-        "Mosaic is an opensource virtual collaborative whiteboard",
+        "Excalidraw is an opensource virtual collaborative whiteboard",
       );
 
       editor.select();
@@ -2219,7 +2219,7 @@ describe("textWysiwyg", () => {
       expect(textElement.height).toBe(25);
       expect(textElement.textAlign).toBe(TEXT_ALIGN.LEFT);
       expect((textElement as MosaicTextElement).text).toBe(
-        "Mosaic is an opensource virtual collaborative whiteboard",
+        "Excalidraw is an opensource virtual collaborative whiteboard",
       );
 
       API.setSelectedElements([textElement] as NonDeletedMosaicElement[]);
@@ -2268,7 +2268,7 @@ describe("textWysiwyg", () => {
       );
       expect(h.elements[2] as MosaicTextElement).toEqual(
         expect.objectContaining({
-          text: "Mosaic is an opensource virtual collaborative whiteboard",
+          text: "Excalidraw is an opensource virtual collaborative whiteboard",
           verticalAlign: VERTICAL_ALIGN.MIDDLE,
           textAlign: TEXT_ALIGN.CENTER,
           boundElements: null,
@@ -2309,7 +2309,7 @@ describe("textWysiwyg", () => {
         rectangle.y + rectangle.height / 2,
       );
       editor = await getTextEditor();
-      updateTextEditor(editor, "Mosaic");
+      updateTextEditor(editor, "Excalidraw");
       Keyboard.exitTextEditor(editor);
 
       expect(h.elements.length).toBe(3);
@@ -2318,7 +2318,7 @@ describe("textWysiwyg", () => {
       ]);
       text = h.elements[2] as MosaicTextElementWithContainer;
       expect(text.containerId).toBe(null);
-      expect(text.text).toBe("Mosaic");
+      expect(text.text).toBe("Excalidraw");
     });
 
     it("shouldn't inherit groupIds or angle when creating unbound text inside a grouped/rotated container", async () => {
@@ -2375,7 +2375,7 @@ describe("textWysiwyg", () => {
       mouse.clickAt(20, 30);
       editor = await getTextEditor();
       expect(h.state.editingTextElement?.id).not.toBe(label.id);
-      updateTextEditor(editor, "Mosaic");
+      updateTextEditor(editor, "Excalidraw");
       Keyboard.exitTextEditor(editor);
 
       expect(h.elements.length).toBe(3);
@@ -2384,7 +2384,7 @@ describe("textWysiwyg", () => {
       ]);
       const text = h.elements[2] as MosaicTextElement;
       expect(text.containerId).toBe(null);
-      expect(text.text).toBe("Mosaic");
+      expect(text.text).toBe("Excalidraw");
       // created at the clicked position (first line box centered on cursor),
       // not warped to the container or label center
       expect(text.x).toBe(20);
@@ -2412,7 +2412,7 @@ describe("textWysiwyg", () => {
 
         editor = await getTextEditor();
         expect(h.state.editingTextElement?.id).not.toBe(label.id);
-        updateTextEditor(editor, "Mosaic");
+        updateTextEditor(editor, "Excalidraw");
         Keyboard.exitTextEditor(editor);
 
         expect(h.elements.length).toBe(3);

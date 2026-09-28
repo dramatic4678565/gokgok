@@ -221,7 +221,7 @@ describe("paste text as a single element", () => {
     expect(maxWidth).toBeLessThan(200);
 
     pasteWithCtrlCmdShiftV(
-      "Mosaic is an opensource virtual collaborative whiteboard for sketching hand-drawn like diagrams!",
+      "Excalidraw is an opensource virtual collaborative whiteboard for sketching hand-drawn like diagrams!",
     );
     await waitFor(() => {
       expect(h.elements.length).toEqual(1);
@@ -290,13 +290,13 @@ describe("Paste bound text container", () => {
     height: 175,
     fontSize: 20,
     fontFamily: 1,
-    text: "Mosaic is a\nvirtual \nopensource \nwhiteboard for \nsketching \nhand-drawn like\ndiagrams",
+    text: "Excalidraw is a\nvirtual \nopensource \nwhiteboard for \nsketching \nhand-drawn like\ndiagrams",
     baseline: 168,
     textAlign: "center",
     verticalAlign: "middle",
     containerId: container.id,
     originalText:
-      "Mosaic is a virtual opensource whiteboard for sketching hand-drawn like diagrams",
+      "Excalidraw is a virtual opensource whiteboard for sketching hand-drawn like diagrams",
   };
 
   it("should fix ellipse bounding box", async () => {

@@ -1,9 +1,9 @@
-// define `EXCALIDRAW_ASSET_PATH` as a SSOT
+// define `MOSAIC_ASSET_PATH` as a SSOT
 const OSS_FONTS_CDN = "https://mosaic.nyc3.cdn.digitaloceanspaces.com/oss/";
 const OSS_FONTS_FALLBACK = "/";
 
 /**
- * Custom vite plugin for auto-prefixing `EXCALIDRAW_ASSET_PATH` woff2 fonts in `mosaic-app`.
+ * Custom vite plugin for auto-prefixing `MOSAIC_ASSET_PATH` woff2 fonts in `mosaic-app`.
  *
  * @returns {import("vite").PluginOption}
  */
@@ -18,7 +18,7 @@ module.exports.woff2BrowserPlugin = () => {
     },
     transform(code, id) {
       // using copy / replace as fonts defined in the `.css` don't have to be manually copied over (vite/rollup does this automatically),
-      // but at the same time can't be easily prefixed with the `EXCALIDRAW_ASSET_PATH` only for the `mosaic-app`
+      // but at the same time can't be easily prefixed with the `MOSAIC_ASSET_PATH` only for the `mosaic-app`
       if (!isDev && id.endsWith("/excalidraw/fonts/fonts.css")) {
         return `/* WARN: The following content is generated during mosaic-app build */
 
@@ -68,7 +68,7 @@ module.exports.woff2BrowserPlugin = () => {
           "<!-- PLACEHOLDER:EXCALIDRAW_APP_FONTS -->",
           `<script>
         // point into our CDN in prod, fallback to root (excalidraw.com) domain in case of issues
-        window.EXCALIDRAW_ASSET_PATH = [
+        window.MOSAIC_ASSET_PATH = [
           "${OSS_FONTS_CDN}",
           "${OSS_FONTS_FALLBACK}",
         ];

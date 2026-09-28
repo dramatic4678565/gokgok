@@ -10,8 +10,8 @@ if (ExecutionEnvironment.canUseDOM) {
   MosaicComp = require("@mosaic/mosaic");
 }
 const Mosaic = React.forwardRef((props, ref) => {
-  if (!window.EXCALIDRAW_ASSET_PATH) {
-    window.EXCALIDRAW_ASSET_PATH =
+  if (!window.MOSAIC_ASSET_PATH) {
+    window.MOSAIC_ASSET_PATH =
       "https://esm.sh/@mosaic/mosaic@0.18.0/dist/prod/";
   }
 

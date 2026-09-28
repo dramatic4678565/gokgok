@@ -1587,7 +1587,7 @@ describe("Test Linear Elements", () => {
       createTwoPointerLinearElement("arrow");
       const text = API.createElement({
         type: "text",
-        text: "Hello Mosaic",
+        text: "Hello Excalidraw",
       });
       expect(text.x).toBe(0);
       expect(text.y).toBe(0);

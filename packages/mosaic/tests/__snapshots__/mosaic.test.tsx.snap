@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`<Excalidraw/> > <MainMenu/> > should render main menu with host menu items if passed from host 1`] = `
+exports[`<Mosaic/> > <MainMenu/> > should render main menu with host menu items if passed from host 1`] = `
 <div
   aria-labelledby="radix-:r85:"
   aria-orientation="vertical"
@@ -54,7 +54,7 @@ exports[`<Excalidraw/> > <MainMenu/> > should render main menu with host menu it
         <span
           style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap;"
         >
-          Excalidraw blog
+          Mosaic blog
         </span>
       </div>
     </a>
@@ -136,7 +136,7 @@ exports[`<Excalidraw/> > <MainMenu/> > should render main menu with host menu it
 </div>
 `;
 
-exports[`<Excalidraw/> > Test UIOptions prop > Test canvasActions > should render menu with default items when "UIOPtions" is "undefined" 1`] = `
+exports[`<Mosaic/> > Test UIOptions prop > Test canvasActions > should render menu with default items when "UIOPtions" is "undefined" 1`] = `
 <div
   aria-labelledby="radix-:rq:"
   aria-orientation="vertical"
@@ -482,7 +482,7 @@ exports[`<Excalidraw/> > Test UIOptions prop > Test canvasActions > should rende
       <p
         class="dropdown-menu-group-title"
       >
-        Excalidraw links
+        Mosaic links
       </p>
       <a
         aria-label="GitHub"

@@ -14,7 +14,7 @@ describe("Test wrapText", () => {
 
   it("should wrap the text correctly when word length is exactly equal to max width", () => {
     const text = "Hello Mosaic";
-    // Length of "Mosaic" is 100 and exacty equal to max width
+    // Length of "Excalidraw" is 100 and exacty equal to max width
     const res = wrapText(text, font, 100);
     expect(res).toEqual(`Hello\nMosaic`);
   });
@@ -137,7 +137,7 @@ describe("Test wrapText", () => {
   });
 
   it("should retain offsets when wrapping a single long token", () => {
-    expect(getWrappedTextLines("Mosaic", font, 50)).toEqual([
+    expect(getWrappedTextLines("Excalidraw", font, 50)).toEqual([
       {
         text: "Excal",
         start: 0,
@@ -459,10 +459,10 @@ describe("Test wrapText", () => {
 
   describe("Test parseTokens", () => {
     it("should tokenize latin", () => {
-      let text = "Mosaic is a virtual collaborative whiteboard";
+      let text = "Excalidraw is a virtual collaborative whiteboard";
 
       expect(parseTokens(text)).toEqual([
-        "Mosaic",
+        "Excalidraw",
         " ",
         "is",
         " ",
