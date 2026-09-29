@@ -81,3 +81,33 @@ export const isMosaicPlusSignedUser = document.cookie.includes(
  * See BRANDING.md.
  */
 export const SHOW_UPSTREAM_PROMOS = false;
+
+/**
+ * Backed services this app can talk to.
+ *
+ * These were all inherited from upstream and pointed at Excalidraw's own
+ * services, which meant a deployment of this fork was shipping real user data
+ * to someone else's infrastructure: share links resolved through
+ * json.excalidraw.com, live collaboration drawings relayed through their
+ * websocket server, and share-link files and persisted scenes written to their
+ * Firebase project.
+ *
+ * They are now blank by default (see .env.production). The features that need
+ * one ask through this helper so the user gets a sentence telling them what to
+ * set, rather than a stack trace from deep inside the Firebase or socket.io
+ * client.
+ */
+export const isServiceConfigured = (
+  value: string | undefined | null,
+  service: string,
+  envVar: string,
+): boolean => {
+  if (value && value.trim() !== "") {
+    return true;
+  }
+  console.warn(
+    `[mosaic] "${service}" is not configured, so it is disabled. ` +
+      `Set ${envVar} in your environment to enable it. See BRANDING.md.`,
+  );
+  return false;
+};

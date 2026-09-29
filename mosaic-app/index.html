@@ -99,21 +99,32 @@
     <!------------------------------------------------------------------------->
     <% if (typeof PROD != 'undefined' && PROD == true) { %>
     <script>
-      // Redirect Excalidraw+ users which have auto-redirect enabled.
+      // Premium-tier auto-redirect.
       //
-      // Redirect only the bare root path, so link/room/library urls are not
-      // redirected.
+      // This sent any visitor carrying the "excplus-autoredirect" cookie off
+      // this site entirely, to a hardcoded upstream URL. On a deployment that
+      // does not resell that product -- the default here, see
+      // SHOW_UPSTREAM_PROMOS in app_constants.ts -- it is a redirect to a
+      // stranger's site with no benefit to the visitor.
       //
-      // Putting into index.html for best performance (can't redirect on server
-      // due to location.hash checks).
+      // It is therefore opt-in, and it uses VITE_APP_PLUS_APP rather than a
+      // hardcoded host, so a deployment that does want it redirects to its own
+      // service. Set VITE_APP_PLUS_AUTO_REDIRECT=true to restore the behaviour.
+      window.__MOSAIC_PLUS_AUTO_REDIRECT__ =
+        <%= typeof VITE_APP_PLUS_AUTO_REDIRECT != 'undefined' &&
+        VITE_APP_PLUS_AUTO_REDIRECT == true ? "true" : "false" %>;
+      window.__MOSAIC_PLUS_APP__ = "<%= typeof VITE_APP_PLUS_APP != 'undefined' ? VITE_APP_PLUS_APP : '' %>";
+
       if (
+        window.__MOSAIC_PLUS_AUTO_REDIRECT__ &&
+        window.__MOSAIC_PLUS_APP__ &&
         window.location.pathname === "/" &&
         !window.location.hash &&
         !window.location.search &&
         // if its present redirect
         document.cookie.includes("excplus-autoredirect=true")
       ) {
-        window.location.href = "https://app.excalidraw.com";
+        window.location.href = window.__MOSAIC_PLUS_APP__;
       }
     </script>
 

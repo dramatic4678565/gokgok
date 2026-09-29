@@ -31,6 +31,8 @@ import { PureComponent } from "react";
 
 import { bumpElementVersions } from "@mosaic/mosaic/data/restore";
 
+import { isServiceConfigured } from "../app_constants";
+
 import type {
   ReconciledMosaicElement,
   RemoteMosaicElement,
@@ -524,6 +526,19 @@ class Collab extends PureComponent<CollabProps, CollabState> {
     this.fallbackInitializationHandler = fallbackInitializationHandler;
 
     try {
+      if (
+        !isServiceConfigured(
+          import.meta.env.VITE_APP_WS_SERVER_URL,
+          "Live collaboration",
+          "VITE_APP_WS_SERVER_URL",
+        )
+      ) {
+        throw new Error(
+          "Live collaboration is not configured on this deployment. " +
+            "Set VITE_APP_WS_SERVER_URL to your own collaboration server to enable it. " +
+            "See BRANDING.md.",
+        );
+      }
       this.portal.socket = this.portal.open(
         socketIOClient(import.meta.env.VITE_APP_WS_SERVER_URL, {
           transports: ["websocket", "polling"],

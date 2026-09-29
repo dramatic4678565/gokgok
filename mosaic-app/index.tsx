@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { registerSW } from "virtual:pwa-register";
 
 import "../mosaic-app/sentry";
+import "../mosaic-app/config-audit";
 
 import MosaicApp from "./App";
 

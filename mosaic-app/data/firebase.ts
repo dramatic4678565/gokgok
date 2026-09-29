@@ -38,16 +38,25 @@ import type { Socket } from "socket.io-client";
 // private
 // -----------------------------------------------------------------------------
 
-let FIREBASE_CONFIG: Record<string, any>;
+let FIREBASE_CONFIG: Record<string, any> | null = null;
 try {
-  FIREBASE_CONFIG = JSON.parse(import.meta.env.VITE_APP_FIREBASE_CONFIG);
+  const parsed = JSON.parse(import.meta.env.VITE_APP_FIREBASE_CONFIG);
+  // The Firebase SDK throws an opaque error from initializeApp() on a config
+  // that parses but is missing fields, so treat an incomplete one as unset.
+  if (parsed && parsed.projectId && parsed.apiKey) {
+    FIREBASE_CONFIG = parsed;
+  }
 } catch (error: any) {
-  console.warn(
-    `Error JSON parsing firebase config. Supplied value: ${
-      import.meta.env.VITE_APP_FIREBASE_CONFIG
-    }`,
-  );
-  FIREBASE_CONFIG = {};
+  // An empty env var is the expected case now that the upstream project is no
+  // longer wired in; that is "feature off", not a misconfiguration.
+  if (import.meta.env.VITE_APP_FIREBASE_CONFIG) {
+    console.warn(
+      `Error JSON parsing firebase config. Supplied value: ${
+        import.meta.env.VITE_APP_FIREBASE_CONFIG
+      }`,
+    );
+  }
+  FIREBASE_CONFIG = null;
 }
 
 let firebaseApp: ReturnType<typeof initializeApp> | null = null;
@@ -56,6 +65,12 @@ let firebaseStorage: ReturnType<typeof getStorage> | null = null;
 
 const _initializeFirebase = () => {
   if (!firebaseApp) {
+    if (!FIREBASE_CONFIG) {
+      throw new Error(
+        "Storage is not configured on this deployment, so this cannot be saved to a link. " +
+          "Set VITE_APP_FIREBASE_CONFIG to your own Firebase project to enable it. See BRANDING.md.",
+      );
+    }
     firebaseApp = initializeApp(FIREBASE_CONFIG);
   }
   return firebaseApp;
@@ -273,11 +288,19 @@ export const loadFilesFromFirebase = async (
   const loadedFiles: BinaryFileData[] = [];
   const erroredFiles = new Map<FileId, true>();
 
+  if (!FIREBASE_CONFIG) {
+    throw new Error(
+      "Cannot load files from storage: this deployment has no storage configured. " +
+        "Set VITE_APP_FIREBASE_CONFIG to your own Firebase project to enable it. " +
+        "See BRANDING.md.",
+    );
+  }
+
   await Promise.all(
     [...new Set(filesIds)].map(async (id) => {
       try {
         const url = `https://firebasestorage.googleapis.com/v0/b/${
-          FIREBASE_CONFIG.storageBucket
+          FIREBASE_CONFIG!.storageBucket
         }/o/${encodeURIComponent(prefix.replace(/^\//, ""))}%2F${id}`;
         const response = await fetch(`${url}?alt=media`);
         if (response.status < 400) {
