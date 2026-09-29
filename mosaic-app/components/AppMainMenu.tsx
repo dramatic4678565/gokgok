@@ -8,7 +8,8 @@ import { isDevEnv } from "@mosaic/common";
 import type { Theme } from "@mosaic/element/types";
 
 import { LanguageList } from "../app-language/LanguageList";
-import { isMosaicPlusSignedUser } from "../app_constants";
+
+import { isMosaicPlusSignedUser, SHOW_UPSTREAM_PROMOS } from "../app_constants";
 
 import { saveDebugState } from "./DebugCanvas";
 
@@ -37,25 +38,41 @@ export const AppMainMenu: React.FC<{
       <MainMenu.DefaultItems.Help />
       <MainMenu.DefaultItems.ClearCanvas />
       <MainMenu.Separator />
-      <MainMenu.ItemLink
-        icon={ExcalLogo}
-        href={`${
-          import.meta.env.VITE_APP_PLUS_LP
-        }/plus?utm_source=mosaic&utm_medium=app&utm_content=hamburger`}
-        className=""
-      >
-        Excalidraw+
-      </MainMenu.ItemLink>
-      <MainMenu.DefaultItems.Socials />
-      <MainMenu.ItemLink
-        icon={loginIcon}
-        href={`${import.meta.env.VITE_APP_PLUS_APP}${
-          isMosaicPlusSignedUser ? "" : "/sign-up"
-        }?utm_source=signin&utm_medium=app&utm_content=hamburger`}
-        className="highlighted"
-      >
-        {isMosaicPlusSignedUser ? t("labels.signIn") : t("labels.signUp")}
-      </MainMenu.ItemLink>
+      {/*
+        The items below advertise upstream services that are not ours: the paid
+        "Excalidraw+" workspace, the Excalidraw project's own social accounts,
+        and its sign-up page. Mosaic is a self-hosted fork, so on a deployment
+        that is not reselling that product all three would send users away to
+        someone else's site.
+
+        They are gated on SHOW_UPSTREAM_PROMOS rather than deleted, so restoring
+        them is a one-line change in app_constants.ts. The URLs still point
+        upstream, so set VITE_APP_PLUS_LP and VITE_APP_PLUS_APP before enabling.
+        See BRANDING.md.
+      */}
+      {SHOW_UPSTREAM_PROMOS && (
+        <>
+          <MainMenu.ItemLink
+            icon={ExcalLogo}
+            href={`${
+              import.meta.env.VITE_APP_PLUS_LP
+            }/plus?utm_source=mosaic&utm_medium=app&utm_content=hamburger`}
+            className=""
+          >
+            Excalidraw+
+          </MainMenu.ItemLink>
+          <MainMenu.DefaultItems.Socials />
+          <MainMenu.ItemLink
+            icon={loginIcon}
+            href={`${import.meta.env.VITE_APP_PLUS_APP}${
+              isMosaicPlusSignedUser ? "" : "/sign-up"
+            }?utm_source=signin&utm_medium=app&utm_content=hamburger`}
+            className="highlighted"
+          >
+            {isMosaicPlusSignedUser ? t("labels.signIn") : t("labels.signUp")}
+          </MainMenu.ItemLink>
+        </>
+      )}
       {isDevEnv() && (
         <MainMenu.Item
           icon={eyeIcon}

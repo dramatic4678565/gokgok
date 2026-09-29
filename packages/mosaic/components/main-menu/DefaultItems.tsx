@@ -370,8 +370,28 @@ export const Export = () => {
 };
 Export.displayName = "Export";
 
+/**
+ * Upstream social links.
+ *
+ * Disabled for Mosaic. Every one of these points at the Excalidraw project's
+ * own accounts, so leaving them in would send Mosaic users to someone else's
+ * GitHub, X profile and Discord.
+ *
+ * Kept and gated rather than deleted, because they are a reasonable default
+ * for a host that does have social accounts. Flip `UPSTREAM_SOCIALS` to true
+ * *and* update the hrefs below, or ignore this component and pass your own
+ * menu items.
+ *
+ * See BRANDING.md for the broader policy on upstream references.
+ */
+const UPSTREAM_SOCIALS = false;
+
 export const Socials = () => {
   const { t } = useI18n();
+
+  if (!UPSTREAM_SOCIALS) {
+    return null;
+  }
 
   return (
     <>

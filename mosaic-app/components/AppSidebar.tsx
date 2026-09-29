@@ -6,6 +6,8 @@ import {
 import { LinkButton } from "@mosaic/mosaic/components/LinkButton";
 import { useUIAppState } from "@mosaic/mosaic/context/ui-appState";
 
+import { SHOW_UPSTREAM_PROMOS } from "../app_constants";
+
 import "./AppSidebar.scss";
 
 type SidebarPromoCopyProps = {
@@ -71,61 +73,78 @@ export const AppSidebar = () => {
   return (
     <DefaultSidebar>
       <DefaultSidebar.TabTriggers>
-        <Sidebar.TabTrigger
-          tab="comments"
-          style={{ opacity: openSidebar?.tab === "comments" ? 1 : 0.4 }}
-        >
-          {messageCircleIcon}
-        </Sidebar.TabTrigger>
-        <Sidebar.TabTrigger
-          tab="presentation"
-          style={{ opacity: openSidebar?.tab === "presentation" ? 1 : 0.4 }}
-        >
-          {presentationIcon}
-        </Sidebar.TabTrigger>
+        {/*
+          The two tabs below are promos for the upstream paid workspace
+          ("Make comments with Excalidraw+", "Create presentation with
+          Excalidraw+"). Mosaic does not resell that product, so they are gated
+          on SHOW_UPSTREAM_PROMOS and hidden by default. The tab triggers
+          further up are gated on the same flag so no empty tab is left behind.
+
+          See BRANDING.md.
+        */}
+        {SHOW_UPSTREAM_PROMOS && (
+          <Sidebar.TabTrigger
+            tab="comments"
+            style={{ opacity: openSidebar?.tab === "comments" ? 1 : 0.4 }}
+          >
+            {messageCircleIcon}
+          </Sidebar.TabTrigger>
+        )}
+        {SHOW_UPSTREAM_PROMOS && (
+          <Sidebar.TabTrigger
+            tab="presentation"
+            style={{ opacity: openSidebar?.tab === "presentation" ? 1 : 0.4 }}
+          >
+            {presentationIcon}
+          </Sidebar.TabTrigger>
+        )}
       </DefaultSidebar.TabTriggers>
-      <Sidebar.Tab tab="comments">
-        <div className="app-sidebar-promo-container">
-          <div
-            className="app-sidebar-promo-image"
-            style={{
-              ["--image-source" as any]: `url(/sidebar-comments-promo-${
-                theme === THEME.DARK ? "dark" : "light"
-              }.jpg)`,
-              opacity: 0.9,
-            }}
-          />
-          <SidebarPromoCopy text="Make comments with Excalidraw+" />
-          <LinkButton
-            href={`${
-              import.meta.env.VITE_APP_PLUS_LP
-            }/plus?utm_source=mosaic&utm_medium=app&utm_content=comments_promo#excalidraw-redirect`}
-          >
-            Sign up now
-          </LinkButton>
-        </div>
-      </Sidebar.Tab>
-      <Sidebar.Tab tab="presentation" className="px-3">
-        <div className="app-sidebar-promo-container">
-          <div
-            className="app-sidebar-promo-image"
-            style={{
-              ["--image-source" as any]: `url(/sidebar-presentation-promo-${
-                theme === THEME.DARK ? "dark" : "light"
-              }.jpg)`,
-              opacity: 0.7,
-            }}
-          />
-          <SidebarPromoCopy text="Create presentation with Excalidraw+" />
-          <LinkButton
-            href={`${
-              import.meta.env.VITE_APP_PLUS_LP
-            }/plus?utm_source=mosaic&utm_medium=app&utm_content=presentations_promo#excalidraw-redirect`}
-          >
-            Sign up now
-          </LinkButton>
-        </div>
-      </Sidebar.Tab>
+      {SHOW_UPSTREAM_PROMOS && (
+        <>
+          <Sidebar.Tab tab="comments">
+            <div className="app-sidebar-promo-container">
+              <div
+                className="app-sidebar-promo-image"
+                style={{
+                  ["--image-source" as any]: `url(/sidebar-comments-promo-${
+                    theme === THEME.DARK ? "dark" : "light"
+                  }.jpg)`,
+                  opacity: 0.9,
+                }}
+              />
+              <SidebarPromoCopy text="Make comments with Excalidraw+" />
+              <LinkButton
+                href={`${
+                  import.meta.env.VITE_APP_PLUS_LP
+                }/plus?utm_source=mosaic&utm_medium=app&utm_content=comments_promo#excalidraw-redirect`}
+              >
+                Sign up now
+              </LinkButton>
+            </div>
+          </Sidebar.Tab>
+          <Sidebar.Tab tab="presentation" className="px-3">
+            <div className="app-sidebar-promo-container">
+              <div
+                className="app-sidebar-promo-image"
+                style={{
+                  ["--image-source" as any]: `url(/sidebar-presentation-promo-${
+                    theme === THEME.DARK ? "dark" : "light"
+                  }.jpg)`,
+                  opacity: 0.7,
+                }}
+              />
+              <SidebarPromoCopy text="Create presentation with Excalidraw+" />
+              <LinkButton
+                href={`${
+                  import.meta.env.VITE_APP_PLUS_LP
+                }/plus?utm_source=mosaic&utm_medium=app&utm_content=presentations_promo#excalidraw-redirect`}
+              >
+                Sign up now
+              </LinkButton>
+            </div>
+          </Sidebar.Tab>
+        </>
+      )}
     </DefaultSidebar>
   );
 };

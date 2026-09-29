@@ -90,6 +90,7 @@ import {
 import {
   FIREBASE_STORAGE_PREFIXES,
   isMosaicPlusSignedUser,
+  SHOW_UPSTREAM_PROMOS,
   STORAGE_KEYS,
   SYNC_BROWSER_TABS_TIMEOUT,
 } from "./app_constants";
@@ -997,9 +998,16 @@ const MosaicWrapper = () => {
 
           return (
             <div className="excalidraw-ui-top-right">
-              {mosaicAPI?.getEditorInterface().formFactor === "desktop" && (
-                <MosaicPlusPromoBanner isSignedIn={isMosaicPlusSignedUser} />
-              )}
+              {/*
+                The "Excalidraw+" button in the top right. It links to the
+                upstream paid workspace, which Mosaic does not resell, so it is
+                gated on SHOW_UPSTREAM_PROMOS (see app_constants.ts) rather than
+                deleted. See BRANDING.md.
+              */}
+              {SHOW_UPSTREAM_PROMOS &&
+                mosaicAPI?.getEditorInterface().formFactor === "desktop" && (
+                  <MosaicPlusPromoBanner isSignedIn={isMosaicPlusSignedUser} />
+                )}
 
               {collabError.message && <CollabError collabError={collabError} />}
               <LiveCollaborationTrigger

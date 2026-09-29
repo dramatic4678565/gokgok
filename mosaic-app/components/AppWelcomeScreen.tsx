@@ -4,7 +4,7 @@ import { useI18n } from "@mosaic/mosaic/i18n";
 import { WelcomeScreen } from "@mosaic/mosaic/index";
 import React from "react";
 
-import { isMosaicPlusSignedUser } from "../app_constants";
+import { isMosaicPlusSignedUser, SHOW_UPSTREAM_PROMOS } from "../app_constants";
 
 export const AppWelcomeScreen: React.FC<{
   onCollabDialogOpen: () => any;
@@ -64,7 +64,12 @@ export const AppWelcomeScreen: React.FC<{
               onSelect={() => props.onCollabDialogOpen()}
             />
           )}
-          {!isMosaicPlusSignedUser && (
+          {/*
+            "Sign up" for the upstream paid workspace. Gated on
+            SHOW_UPSTREAM_PROMOS for the same reason as the rest of the upstream
+            promos -- see BRANDING.md.
+          */}
+          {SHOW_UPSTREAM_PROMOS && !isMosaicPlusSignedUser && (
             <WelcomeScreen.Center.MenuItemLink
               href={`${
                 import.meta.env.VITE_APP_PLUS_LP

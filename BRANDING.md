@@ -61,6 +61,28 @@ The JSON is the source of truth, but a few things cannot read it at runtime:
 
 ---
 
+## Hiding upstream promotions
+
+Upstream ships several surfaces that advertise Excalidraw's own paid workspace and its own social accounts. On a self-hosted Mosaic deployment they point users somewhere that has nothing to do with this product, so they are hidden behind a single flag rather than deleted:
+
+```ts
+// mosaic-app/app_constants.ts
+export const SHOW_UPSTREAM_PROMOS = false;
+```
+
+It gates:
+
+| Surface | File |
+| --- | --- |
+| "Excalidraw+" button, top right | `mosaic-app/App.tsx` |
+| "Excalidraw+", "Sign up" menu items | `mosaic-app/components/AppMainMenu.tsx` |
+| "GitHub", "Follow us", "Discord chat" | `packages/mosaic/components/main-menu/DefaultItems.tsx` (`UPSTREAM_SOCIALS`) |
+| Sidebar promo tabs ("comments", "presentation") | `mosaic-app/components/AppSidebar.tsx` |
+| Footer shield icon (links to an upstream blog post) | `mosaic-app/components/AppFooter.tsx` |
+| Welcome screen "Sign up" | `mosaic-app/components/AppWelcomeScreen.tsx` |
+
+**Why gate instead of delete:** upstream is merged in every six hours, so a removed block comes back as a merge conflict. Re-resolving that is far more expensive than flipping a boolean, and a fork that _does_ resell a hosted tier needs these back. Enabling the flag also needs `VITE_APP_PLUS_LP` and `VITE_APP_PLUS_APP` pointed somewhere real first — the URLs in the code still target upstream.
+
 ## What deliberately did **not** get renamed
 
 The rebrand changed everything that is our brand. It deliberately left alone everything that is a _contract with the outside world_, because renaming those silently breaks data that already exists.
