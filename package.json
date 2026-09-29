@@ -55,6 +55,7 @@
     "sync:brand": "node ./scripts/sync-brand-into-html.cjs",
     "check:brand": "node ./scripts/sync-brand-into-html.cjs --check && node ./scripts/rebrand.cjs --test",
     "rebrand": "node ./scripts/rebrand.cjs && node ./scripts/fix-rebrand-consistency.cjs && node ./scripts/fix-test-fixture-text.cjs",
+    "check:docs": "node ./scripts/check-doc-ids.cjs",
     "build:app:docker": "yarn --cwd ./mosaic-app build:app:docker",
     "build:app": "yarn --cwd ./mosaic-app build:app",
     "build:common": "yarn --cwd ./packages/common build:esm",

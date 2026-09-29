@@ -6,13 +6,7 @@ const { execSync } = require("child_process");
 const updateChangelog = require("./updateChangelog");
 
 // skipping utils for now, as it has independent release process
-const PACKAGES = [
-  "common",
-  "fractional-indexing",
-  "math",
-  "element",
-  "excalidraw",
-];
+const PACKAGES = ["common", "fractional-indexing", "math", "element", "mosaic"];
 const PACKAGES_DIR = path.resolve(__dirname, "../packages");
 
 /**
@@ -75,9 +69,7 @@ const getArguments = () => {
 
   if (!version) {
     // set the next version based on the mosaic package version + commit hash
-    const mosaicPackageVersion = require(getPackageJsonPath(
-      "excalidraw",
-    )).version;
+    const mosaicPackageVersion = require(getPackageJsonPath("mosaic")).version;
 
     const hash = getShortCommitHash();
 

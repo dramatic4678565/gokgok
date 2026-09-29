@@ -15,7 +15,7 @@ const MosaicWithClientOnly = dynamic(
 export default function Page() {
   return (
     <>
-      <a href="/excalidraw-in-pages">Switch to Pages router</a>
+      <a href="/mosaic-in-pages">Switch to Pages router</a>
       <h1 className="page-title">App Router</h1>
       <Script id="load-env-variables" strategy="beforeInteractive">
         {`window["MOSAIC_ASSET_PATH"] = window.origin;`}

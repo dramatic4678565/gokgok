@@ -2,7 +2,7 @@
   "name": "@mosaic/mosaic",
   "version": "0.18.0",
   "type": "module",
-  "types": "./dist/types/excalidraw/index.d.ts",
+  "types": "./dist/types/mosaic/index.d.ts",
   "main": "./dist/prod/index.js",
   "module": "./dist/prod/index.js",
   "exports": {
@@ -26,7 +26,7 @@
       "production": "./dist/prod/index.css"
     },
     ".": {
-      "types": "./dist/types/excalidraw/index.d.ts",
+      "types": "./dist/types/mosaic/index.d.ts",
       "development": "./dist/dev/index.js",
       "production": "./dist/prod/index.js",
       "default": "./dist/prod/index.js"

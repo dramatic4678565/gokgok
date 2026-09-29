@@ -98,17 +98,17 @@ const sidebars = {
       label: "@excalidraw/mermaid-to-excalidraw",
       link: {
         type: "doc",
-        id: "@excalidraw/mermaid-to-excalidraw/installation",
+        id: "@mosaic/mermaid-to-excalidraw/installation",
       },
       items: [
-        "@excalidraw/mermaid-to-excalidraw/api",
-        "@excalidraw/mermaid-to-excalidraw/development",
+        "@mosaic/mermaid-to-excalidraw/api",
+        "@mosaic/mermaid-to-excalidraw/development",
         {
           type: "category",
           label: "Codebase",
           link: {
             type: "doc",
-            id: "@excalidraw/mermaid-to-excalidraw/codebase/codebase",
+            id: "@mosaic/mermaid-to-excalidraw/codebase/codebase",
           },
           items: [
             {
@@ -116,13 +116,13 @@ const sidebars = {
               label: "How Parser works under the hood?",
               link: {
                 type: "doc",
-                id: "@excalidraw/mermaid-to-excalidraw/codebase/parser/parser",
+                id: "@mosaic/mermaid-to-excalidraw/codebase/parser/parser",
               },
               items: [
-                "@excalidraw/mermaid-to-excalidraw/codebase/parser/flowchart",
+                "@mosaic/mermaid-to-excalidraw/codebase/parser/flowchart",
               ],
             },
-            "@excalidraw/mermaid-to-excalidraw/codebase/new-diagram-type",
+            "@mosaic/mermaid-to-excalidraw/codebase/new-diagram-type",
           ],
         },
       ],
