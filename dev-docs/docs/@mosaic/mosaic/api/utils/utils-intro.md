@@ -8,7 +8,7 @@ These are pure Javascript functions exported from the @mosaic/mosaic [`@mosaic/m
 
 ### serializeAsJSON
 
-Takes the scene elements and state and returns a JSON string. `Deleted` elements as well as most properties from `AppState` are removed from the resulting JSON. (see [`serializeAsJSON()`](https://github.com/excalidraw/excalidraw/blob/master/packages/mosaic/data/json.ts#L42) source for details).
+Takes the scene elements and state and returns a JSON string. `Deleted` elements as well as most properties from `AppState` are removed from the resulting JSON. (see [`serializeAsJSON()`](https://github.com/excalidraw/excalidraw/blob/master/packages/excalidraw/data/json.ts#L42) source for details).
 
 If you want to overwrite the `source` field in the `JSON` string, you can set `window.MOSAIC_EXPORT_SOURCE` to the desired value.
 
@@ -16,8 +16,8 @@ If you want to overwrite the `source` field in the `JSON` string, you can set `w
 
 <pre>
 serializeAsJSON(&#123;<br/>&nbsp;
-  elements: <a href="https://github.com/excalidraw/excalidraw/blob/master/packages/mosaic/element/types.ts#L114">MosaicElement[]</a>,<br/>&nbsp;
-  appState: <a href="https://github.com/excalidraw/excalidraw/blob/master/packages/mosaic/types.ts#L95">AppState</a>,<br/>
+  elements: <a href="https://github.com/excalidraw/excalidraw/blob/master/packages/excalidraw/element/types.ts#L114">MosaicElement[]</a>,<br/>&nbsp;
+  appState: <a href="https://github.com/excalidraw/excalidraw/blob/master/packages/excalidraw/types.ts#L95">AppState</a>,<br/>
 }): string
 </pre>
 
@@ -37,7 +37,7 @@ If you want to overwrite the source field in the JSON string, you can set `windo
 
 <pre>
 serializeLibraryAsJSON(
-  libraryItems: <a href="https://github.com/excalidraw/excalidraw/blob/master/packages/mosaic/types.ts#L200">LibraryItems[]</a>)
+  libraryItems: <a href="https://github.com/excalidraw/excalidraw/blob/master/packages/excalidraw/types.ts#L200">LibraryItems[]</a>)
 </pre>
 
 **How to use**
@@ -53,7 +53,7 @@ Returns `true` if element is invisibly small (e.g. width & height are zero).
 **_Signature_**
 
 <pre>
-isInvisiblySmallElement(element:  <a href="https://github.com/excalidraw/excalidraw/blob/master/packages/mosaic/element/types.ts#L114">MosaicElement</a>): boolean
+isInvisiblySmallElement(element:  <a href="https://github.com/excalidraw/excalidraw/blob/master/packages/excalidraw/element/types.ts#L114">MosaicElement</a>): boolean
 </pre>
 
 **How to use**
@@ -80,10 +80,10 @@ mosaicAPI.updateScene(scene);
 <pre>
 loadFromBlob(<br/>&nbsp;
   blob: <a href="https://developer.mozilla.org/en-US/docs/Web/API/Blob">Blob</a>,<br/>&nbsp;
-  localAppState: <a href="https://github.com/excalidraw/excalidraw/blob/master/packages/mosaic/types.ts#L95">AppState</a> | null,<br/>&nbsp;
-  localElements: <a href="https://github.com/excalidraw/excalidraw/blob/master/packages/mosaic/element/types.ts#L114">MosaicElement[]</a> | null,<br/>&nbsp;
+  localAppState: <a href="https://github.com/excalidraw/excalidraw/blob/master/packages/excalidraw/types.ts#L95">AppState</a> | null,<br/>&nbsp;
+  localElements: <a href="https://github.com/excalidraw/excalidraw/blob/master/packages/excalidraw/element/types.ts#L114">MosaicElement[]</a> | null,<br/>&nbsp;
   fileHandle?: FileSystemHandle | null <br/>
-) => Promise&lt;<a href="https://github.com/excalidraw/excalidraw/blob/master/packages/mosaic/data/restore.ts#L61">RestoredDataState</a>>
+) => Promise&lt;<a href="https://github.com/excalidraw/excalidraw/blob/master/packages/excalidraw/data/restore.ts#L61">RestoredDataState</a>>
 </pre>
 
 ### loadLibraryFromBlob
@@ -130,10 +130,10 @@ if (contents.type === MIME_TYPES.excalidraw) {
 <pre>
 loadSceneOrLibraryFromBlob(<br/>&nbsp;
   blob: <a href="https://developer.mozilla.org/en-US/docs/Web/API/Blob">Blob</a>,<br/>&nbsp;
-  localAppState: <a href="https://github.com/excalidraw/excalidraw/blob/master/packages/mosaic/types.ts#L95">AppState</a> | null,<br/>&nbsp;
-  localElements: <a href="https://github.com/excalidraw/excalidraw/blob/master/packages/mosaic/element/types.ts#L114">MosaicElement[]</a> | null,<br/>&nbsp;
+  localAppState: <a href="https://github.com/excalidraw/excalidraw/blob/master/packages/excalidraw/types.ts#L95">AppState</a> | null,<br/>&nbsp;
+  localElements: <a href="https://github.com/excalidraw/excalidraw/blob/master/packages/excalidraw/element/types.ts#L114">MosaicElement[]</a> | null,<br/>&nbsp;
   fileHandle?: FileSystemHandle | null<br/>
-) => Promise&lt;&#123; type: string, data: <a href="https://github.com/excalidraw/excalidraw/blob/master/packages/mosaic/data/restore.ts#L53">RestoredDataState</a> | <a href="https://github.com/excalidraw/excalidraw/blob/master/packages/mosaic/data/types.ts#L33">ImportedLibraryState</a>}>
+) => Promise&lt;&#123; type: string, data: <a href="https://github.com/excalidraw/excalidraw/blob/master/packages/excalidraw/data/restore.ts#L53">RestoredDataState</a> | <a href="https://github.com/excalidraw/excalidraw/blob/master/packages/excalidraw/data/types.ts#L33">ImportedLibraryState</a>}>
 </pre>
 
 ### getFreeDrawSvgPath
@@ -149,7 +149,7 @@ import { getFreeDrawSvgPath } from "@mosaic/mosaic";
 **Signature**
 
 <pre>
-getFreeDrawSvgPath(element: <a href="https://github.com/excalidraw/excalidraw/blob/master/packages/mosaic/element/types.ts#L182">MosaicFreeDrawElement</a>)
+getFreeDrawSvgPath(element: <a href="https://github.com/excalidraw/excalidraw/blob/master/packages/excalidraw/element/types.ts#L182">MosaicFreeDrawElement</a>)
 </pre>
 
 ### isLinearElement
@@ -165,7 +165,7 @@ import { isLinearElement } from "@mosaic/mosaic";
 **Signature**
 
 <pre>
-isLinearElement(elementType?: <a href="https://github.com/excalidraw/excalidraw/blob/master/packages/mosaic/element/types.ts#L80">MosaicElement</a>): boolean
+isLinearElement(elementType?: <a href="https://github.com/excalidraw/excalidraw/blob/master/packages/excalidraw/element/types.ts#L80">MosaicElement</a>): boolean
 </pre>
 
 ### getNonDeletedElements
@@ -181,7 +181,7 @@ import { getNonDeletedElements } from "@mosaic/mosaic";
 **Signature**
 
 <pre>
-getNonDeletedElements(elements:<a href="https://github.com/excalidraw/excalidraw/blob/master/packages/mosaic/element/types.ts#L114"> readonly MosaicElement[]</a>): as readonly <a href="https://github.com/excalidraw/excalidraw/blob/master/packages/mosaic/element/types.ts#L125">NonDeletedMosaicElement[]</a>
+getNonDeletedElements(elements:<a href="https://github.com/excalidraw/excalidraw/blob/master/packages/excalidraw/element/types.ts#L114"> readonly MosaicElement[]</a>): as readonly <a href="https://github.com/excalidraw/excalidraw/blob/master/packages/excalidraw/element/types.ts#L125">NonDeletedMosaicElement[]</a>
 </pre>
 
 ### mergeLibraryItems
@@ -196,9 +196,9 @@ import { mergeLibraryItems } from "@mosaic/mosaic";
 
 <pre>
 mergeLibraryItems(<br/>&nbsp;
-  localItems: <a href="https://github.com/excalidraw/excalidraw/blob/master/packages/mosaic/types.ts#L250">LibraryItems</a>,<br/>&nbsp;
-  otherItems: <a href="https://github.com/excalidraw/excalidraw/blob/master/packages/mosaic/types.ts#L200">LibraryItems</a><br/>
-): <a href="https://github.com/excalidraw/excalidraw/blob/master/packages/mosaic/types.ts#L250">LibraryItems</a>
+  localItems: <a href="https://github.com/excalidraw/excalidraw/blob/master/packages/excalidraw/types.ts#L250">LibraryItems</a>,<br/>&nbsp;
+  otherItems: <a href="https://github.com/excalidraw/excalidraw/blob/master/packages/excalidraw/types.ts#L200">LibraryItems</a><br/>
+): <a href="https://github.com/excalidraw/excalidraw/blob/master/packages/excalidraw/types.ts#L250">LibraryItems</a>
 </pre>
 
 ### parseLibraryTokensFromUrl
@@ -239,8 +239,8 @@ export const App = () => {
 
 <pre>
 useHandleLibrary(opts: &#123;<br/>&nbsp;
-  mosaicAPI: <a href="https://github.com/excalidraw/excalidraw/blob/master/packages/mosaic/types.ts#L494">MosaicAPI</a>,<br/>&nbsp;
-  getInitialLibraryItems?: () => <a href="https://github.com/excalidraw/excalidraw/blob/master/packages/mosaic/types.ts#L253">LibraryItemsSource</a><br/>
+  mosaicAPI: <a href="https://github.com/excalidraw/excalidraw/blob/master/packages/excalidraw/types.ts#L494">MosaicAPI</a>,<br/>&nbsp;
+  getInitialLibraryItems?: () => <a href="https://github.com/excalidraw/excalidraw/blob/master/packages/excalidraw/types.ts#L253">LibraryItemsSource</a><br/>
 });
 </pre>
 
@@ -253,7 +253,7 @@ This function returns the current `scene` version.
 **_Signature_**
 
 <pre>
-getSceneVersion(elements:  <a href="https://github.com/excalidraw/excalidraw/blob/master/packages/mosaic/element/types.ts#L114">MosaicElement[]</a>)
+getSceneVersion(elements:  <a href="https://github.com/excalidraw/excalidraw/blob/master/packages/excalidraw/element/types.ts#L114">MosaicElement[]</a>)
 </pre>
 
 **How to use**
@@ -274,7 +274,7 @@ import { sceneCoordsToViewportCoords } from "@mosaic/mosaic";
 
 <pre>
 sceneCoordsToViewportCoords(&#123; sceneX: number, sceneY: number },<br/>&nbsp;
-  appState: <a href="https://github.com/excalidraw/excalidraw/blob/master/packages/mosaic/types.ts#L95">AppState</a><br/>): &#123; x: number, y: number }
+  appState: <a href="https://github.com/excalidraw/excalidraw/blob/master/packages/excalidraw/types.ts#L95">AppState</a><br/>): &#123; x: number, y: number }
 </pre>
 
 ### viewportCoordsToSceneCoords
@@ -289,7 +289,7 @@ import { viewportCoordsToSceneCoords } from "@mosaic/mosaic";
 
 <pre>
 viewportCoordsToSceneCoords(&#123; clientX: number, clientY: number },<br/>&nbsp;
-  appState: <a href="https://github.com/excalidraw/excalidraw/blob/master/packages/mosaic/types.ts#L95">AppState</a><br/>): &#123;x: number, y: number}
+  appState: <a href="https://github.com/excalidraw/excalidraw/blob/master/packages/excalidraw/types.ts#L95">AppState</a><br/>): &#123;x: number, y: number}
 </pre>
 
 ### useEditorInterface
@@ -358,8 +358,8 @@ To help with localization, we export the following.
 | name | type |
 | --- | --- |
 | `defaultLang` | `string` |
-| `languages` | [`Language[]`](https://github.com/excalidraw/excalidraw/blob/master/packages/mosaic/i18n.ts#L15) |
-| `useI18n` | [`() => { langCode, t }`](https://github.com/excalidraw/excalidraw/blob/master/packages/mosaic/i18n.ts#L15) |
+| `languages` | [`Language[]`](https://github.com/excalidraw/excalidraw/blob/master/packages/excalidraw/i18n.ts#L15) |
+| `useI18n` | [`() => { langCode, t }`](https://github.com/excalidraw/excalidraw/blob/master/packages/excalidraw/i18n.ts#L15) |
 
 ```js
 import { defaultLang, languages, useI18n } from "@mosaic/mosaic";

@@ -1,18 +1,18 @@
 # initialData
 
 <pre>
-&#123; elements?: <a href="https://github.com/excalidraw/excalidraw/blob/master/packages/mosaic/element/types.ts#L114">MosaicElement[]</a>, appState?: <a href="https://github.com/excalidraw/excalidraw/blob/master/packages/mosaic/types.ts#L95">AppState</a> &#125;
+&#123; elements?: <a href="https://github.com/excalidraw/excalidraw/blob/master/packages/excalidraw/element/types.ts#L114">MosaicElement[]</a>, appState?: <a href="https://github.com/excalidraw/excalidraw/blob/master/packages/excalidraw/types.ts#L95">AppState</a> &#125;
 </pre>
 
 This helps to load Mosaic with `initialData`. It must be an object or a [promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/Promise) which resolves to an object containing the below optional fields.
 
 | Name | Type | Description |
 | --- | --- | --- |
-| `elements` | [MosaicElement[]](https://github.com/excalidraw/excalidraw/blob/master/packages/mosaic/element/types.ts#L114) | The `elements` with which `Mosaic` should be mounted. |
-| `appState` | [AppState](https://github.com/excalidraw/excalidraw/blob/master/packages/mosaic/types.ts#L95) | The `AppState` with which `Mosaic` should be mounted. |
+| `elements` | [MosaicElement[]](https://github.com/excalidraw/excalidraw/blob/master/packages/excalidraw/element/types.ts#L114) | The `elements` with which `Mosaic` should be mounted. |
+| `appState` | [AppState](https://github.com/excalidraw/excalidraw/blob/master/packages/excalidraw/types.ts#L95) | The `AppState` with which `Mosaic` should be mounted. |
 | `scrollToContent` | `boolean` | This attribute indicates whether to `scroll` to the nearest element to center once `Mosaic` is mounted. By default, it will not scroll the nearest element to the center. Make sure you pass `initialData.appState.scrollX` and `initialData.appState.scrollY` when `scrollToContent` is false so that scroll positions are retained |
-| `libraryItems` | [LibraryItems](https://github.com/excalidraw/excalidraw/blob/master/packages/mosaic/types.ts#L247) &#124; Promise&lt;[LibraryItems](https://github.com/excalidraw/excalidraw/blob/master/packages/mosaic/types.ts#L200)&gt; | This library items with which `Mosaic` should be mounted. |
-| `files` | [BinaryFiles](https://github.com/excalidraw/excalidraw/blob/master/packages/mosaic/types.ts#L82) | The `files` added to the scene. |
+| `libraryItems` | [LibraryItems](https://github.com/excalidraw/excalidraw/blob/master/packages/excalidraw/types.ts#L247) &#124; Promise&lt;[LibraryItems](https://github.com/excalidraw/excalidraw/blob/master/packages/excalidraw/types.ts#L200)&gt; | This library items with which `Mosaic` should be mounted. |
+| `files` | [BinaryFiles](https://github.com/excalidraw/excalidraw/blob/master/packages/excalidraw/types.ts#L82) | The `files` added to the scene. |
 
 You might want to use this when you want to load mosaic with some initial elements and app state.
 
