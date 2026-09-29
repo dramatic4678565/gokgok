@@ -108,7 +108,7 @@ export const AppSidebar = () => {
                 style={{
                   ["--image-source" as any]: `url(/sidebar-comments-promo-${
                     theme === THEME.DARK ? "dark" : "light"
-                  }.jpg)`,
+                  }.png)`,
                   opacity: 0.9,
                 }}
               />
@@ -129,7 +129,7 @@ export const AppSidebar = () => {
                 style={{
                   ["--image-source" as any]: `url(/sidebar-presentation-promo-${
                     theme === THEME.DARK ? "dark" : "light"
-                  }.jpg)`,
+                  }.png)`,
                   opacity: 0.7,
                 }}
               />

@@ -19,6 +19,17 @@ The wordmark is drawn as SVG strokes rather than set in a font, so it renders id
 
 Assets live in [`branding/`](./branding) as sources, and are generated into [`public/`](./public) as the sizes the app actually uses.
 
+| Generated | What it is |
+| --- | --- |
+| `favicon.ico` | 16/24/32/48 PNG frames. Browsers ask for this first, so a stale one shows the old mark in the tab bar no matter what the other icons say. |
+| `favicon.svg`, `favicon-{16,32,48}x48.png` | favicon variants |
+| `maskable_icon_x{192,512}.png` | PWA maskable icons (full-bleed, inside the 80% safe zone) |
+| `android-chrome-{192,512}x192.png`, `apple-touch-icon.png` | PWA / iOS home screen |
+| `mosaic-mark.png`, `mosaic-logo.png` | mark and horizontal lockup, for README and docs |
+| `og-image-3.png` | social card |
+| `screenshots/*.png` | PWA store screenshots, generated as mockups so they can never go stale |
+| `sidebar-*-promo-*.png` | artwork for the sidebar promo tabs, only rendered when `SHOW_UPSTREAM_PROMOS` is on |
+
 ---
 
 ## Changing the brand
@@ -26,16 +37,16 @@ Assets live in [`branding/`](./branding) as sources, and are generated into [`pu
 1. Edit [`branding/mosaic-brand.json`](./branding/mosaic-brand.json).
 2. Regenerate the images:
 
-   ```powershell
-   # one-off: install the rasteriser
-   npm i -g @resvg/resvg-js-cli     # or: npm i @resvg/resvg-js
-   node scripts/build-brand-assets.cjs
+   ```bash
+   yarn build:brand
    ```
+
+   This uses `@resvg/resvg-js`, which is a devDependency, so it works in a fresh clone with no global installs.
 
 3. Bake the meta tags into `index.html`:
 
-   ```powershell
-   node scripts/sync-brand-into-html.cjs
+   ```bash
+   yarn sync:brand
    ```
 
 4. Commit all of it.
