@@ -1,4 +1,4 @@
-import { pointFrom } from "@excalidraw/math";
+import { pointFrom } from "@mosaic/math";
 
 import {
   FONT_FAMILY,
@@ -6,24 +6,24 @@ import {
   ROUNDNESS,
   isPrimitive,
   getUpdatedTimestamp,
-} from "@excalidraw/common";
+} from "@mosaic/common";
 
-import { Excalidraw, mutateElement } from "@excalidraw/excalidraw";
+import { Mosaic, mutateElement } from "@mosaic/mosaic";
 
-import { actionDuplicateSelection } from "@excalidraw/excalidraw/actions";
+import { actionDuplicateSelection } from "@mosaic/mosaic/actions";
 
-import { API } from "@excalidraw/excalidraw/tests/helpers/api";
+import { API } from "@mosaic/mosaic/tests/helpers/api";
 
-import { UI, Keyboard, Pointer } from "@excalidraw/excalidraw/tests/helpers/ui";
+import { UI, Keyboard, Pointer } from "@mosaic/mosaic/tests/helpers/ui";
 
 import {
   act,
   assertElements,
   getCloneByOrigId,
   render,
-} from "@excalidraw/excalidraw/tests/test-utils";
+} from "@mosaic/mosaic/tests/test-utils";
 
-import type { LocalPoint } from "@excalidraw/math";
+import type { LocalPoint } from "@mosaic/math";
 
 import {
   deepCopyElement,
@@ -31,7 +31,7 @@ import {
   duplicateElements,
 } from "../src/duplicate";
 
-import type { ExcalidrawLinearElement } from "../src/types";
+import type { MosaicLinearElement } from "../src/types";
 
 const { h } = window;
 const mouse = new Pointer("mouse");
@@ -238,7 +238,7 @@ describe("duplicating multiple elements", () => {
 
     const clonedArrows = duplicatedElements.filter(
       (e) => e.type === "arrow",
-    ) as ExcalidrawLinearElement[];
+    ) as MosaicLinearElement[];
 
     const [clonedRectangle, clonedText1, , clonedArrow2, clonedArrowLabel] =
       duplicatedElements as any as typeof origElements;
@@ -424,7 +424,7 @@ describe("duplicating multiple elements", () => {
 
 describe("group-related duplication", () => {
   beforeEach(async () => {
-    await render(<Excalidraw />);
+    await render(<Mosaic />);
   });
 
   it("action-duplicating within group", async () => {
@@ -533,7 +533,7 @@ describe("group-related duplication", () => {
 
 describe("duplication z-order", () => {
   beforeEach(async () => {
-    await render(<Excalidraw />);
+    await render(<Mosaic />);
   });
 
   it("duplication z order with Cmd+D for the lowest z-ordered element should be +1 for the clone", () => {

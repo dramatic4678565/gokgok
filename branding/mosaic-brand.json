@@ -1,0 +1,40 @@
+{
+  "$comment": [
+    "Single source of truth for Mosaic branding.",
+    "Change a value here, then re-run `node scripts/build-brand-assets.cjs`",
+    "for the image assets, and update the meta tags in mosaic-app/index.html",
+    "(the SITE_URL is duplicated there because index.html is a static file).",
+    "",
+    "SITE_URL is a placeholder -- replace it with your real domain before launch.",
+    "See BRANDING.md for the full checklist of what to change."
+  ],
+  "name": "Mosaic",
+  "wordmark": "MOSAIC",
+  "tagline": "Visual whiteboard for teams",
+  "description": "Mosaic is a collaborative whiteboard for sketching diagrams with a hand-drawn feel. Draw, map systems and think together in the browser.",
+  "shortDescription": "Free, collaborative whiteboard with a hand-drawn feel",
+  "siteUrl": "https://mosaic.app",
+  "repoUrl": "https://github.com/dramatic4678565/mosaic",
+  "supportEmail": "support@mosaic.app",
+  "social": {
+    "twitter": "@mosaic",
+    "github": "https://github.com/dramatic4678565/mosaic"
+  },
+  "colors": {
+    "hero": "#3977df",
+    "mid": "#5f96ea",
+    "light": "#8fb4f2",
+    "soft": "#c7dbfb",
+    "ink": "#253144",
+    "muted": "#8390a0",
+    "night": "#0f1729"
+  },
+  "assets": {
+    "mark": "mosaic-mark.svg",
+    "logo": "mosaic-logo.svg",
+    "logoStacked": "mosaic-logo-stacked.svg",
+    "wordmark": "mosaic-wordmark.svg",
+    "favicon": "favicon.svg",
+    "ogImage": "og-image-3.png"
+  }
+}

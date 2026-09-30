@@ -33,7 +33,7 @@ jobs:
           scopes: |
             app
             editor
-            packages/excalidraw
+            packages/mosaic
             packages/utils
             docker
             repo

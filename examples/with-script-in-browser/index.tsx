@@ -1,29 +1,29 @@
 import React, { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
-import "@excalidraw/excalidraw/index.css";
+import "@mosaic/mosaic/index.css";
 
-import type * as TExcalidraw from "@excalidraw/excalidraw";
+import type * as TMosaic from "@mosaic/mosaic";
 
 import App from "./components/ExampleApp";
 
 declare global {
   interface Window {
-    ExcalidrawLib: typeof TExcalidraw;
+    MosaicLib: typeof TMosaic;
   }
 }
 
 const rootElement = document.getElementById("root")!;
 const root = createRoot(rootElement);
-const { Excalidraw } = window.ExcalidrawLib;
+const { Mosaic } = window.MosaicLib;
 root.render(
   <StrictMode>
     <App
-      appTitle={"Excalidraw Example"}
+      appTitle={"Mosaic Example"}
       useCustom={(api: any, args?: any[]) => {}}
-      excalidrawLib={window.ExcalidrawLib}
+      mosaicLib={window.MosaicLib}
     >
-      <Excalidraw />
+      <Mosaic />
     </App>
   </StrictMode>,
 );

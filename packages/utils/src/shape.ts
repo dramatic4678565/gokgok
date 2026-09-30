@@ -3,17 +3,17 @@
  *
  * for instance, a cubic bezier curve is specified by its four control points and
  * an ellipse is defined by its center, angle, semi major axis and semi minor axis
- * (but in semi-width and semi-height so it's more relevant to Excalidraw)
+ * (but in semi-width and semi-height so it's more relevant to Mosaic)
  *
  * the idea with pure shapes is so that we can provide collision and other geoemtric methods not depending on
- * the specifics of roughjs or elements in Excalidraw; instead, we can focus on the pure shapes themselves
+ * the specifics of roughjs or elements in Mosaic; instead, we can focus on the pure shapes themselves
  *
- * also included in this file are methods for converting an Excalidraw element or a Drawable from roughjs
+ * also included in this file are methods for converting an Mosaic element or a Drawable from roughjs
  * to pure shapes
  */
 import { pointsOnBezierCurves } from "points-on-curve";
 
-import { invariant } from "@excalidraw/common";
+import { invariant } from "@mosaic/common";
 import {
   curve,
   lineSegment,
@@ -32,28 +32,28 @@ import {
   vectorScale,
   type GlobalPoint,
   type LocalPoint,
-} from "@excalidraw/math";
+} from "@mosaic/math";
 
-import { getElementAbsoluteCoords } from "@excalidraw/element";
+import { getElementAbsoluteCoords } from "@mosaic/element";
 
 import type {
   ElementsMap,
-  ExcalidrawBindableElement,
-  ExcalidrawDiamondElement,
-  ExcalidrawElement,
-  ExcalidrawEllipseElement,
-  ExcalidrawEmbeddableElement,
-  ExcalidrawFrameLikeElement,
-  ExcalidrawFreeDrawElement,
-  ExcalidrawIframeElement,
-  ExcalidrawImageElement,
-  ExcalidrawLinearElement,
-  ExcalidrawRectangleElement,
-  ExcalidrawSelectionElement,
-  ExcalidrawStickyNoteElement,
-  ExcalidrawTextElement,
-} from "@excalidraw/element/types";
-import type { Curve, LineSegment, Polygon, Radians } from "@excalidraw/math";
+  MosaicBindableElement,
+  MosaicDiamondElement,
+  MosaicElement,
+  MosaicEllipseElement,
+  MosaicEmbeddableElement,
+  MosaicFrameLikeElement,
+  MosaicFreeDrawElement,
+  MosaicIframeElement,
+  MosaicImageElement,
+  MosaicLinearElement,
+  MosaicRectangleElement,
+  MosaicSelectionElement,
+  MosaicStickyNoteElement,
+  MosaicTextElement,
+} from "@mosaic/element/types";
+import type { Curve, LineSegment, Polygon, Radians } from "@mosaic/math";
 
 import type { Drawable, Op } from "roughjs/bin/core";
 
@@ -104,15 +104,15 @@ export type GeometricShape<Point extends GlobalPoint | LocalPoint> =
     };
 
 type RectangularElement =
-  | ExcalidrawRectangleElement
-  | ExcalidrawStickyNoteElement
-  | ExcalidrawDiamondElement
-  | ExcalidrawFrameLikeElement
-  | ExcalidrawEmbeddableElement
-  | ExcalidrawImageElement
-  | ExcalidrawIframeElement
-  | ExcalidrawTextElement
-  | ExcalidrawSelectionElement;
+  | MosaicRectangleElement
+  | MosaicStickyNoteElement
+  | MosaicDiamondElement
+  | MosaicFrameLikeElement
+  | MosaicEmbeddableElement
+  | MosaicImageElement
+  | MosaicIframeElement
+  | MosaicTextElement
+  | MosaicSelectionElement;
 
 // polygon
 export const getPolygonShape = <Point extends GlobalPoint | LocalPoint>(
@@ -151,7 +151,7 @@ export const getPolygonShape = <Point extends GlobalPoint | LocalPoint>(
 
 // return the selection box for an element, possibly rotated as well
 export const getSelectionBoxShape = <Point extends GlobalPoint | LocalPoint>(
-  element: ExcalidrawElement,
+  element: MosaicElement,
   elementsMap: ElementsMap,
   padding = 10,
 ) => {
@@ -181,7 +181,7 @@ export const getSelectionBoxShape = <Point extends GlobalPoint | LocalPoint>(
 
 // ellipse
 export const getEllipseShape = <Point extends GlobalPoint | LocalPoint>(
-  element: ExcalidrawEllipseElement,
+  element: MosaicEllipseElement,
 ): GeometricShape<Point> => {
   const { width, height, angle, x, y } = element;
 
@@ -265,7 +265,7 @@ const polylineFromPoints = <Point extends GlobalPoint | LocalPoint>(
 };
 
 export const getFreedrawShape = <Point extends GlobalPoint | LocalPoint>(
-  element: ExcalidrawFreeDrawElement,
+  element: MosaicFreeDrawElement,
   center: Point,
   isClosed: boolean = false,
 ): GeometricShape<Point> => {
@@ -296,7 +296,7 @@ export const getFreedrawShape = <Point extends GlobalPoint | LocalPoint>(
 };
 
 export const getClosedCurveShape = <Point extends GlobalPoint | LocalPoint>(
-  element: ExcalidrawLinearElement,
+  element: MosaicLinearElement,
   roughShape: Drawable,
   startingPoint: Point = pointFrom<Point>(0, 0),
   angleInRadian: Radians,
@@ -364,7 +364,7 @@ export const getClosedCurveShape = <Point extends GlobalPoint | LocalPoint>(
 export const segmentIntersectRectangleElement = <
   Point extends LocalPoint | GlobalPoint,
 >(
-  element: ExcalidrawBindableElement,
+  element: MosaicBindableElement,
   segment: LineSegment<Point>,
   gap: number = 0,
 ): Point[] => {

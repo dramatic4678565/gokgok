@@ -4,7 +4,7 @@ import {
   getGridPoint,
   invariant,
   isTransparent,
-} from "@excalidraw/common";
+} from "@mosaic/common";
 
 import {
   PRECISION,
@@ -21,12 +21,12 @@ import {
   vectorNormalize,
   vectorScale,
   type GlobalPoint,
-} from "@excalidraw/math";
+} from "@mosaic/math";
 
-import type { LineSegment, LocalPoint, Radians } from "@excalidraw/math";
-import type { AppState, NullableGridSize } from "@excalidraw/excalidraw/types";
-import type { MapEntry, Mutable } from "@excalidraw/common/utility-types";
-import type { Bounds } from "@excalidraw/common";
+import type { LineSegment, LocalPoint, Radians } from "@mosaic/math";
+import type { AppState, NullableGridSize } from "@mosaic/mosaic/types";
+import type { MapEntry, Mutable } from "@mosaic/common/utility-types";
+import type { Bounds } from "@mosaic/common";
 
 import { getCenterForBounds } from "./bounds";
 import {
@@ -74,16 +74,16 @@ import type { ElementUpdate } from "./mutateElement";
 import type {
   BindMode,
   ElementsMap,
-  ExcalidrawArrowElement,
-  ExcalidrawBindableElement,
-  ExcalidrawElbowArrowElement,
-  ExcalidrawElement,
-  ExcalidrawRectanguloidElement,
-  ExcalidrawTextElement,
+  MosaicArrowElement,
+  MosaicBindableElement,
+  MosaicElbowArrowElement,
+  MosaicElement,
+  MosaicRectanguloidElement,
+  MosaicTextElement,
   FixedPoint,
   FixedPointBinding,
   NonDeleted,
-  NonDeletedExcalidrawElement,
+  NonDeletedMosaicElement,
   NonDeletedSceneElementsMap,
   Ordered,
   PointsPositionUpdates,
@@ -93,7 +93,7 @@ export type BindingStrategy =
   // Create a new binding with this mode
   | {
       mode: BindMode;
-      element: NonDeleted<ExcalidrawBindableElement>;
+      element: NonDeleted<MosaicBindableElement>;
       focusPoint: GlobalPoint;
     }
   // Break the binding
@@ -125,7 +125,7 @@ const MIN_BINDABLE_SIZE = 1;
 export const getBindingGap = (
   // only the stroke width is needed, so the gap can also be computed for a
   // bind target that doesn't exist yet (see `getTextBindingForArrowEndpoint`)
-  bindTarget: Pick<ExcalidrawBindableElement, "strokeWidth">,
+  bindTarget: Pick<MosaicBindableElement, "strokeWidth">,
 ): number => {
   return BASE_BINDING_GAP + bindTarget.strokeWidth / 2;
 };
@@ -149,7 +149,7 @@ export const isBindingEnabled = (appState: {
 };
 
 export const bindOrUnbindBindingElement = (
-  arrow: NonDeleted<ExcalidrawArrowElement>,
+  arrow: NonDeleted<MosaicArrowElement>,
   draggingPoints: PointsPositionUpdates,
   scenePointerX: number,
   scenePointerY: number,
@@ -238,7 +238,7 @@ export const bindOrUnbindBindingElement = (
 };
 
 const bindOrUnbindBindingElementEdge = (
-  arrow: NonDeleted<ExcalidrawArrowElement>,
+  arrow: NonDeleted<MosaicArrowElement>,
   { mode, element, focusPoint }: BindingStrategy,
   startOrEnd: "start" | "end",
   scene: Scene,
@@ -265,10 +265,10 @@ const bindOrUnbindBindingElementEdge = (
 };
 
 const bindingStrategyForElbowArrowEndpointDragging = (
-  arrow: NonDeleted<ExcalidrawArrowElement>,
+  arrow: NonDeleted<MosaicArrowElement>,
   draggingPoints: PointsPositionUpdates,
   elementsMap: NonDeletedSceneElementsMap,
-  elements: readonly Ordered<NonDeletedExcalidrawElement>[],
+  elements: readonly Ordered<NonDeletedMosaicElement>[],
   zoom: AppState["zoom"],
 ): {
   start: BindingStrategy;
@@ -317,10 +317,10 @@ const bindingStrategyForElbowArrowEndpointDragging = (
 };
 
 const bindingStrategyForNewSimpleArrowEndpointDragging = (
-  arrow: NonDeleted<ExcalidrawArrowElement>,
+  arrow: NonDeleted<MosaicArrowElement>,
   draggingPoints: PointsPositionUpdates,
   elementsMap: NonDeletedSceneElementsMap,
-  elements: readonly Ordered<NonDeletedExcalidrawElement>[],
+  elements: readonly Ordered<NonDeletedMosaicElement>[],
   startDragged: boolean,
   endDragged: boolean,
   startIdx: number,
@@ -401,7 +401,7 @@ const bindingStrategyForNewSimpleArrowEndpointDragging = (
       if (allHits.find((el) => el.id === startBinding.elementId)) {
         const otherElement = elementsMap.get(
           arrow.startBinding.elementId,
-        ) as NonDeleted<ExcalidrawBindableElement>;
+        ) as NonDeleted<MosaicBindableElement>;
 
         invariant(otherElement, "Other element must be in the elements map");
 
@@ -426,7 +426,7 @@ const bindingStrategyForNewSimpleArrowEndpointDragging = (
     if (arrow.startBinding && arrow.startBinding.elementId !== hit?.id) {
       const otherElement = elementsMap.get(
         arrow.startBinding.elementId,
-      ) as NonDeleted<ExcalidrawBindableElement>;
+      ) as NonDeleted<MosaicBindableElement>;
       invariant(otherElement, "Other element must be in the elements map");
 
       const otherIsInsideBinding =
@@ -489,9 +489,9 @@ const bindingStrategyForSimpleArrowEndpointDragging_complex = (
   currentBinding: FixedPointBinding | null,
   oppositeBinding: FixedPointBinding | null,
   elementsMap: NonDeletedSceneElementsMap,
-  elements: readonly Ordered<NonDeletedExcalidrawElement>[],
+  elements: readonly Ordered<NonDeletedMosaicElement>[],
   globalBindMode: AppState["bindMode"],
-  arrow: NonDeleted<ExcalidrawArrowElement>,
+  arrow: NonDeleted<MosaicArrowElement>,
   zoom: AppState["zoom"],
   finalize?: boolean,
 ): { current: BindingStrategy; other: BindingStrategy } => {
@@ -508,7 +508,7 @@ const bindingStrategyForSimpleArrowEndpointDragging_complex = (
   const oppositeElement = oppositeBinding
     ? (elementsMap.get(
         oppositeBinding.elementId,
-      ) as NonDeleted<ExcalidrawBindableElement>)
+      ) as NonDeleted<MosaicBindableElement>)
     : null;
   const otherIsTransparent =
     isOverlapping && oppositeElement
@@ -612,12 +612,12 @@ const bindingStrategyForSimpleArrowEndpointDragging_complex = (
 };
 
 export const getBindingStrategyForDraggingBindingElementEndpoints = (
-  arrow: NonDeleted<ExcalidrawArrowElement>,
+  arrow: NonDeleted<MosaicArrowElement>,
   draggingPoints: PointsPositionUpdates,
   screenPointerX: number,
   screenPointerY: number,
   elementsMap: NonDeletedSceneElementsMap,
-  elements: readonly Ordered<NonDeletedExcalidrawElement>[],
+  elements: readonly Ordered<NonDeletedMosaicElement>[],
   appState: AppState,
   opts?: {
     newArrow?: boolean;
@@ -652,12 +652,12 @@ export const getBindingStrategyForDraggingBindingElementEndpoints = (
 };
 
 const getBindingStrategyForDraggingBindingElementEndpoints_simple = (
-  arrow: NonDeleted<ExcalidrawArrowElement>,
+  arrow: NonDeleted<MosaicArrowElement>,
   draggingPoints: PointsPositionUpdates,
   scenePointerX: number,
   scenePointerY: number,
   elementsMap: NonDeletedSceneElementsMap,
-  elements: readonly Ordered<NonDeletedExcalidrawElement>[],
+  elements: readonly Ordered<NonDeletedMosaicElement>[],
   appState: AppState,
   opts?: {
     newArrow?: boolean;
@@ -750,7 +750,7 @@ const getBindingStrategyForDraggingBindingElementEndpoints_simple = (
   const otherBindableElement = otherBinding
     ? (elementsMap.get(
         otherBinding.elementId,
-      ) as NonDeleted<ExcalidrawBindableElement>)
+      ) as NonDeleted<MosaicBindableElement>)
     : undefined;
   const otherFocusPoint =
     otherBinding &&
@@ -962,10 +962,10 @@ const getBindingStrategyForDraggingBindingElementEndpoints_simple = (
 };
 
 const getBindingStrategyForDraggingBindingElementEndpoints_complex = (
-  arrow: NonDeleted<ExcalidrawArrowElement>,
+  arrow: NonDeleted<MosaicArrowElement>,
   draggingPoints: PointsPositionUpdates,
   elementsMap: NonDeletedSceneElementsMap,
-  elements: readonly Ordered<NonDeletedExcalidrawElement>[],
+  elements: readonly Ordered<NonDeletedMosaicElement>[],
   appState: AppState,
   opts?: {
     newArrow?: boolean;
@@ -1096,7 +1096,7 @@ const getBindingStrategyForDraggingBindingElementEndpoints_complex = (
 };
 
 export const bindOrUnbindBindingElements = (
-  selectedArrows: NonDeleted<ExcalidrawArrowElement>[],
+  selectedArrows: NonDeleted<MosaicArrowElement>[],
   scene: Scene,
   appState: AppState,
 ): void => {
@@ -1117,8 +1117,8 @@ export const bindOrUnbindBindingElements = (
  * keeping the two sides of the relationship in step.
  */
 const applyBinding = (
-  arrow: NonDeleted<ExcalidrawArrowElement>,
-  bindableElement: NonDeleted<ExcalidrawBindableElement>,
+  arrow: NonDeleted<MosaicArrowElement>,
+  bindableElement: NonDeleted<MosaicBindableElement>,
   binding: FixedPointBinding,
   startOrEnd: "start" | "end",
   scene: Scene,
@@ -1139,8 +1139,8 @@ const applyBinding = (
 };
 
 export const bindBindingElement = (
-  arrow: NonDeleted<ExcalidrawArrowElement>,
-  hoveredElement: NonDeleted<ExcalidrawBindableElement>,
+  arrow: NonDeleted<MosaicArrowElement>,
+  hoveredElement: NonDeleted<MosaicBindableElement>,
   mode: BindMode,
   startOrEnd: "start" | "end",
   scene: Scene,
@@ -1185,10 +1185,10 @@ export const bindBindingElement = (
 };
 
 export const unbindBindingElement = (
-  arrow: ExcalidrawArrowElement,
+  arrow: MosaicArrowElement,
   startOrEnd: "start" | "end",
   scene: Scene,
-): ExcalidrawBindableElement["id"] | null => {
+): MosaicBindableElement["id"] | null => {
   const field = startOrEnd === "start" ? "startBinding" : "endBinding";
   const binding = arrow[field];
 
@@ -1203,7 +1203,7 @@ export const unbindBindingElement = (
     // end is not bound to the same element
     const boundElement = scene
       .getNonDeletedElementsMap()
-      .get(binding.elementId) as NonDeleted<ExcalidrawBindableElement>;
+      .get(binding.elementId) as NonDeleted<MosaicBindableElement>;
     scene.mutateElement(boundElement, {
       boundElements: boundElement.boundElements?.filter(
         (element) => element.id !== arrow.id,
@@ -1217,7 +1217,7 @@ export const unbindBindingElement = (
 };
 
 export const reanchorBindingsToOutline = (
-  changedElement: NonDeleted<ExcalidrawBindableElement>,
+  changedElement: NonDeleted<MosaicBindableElement>,
   scene: Scene,
   zoom: AppState["zoom"],
 ) => {
@@ -1319,12 +1319,12 @@ export const reanchorBindingsToOutline = (
 // Supports translating, rotating and scaling `changedElement` with bound
 // linear elements.
 export const updateBoundElements = (
-  changedElement: NonDeletedExcalidrawElement,
+  changedElement: NonDeletedMosaicElement,
   scene: Scene,
   options?: {
     /** see `getSimultaneouslyUpdatedElementIds` for how to pass it */
-    simultaneouslyUpdated?: readonly NonDeletedExcalidrawElement[];
-    changedElements?: Map<string, ExcalidrawElement>;
+    simultaneouslyUpdated?: readonly NonDeletedMosaicElement[];
+    changedElements?: Map<string, MosaicElement>;
   },
 ) => {
   if (!isBindableElement(changedElement)) {
@@ -1344,7 +1344,7 @@ export const updateBoundElements = (
     });
   }
 
-  const visitor = (element: ExcalidrawElement | undefined) => {
+  const visitor = (element: MosaicElement | undefined) => {
     // SAFETY: This should never happen, but log it just in case
     if (element && !isNonDeletedElement(element)) {
       console.error(
@@ -1429,7 +1429,7 @@ export const updateBoundElements = (
 };
 
 const updateArrowBindings = (
-  latestElement: NonDeleted<ExcalidrawArrowElement>,
+  latestElement: NonDeleted<MosaicArrowElement>,
   startOrEnd: "startBinding" | "endBinding",
   elementsMap: NonDeletedSceneElementsMap,
   scene: Scene,
@@ -1443,9 +1443,7 @@ const updateArrowBindings = (
   const binding = latestElement[startOrEnd];
   const bindableElement =
     binding &&
-    (elementsMap.get(
-      binding.elementId,
-    ) as NonDeleted<ExcalidrawBindableElement>);
+    (elementsMap.get(binding.elementId) as NonDeleted<MosaicBindableElement>);
   const point = LinearElementEditor.getPointAtIndexGlobalCoordinates(
     latestElement,
     startOrEnd === "startBinding" ? 0 : -1,
@@ -1494,11 +1492,11 @@ const updateArrowBindings = (
 };
 
 export const updateBindings = (
-  latestElement: NonDeletedExcalidrawElement,
+  latestElement: NonDeletedMosaicElement,
   scene: Scene,
   appState: AppState,
   options?: {
-    simultaneouslyUpdated?: readonly NonDeletedExcalidrawElement[];
+    simultaneouslyUpdated?: readonly NonDeletedMosaicElement[];
     newSize?: { width: number; height: number };
   },
 ) => {
@@ -1533,8 +1531,8 @@ export const updateBindings = (
 };
 
 const doesNeedUpdate = (
-  boundElement: NonDeleted<ExcalidrawArrowElement>,
-  changedElement: ExcalidrawBindableElement,
+  boundElement: NonDeleted<MosaicArrowElement>,
+  changedElement: MosaicBindableElement,
 ) => {
   return (
     boundElement.startBinding?.elementId === changedElement.id ||
@@ -1547,8 +1545,8 @@ const doesNeedUpdate = (
 // per array to avoid rebuilding it on every call (O(n^2) on multi-element
 // transforms)
 const simultaneouslyUpdatedElementIdsCache = new WeakMap<
-  readonly ExcalidrawElement[],
-  ReadonlySet<ExcalidrawElement["id"]>
+  readonly MosaicElement[],
+  ReadonlySet<MosaicElement["id"]>
 >();
 
 /**
@@ -1558,8 +1556,8 @@ const simultaneouslyUpdatedElementIdsCache = new WeakMap<
  * cached ids go stale.
  */
 export const getSimultaneouslyUpdatedElementIds = (
-  simultaneouslyUpdated: readonly ExcalidrawElement[] | undefined,
-): ReadonlySet<ExcalidrawElement["id"]> => {
+  simultaneouslyUpdated: readonly MosaicElement[] | undefined,
+): ReadonlySet<MosaicElement["id"]> => {
   if (!simultaneouslyUpdated) {
     return new Set();
   }
@@ -1574,7 +1572,7 @@ export const getSimultaneouslyUpdatedElementIds = (
 export const getHeadingForElbowArrowSnap = (
   p: Readonly<GlobalPoint>,
   otherPoint: Readonly<GlobalPoint>,
-  bindableElement: ExcalidrawBindableElement | undefined | null,
+  bindableElement: MosaicBindableElement | undefined | null,
   aabb: Bounds | undefined | null,
   origPoint: GlobalPoint,
   elementsMap: ElementsMap,
@@ -1604,7 +1602,7 @@ export const getHeadingForElbowArrowSnap = (
 
 const getDistanceForBinding = (
   point: Readonly<GlobalPoint>,
-  bindableElement: ExcalidrawBindableElement,
+  bindableElement: MosaicBindableElement,
   elementsMap: ElementsMap,
   zoom?: AppState["zoom"],
 ) => {
@@ -1615,8 +1613,8 @@ const getDistanceForBinding = (
 };
 
 export const bindPointToSnapToElementOutline = (
-  arrowElement: ExcalidrawArrowElement,
-  bindableElement: ExcalidrawBindableElement,
+  arrowElement: MosaicArrowElement,
+  bindableElement: MosaicBindableElement,
   startOrEnd: "start" | "end",
   elementsMap: ElementsMap,
   zoom: AppState["zoom"],
@@ -1763,8 +1761,8 @@ export const bindPointToSnapToElementOutline = (
 };
 
 export const avoidRectangularCorner = (
-  arrowElement: ExcalidrawArrowElement,
-  bindTarget: ExcalidrawBindableElement,
+  arrowElement: MosaicArrowElement,
+  bindTarget: MosaicBindableElement,
   elementsMap: ElementsMap,
   p: GlobalPoint,
 ): GlobalPoint => {
@@ -1854,7 +1852,7 @@ export const avoidRectangularCorner = (
 };
 
 const extractBinding = (
-  arrow: ExcalidrawArrowElement,
+  arrow: MosaicArrowElement,
   startOrEnd: "startBinding" | "endBinding",
   elementsMap: ElementsMap,
 ) => {
@@ -1871,7 +1869,7 @@ const extractBinding = (
 
   const element = elementsMap.get(
     binding.elementId,
-  ) as NonDeleted<ExcalidrawBindableElement>;
+  ) as NonDeleted<MosaicBindableElement>;
 
   return {
     element,
@@ -1895,10 +1893,10 @@ const extractBinding = (
  */
 const snapBoundPointToGrid = (
   outlinePoint: GlobalPoint,
-  bindableElement: ExcalidrawBindableElement,
+  bindableElement: MosaicBindableElement,
   elementsMap: ElementsMap,
   gridSize: NullableGridSize,
-  arrowElement: ExcalidrawArrowElement,
+  arrowElement: MosaicArrowElement,
   adjacentPoint?: GlobalPoint,
 ): GlobalPoint => {
   if (!gridSize) {
@@ -1966,14 +1964,14 @@ const snapBoundPointToGrid = (
   return intersection ?? pointFrom<GlobalPoint>(snappedX, outlinePoint[1]);
 };
 
-const elementArea = (element: ExcalidrawBindableElement) =>
+const elementArea = (element: MosaicBindableElement) =>
   element.width * element.height;
 
 export const updateBoundPoint = (
-  arrow: NonDeleted<ExcalidrawArrowElement>,
+  arrow: NonDeleted<MosaicArrowElement>,
   startOrEnd: "startBinding" | "endBinding",
   binding: FixedPointBinding | null | undefined,
-  bindableElement: ExcalidrawBindableElement,
+  bindableElement: MosaicBindableElement,
   elementsMap: ElementsMap,
   dragging?: boolean,
 ): LocalPoint | null => {
@@ -2128,8 +2126,8 @@ export const updateBoundPoint = (
 };
 
 export const calculateFixedPointForElbowArrowBinding = (
-  linearElement: NonDeleted<ExcalidrawElbowArrowElement>,
-  hoveredElement: ExcalidrawBindableElement,
+  linearElement: NonDeleted<MosaicElbowArrowElement>,
+  hoveredElement: MosaicBindableElement,
   startOrEnd: "start" | "end",
   elementsMap: ElementsMap,
   zoom: AppState["zoom"],
@@ -2194,8 +2192,8 @@ export const calculateFixedPointForElbowArrowBinding = (
 };
 
 export const calculateFixedPointForNonElbowArrowBinding = (
-  linearElement: NonDeleted<ExcalidrawArrowElement>,
-  hoveredElement: NonDeleted<ExcalidrawBindableElement>,
+  linearElement: NonDeleted<MosaicArrowElement>,
+  hoveredElement: NonDeleted<MosaicBindableElement>,
   startOrEnd: "start" | "end",
   elementsMap: ElementsMap,
   focusPoint?: GlobalPoint,
@@ -2247,8 +2245,8 @@ export const calculateFixedPointForNonElbowArrowBinding = (
 };
 
 export const fixDuplicatedBindingsAfterDuplication = (
-  duplicatedElements: ExcalidrawElement[],
-  origIdToDuplicateId: Map<ExcalidrawElement["id"], ExcalidrawElement["id"]>,
+  duplicatedElements: MosaicElement[],
+  origIdToDuplicateId: Map<MosaicElement["id"], MosaicElement["id"]>,
   duplicateElementsMap: NonDeletedSceneElementsMap,
 ) => {
   for (const duplicateElement of duplicatedElements) {
@@ -2256,7 +2254,7 @@ export const fixDuplicatedBindingsAfterDuplication = (
       Object.assign(duplicateElement, {
         boundElements: duplicateElement.boundElements.reduce(
           (
-            acc: Mutable<NonNullable<ExcalidrawElement["boundElements"]>>,
+            acc: Mutable<NonNullable<MosaicElement["boundElements"]>>,
             binding,
           ) => {
             const newBindingId = origIdToDuplicateId.get(binding.id);
@@ -2319,8 +2317,8 @@ export const fixDuplicatedBindingsAfterDuplication = (
 };
 
 export const fixBindingsAfterDeletion = (
-  sceneElements: readonly ExcalidrawElement[],
-  deletedElements: readonly ExcalidrawElement[],
+  sceneElements: readonly MosaicElement[],
+  deletedElements: readonly MosaicElement[],
 ): void => {
   const elements = arrayToMap(sceneElements);
 
@@ -2335,9 +2333,9 @@ export const fixBindingsAfterDeletion = (
 };
 
 const newBoundElements = (
-  boundElements: ExcalidrawElement["boundElements"],
-  idsToRemove: Set<ExcalidrawElement["id"]>,
-  elementsToAdd: Array<ExcalidrawElement> = [],
+  boundElements: MosaicElement["boundElements"],
+  idsToRemove: Set<MosaicElement["id"]>,
+  elementsToAdd: Array<MosaicElement> = [],
 ) => {
   if (!boundElements) {
     return null;
@@ -2350,9 +2348,7 @@ const newBoundElements = (
   nextBoundElements.push(
     ...elementsToAdd.map(
       (x) =>
-        ({ id: x.id, type: x.type } as
-          | ExcalidrawArrowElement
-          | ExcalidrawTextElement),
+        ({ id: x.id, type: x.type } as MosaicArrowElement | MosaicTextElement),
     ),
   );
 
@@ -2376,13 +2372,13 @@ export type BindingProp =
   | "endBinding";
 
 type BoundElementsVisitingFunc = (
-  boundElement: ExcalidrawElement | undefined,
+  boundElement: MosaicElement | undefined,
   bindingProp: BindableProp,
   bindingId: string,
 ) => void;
 
 type BindableElementVisitingFunc<T> = (
-  bindableElement: ExcalidrawElement | undefined,
+  bindableElement: MosaicElement | undefined,
   bindingProp: BindingProp,
   bindingId: string,
 ) => T;
@@ -2392,7 +2388,7 @@ type BindableElementVisitingFunc<T> = (
  */
 const boundElementsVisitor = (
   elements: ElementsMap,
-  element: ExcalidrawElement,
+  element: MosaicElement,
   visit: BoundElementsVisitingFunc,
 ) => {
   if (isBindableElement(element)) {
@@ -2411,7 +2407,7 @@ const boundElementsVisitor = (
  */
 const bindableElementsVisitor = <T>(
   elements: ElementsMap,
-  element: ExcalidrawElement,
+  element: MosaicElement,
   visit: BindableElementVisitingFunc<T>,
 ): T[] => {
   const result: T[] = [];
@@ -2452,10 +2448,10 @@ export class BoundElement {
    */
   public static unbindAffected(
     elements: ElementsMap,
-    boundElement: ExcalidrawElement | undefined,
+    boundElement: MosaicElement | undefined,
     updateElementWith: (
-      affected: ExcalidrawElement,
-      updates: ElementUpdate<ExcalidrawElement>,
+      affected: MosaicElement,
+      updates: ElementUpdate<MosaicElement>,
     ) => void,
   ) {
     if (!boundElement) {
@@ -2494,10 +2490,10 @@ export class BoundElement {
    */
   public static rebindAffected = (
     elements: ElementsMap,
-    boundElement: ExcalidrawElement | undefined,
+    boundElement: MosaicElement | undefined,
     updateElementWith: (
-      affected: ExcalidrawElement,
-      updates: ElementUpdate<ExcalidrawElement>,
+      affected: MosaicElement,
+      updates: ElementUpdate<MosaicElement>,
     ) => void,
   ) => {
     // don't try to rebind element that is deleted
@@ -2568,10 +2564,10 @@ export class BindableElement {
    */
   public static unbindAffected(
     elements: ElementsMap,
-    bindableElement: ExcalidrawElement | undefined,
+    bindableElement: MosaicElement | undefined,
     updateElementWith: (
-      affected: ExcalidrawElement,
-      updates: ElementUpdate<ExcalidrawElement>,
+      affected: MosaicElement,
+      updates: ElementUpdate<MosaicElement>,
     ) => void,
   ) {
     if (!bindableElement) {
@@ -2606,10 +2602,10 @@ export class BindableElement {
    */
   public static rebindAffected = (
     elements: ElementsMap,
-    bindableElement: ExcalidrawElement | undefined,
+    bindableElement: MosaicElement | undefined,
     updateElementWith: (
-      affected: ExcalidrawElement,
-      updates: ElementUpdate<ExcalidrawElement>,
+      affected: MosaicElement,
+      updates: ElementUpdate<MosaicElement>,
     ) => void,
   ) => {
     // don't try to rebind element that is deleted (i.e. updated as deleted)
@@ -2643,14 +2639,14 @@ export class BindableElement {
               // rebind if not bound already!
               updateElementWith(boundElement, {
                 containerId: bindableElement.id,
-              } as ElementUpdate<ExcalidrawTextElement>);
+              } as ElementUpdate<MosaicTextElement>);
             }
           } else {
             if (boundElement.containerId !== null) {
               // unbind if not unbound already
               updateElementWith(boundElement, {
                 containerId: null,
-              } as ElementUpdate<ExcalidrawTextElement>);
+              } as ElementUpdate<MosaicTextElement>);
             }
 
             // unbind from boundElements as the element got bound to some other element in the meantime
@@ -2669,7 +2665,7 @@ export class BindableElement {
 
 export const getGlobalFixedPointForBindableElement = (
   fixedPointRatio: FixedPoint,
-  element: ExcalidrawBindableElement,
+  element: MosaicBindableElement,
   elementsMap: ElementsMap,
 ): GlobalPoint => {
   const [fixedX, fixedY] = normalizeFixedPoint(fixedPointRatio);
@@ -2685,24 +2681,24 @@ export const getGlobalFixedPointForBindableElement = (
 };
 
 export const getGlobalFixedPoints = (
-  arrow: ExcalidrawArrowElement,
+  arrow: MosaicArrowElement,
   elementsMap: ElementsMap,
 ): [GlobalPoint, GlobalPoint] => {
   const startElement =
     arrow.startBinding &&
     (elementsMap.get(arrow.startBinding.elementId) as
-      | ExcalidrawBindableElement
+      | MosaicBindableElement
       | undefined);
   const endElement =
     arrow.endBinding &&
     (elementsMap.get(arrow.endBinding.elementId) as
-      | ExcalidrawBindableElement
+      | MosaicBindableElement
       | undefined);
   const startPoint =
     startElement && arrow.startBinding
       ? getGlobalFixedPointForBindableElement(
           arrow.startBinding.fixedPoint,
-          startElement as ExcalidrawBindableElement,
+          startElement as MosaicBindableElement,
           elementsMap,
         )
       : pointFrom<GlobalPoint>(
@@ -2713,7 +2709,7 @@ export const getGlobalFixedPoints = (
     endElement && arrow.endBinding
       ? getGlobalFixedPointForBindableElement(
           arrow.endBinding.fixedPoint,
-          endElement as ExcalidrawBindableElement,
+          endElement as MosaicBindableElement,
           elementsMap,
         )
       : pointFrom<GlobalPoint>(
@@ -2725,7 +2721,7 @@ export const getGlobalFixedPoints = (
 };
 
 export const getArrowLocalFixedPoints = (
-  arrow: ExcalidrawElbowArrowElement,
+  arrow: MosaicElbowArrowElement,
   elementsMap: ElementsMap,
 ) => {
   const [startPoint, endPoint] = getGlobalFixedPoints(arrow, elementsMap);
@@ -2786,7 +2782,7 @@ type Side =
   | "left"
   | "top-left";
 type ShapeType = "rectangle" | "ellipse" | "diamond";
-const getShapeType = (element: ExcalidrawBindableElement): ShapeType => {
+const getShapeType = (element: MosaicBindableElement): ShapeType => {
   if (element.type === "ellipse" || element.type === "diamond") {
     return element.type;
   }
@@ -3100,7 +3096,7 @@ export const getBindingSideMidPoint = (
 
   if (isRectangularElement(bindableElement)) {
     const [sides, corners] = deconstructRectanguloidElement(
-      bindableElement as ExcalidrawRectanguloidElement,
+      bindableElement as MosaicRectanguloidElement,
     );
     const [top, right, bottom, left] = sides;
 
@@ -3214,8 +3210,8 @@ const getMidPoint = (p1: GlobalPoint, p2: GlobalPoint): GlobalPoint => {
  * the arrow rather than the other way round.
  */
 export const bindBindingElementToFixedPoint = (
-  arrow: NonDeleted<ExcalidrawArrowElement>,
-  bindableElement: NonDeleted<ExcalidrawBindableElement>,
+  arrow: NonDeleted<MosaicArrowElement>,
+  bindableElement: NonDeleted<MosaicBindableElement>,
   startOrEnd: "start" | "end",
   fixedPoint: FixedPoint,
   scene: Scene,

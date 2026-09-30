@@ -1,12 +1,9 @@
-import type {
-  ExcalidrawElement,
-  FontFamilyValues,
-} from "@excalidraw/element/types";
+import type { MosaicElement, FontFamilyValues } from "@mosaic/element/types";
 import type {
   AppProps,
   AppState,
   NormalizedZoomValue,
-} from "@excalidraw/excalidraw/types";
+} from "@mosaic/mosaic/types";
 
 import { COLOR_PALETTE } from "./colors";
 
@@ -15,7 +12,36 @@ export { DEFAULT_STICKY_NOTE_BG } from "./colors";
 export const supportsResizeObserver =
   typeof window !== "undefined" && "ResizeObserver" in window;
 
-export const APP_NAME = "Excalidraw";
+export const APP_NAME = "Mosaic";
+
+/**
+ * Whether to surface upstream promotion surfaces in the UI.
+ *
+ * These advertise the Excalidraw project's own paid workspace ("Excalidraw+"),
+ * its own social and community accounts, and its own documentation. On a
+ * self-hosted Mosaic deployment they would point users at someone else's
+ * product, so they are off by default.
+ *
+ * Off by default. Flip it to true for a fork that actually resells a hosted
+ * tier, and point the relevant env vars at that service first:
+ *
+ *   VITE_APP_PLUS_LP    the landing page (VITE_APP_PLUS_LP + "/plus")
+ *   VITE_APP_PLUS_APP   the app itself (VITE_APP_PLUS_APP + "/sign-up")
+ *
+ * The code behind each surface is still present, just gated on this flag, so
+ * toggling it here is all that is needed to bring them back.
+ *
+ * It lives in `@mosaic/common` rather than in the app because the surfaces
+ * span two packages: `mosaic-app` (menu, command palette, export dialog,
+ * welcome screen, crash screen) and `packages/mosaic` (help dialog, the Brave
+ * error dialog, the library publish dialog, the text-to-diagram chat). One
+ * flag, one place -- a second copy in either package would drift and quietly
+ * re-enable half the surfaces. `mosaic-app/app_constants.ts` re-exports it, so
+ * app code can keep importing it from there.
+ *
+ * See BRANDING.md.
+ */
+export const SHOW_UPSTREAM_PROMOS = false;
 
 // distance when creating text before it's considered `autoResize: false`
 // we're using higher threshold so that clicks that end up being drags
@@ -87,7 +113,7 @@ export enum EVENT {
   VISIBILITY_CHANGE = "visibilitychange",
   SCROLL = "scroll",
   // custom events
-  EXCALIDRAW_LINK = "excalidraw-link",
+  MOSAIC_LINK = "excalidraw-link",
   MENU_ITEM_SELECT = "menu.itemSelect",
   MESSAGE = "message",
   FULLSCREENCHANGE = "fullscreenchange",
@@ -204,13 +230,13 @@ export const THEME = {
 export const DARK_THEME_FILTER = "invert(93%) hue-rotate(180deg)";
 
 export const FRAME_STYLE = {
-  strokeColor: "#bbb" as ExcalidrawElement["strokeColor"],
-  strokeWidth: 2 as ExcalidrawElement["strokeWidth"],
-  strokeStyle: "solid" as ExcalidrawElement["strokeStyle"],
-  fillStyle: "solid" as ExcalidrawElement["fillStyle"],
-  roughness: 0 as ExcalidrawElement["roughness"],
-  roundness: null as ExcalidrawElement["roundness"],
-  backgroundColor: "transparent" as ExcalidrawElement["backgroundColor"],
+  strokeColor: "#bbb" as MosaicElement["strokeColor"],
+  strokeWidth: 2 as MosaicElement["strokeWidth"],
+  strokeStyle: "solid" as MosaicElement["strokeStyle"],
+  fillStyle: "solid" as MosaicElement["fillStyle"],
+  roughness: 0 as MosaicElement["roughness"],
+  roundness: null as MosaicElement["roundness"],
+  backgroundColor: "transparent" as MosaicElement["backgroundColor"],
   radius: 8,
   nameOffsetY: 3,
   nameColorLightTheme: "#999999",
@@ -268,7 +294,7 @@ export const STICKY_NOTE_EDGE_SHADOW_OPACITY = 0.08;
 export const DEFAULT_FONT_FAMILY: FontFamilyValues = FONT_FAMILY.Excalifont;
 /** number of slots in the font-picker top-picks strip — pick customization
  * (replace / reorder) preserves it. Must equal `DEFAULT_FONTS.length` in
- * `packages/excalidraw/components/FontPicker/FontPicker.tsx` (enforced by
+ * `packages/mosaic/components/FontPicker/FontPicker.tsx` (enforced by
  * `fontTopPicks.test.ts`) */
 export const FONT_TOP_PICKS_SLOTS = 3;
 export const DEFAULT_TEXT_ALIGN = "left";
@@ -309,18 +335,18 @@ export const STRING_MIME_TYPES = {
   text: "text/plain",
   html: "text/html",
   json: "application/json",
-  // excalidraw data
+  // mosaic data
   excalidraw: "application/vnd.excalidraw+json",
   excalidrawClipboard: "application/vnd.excalidraw.clipboard+json",
   // LEGACY: fully-qualified library JSON data
   excalidrawlib: "application/vnd.excalidrawlib+json",
-  // list of excalidraw library item ids
+  // list of mosaic library item ids
   excalidrawlibIds: "application/vnd.excalidrawlib.ids+json",
 } as const;
 
 export const MIME_TYPES = {
   ...STRING_MIME_TYPES,
-  // image-encoded excalidraw data
+  // image-encoded mosaic data
   "excalidraw.svg": "image/svg+xml",
   "excalidraw.png": "image/png",
   // binary
@@ -349,7 +375,9 @@ export const EXPORT_DATA_TYPES = {
 } as const;
 
 export const getExportSource = () =>
-  window.EXCALIDRAW_EXPORT_SOURCE || window.location.origin;
+  window.MOSAIC_EXPORT_SOURCE ||
+  window.EXCALIDRAW_EXPORT_SOURCE ||
+  window.location.origin;
 
 // time in milliseconds
 export const IMAGE_RENDER_TIMEOUT = 500;
@@ -478,7 +506,7 @@ export const STROKE_WIDTH_KEYS: readonly StrokeWidthKey[] = [
 ];
 
 export const STROKE_WIDTH: Readonly<
-  Record<StrokeWidthKey | "extraBold", ExcalidrawElement["strokeWidth"]>
+  Record<StrokeWidthKey | "extraBold", MosaicElement["strokeWidth"]>
 > = {
   thin: 1,
   medium: 2,
@@ -492,7 +520,7 @@ export const STROKE_WIDTH: Readonly<
 //
 // note that in the UI, STROKE_WIDTH.thin == FREEDRAW_STROKE_WIDTH.thin still
 export const FREEDRAW_STROKE_WIDTH: Readonly<
-  Record<StrokeWidthKey | "extraBold", ExcalidrawElement["strokeWidth"]>
+  Record<StrokeWidthKey | "extraBold", MosaicElement["strokeWidth"]>
 > = {
   thin: 0.5,
   medium: 1,
@@ -501,9 +529,9 @@ export const FREEDRAW_STROKE_WIDTH: Readonly<
 };
 
 export const getStrokeWidthByKey = (
-  elementType: ExcalidrawElement["type"],
+  elementType: MosaicElement["type"],
   strokeWidthKey: StrokeWidthKey,
-): ExcalidrawElement["strokeWidth"] => {
+): MosaicElement["strokeWidth"] => {
   return elementType === "freedraw"
     ? FREEDRAW_STROKE_WIDTH[strokeWidthKey]
     : STROKE_WIDTH[strokeWidthKey];
@@ -512,14 +540,14 @@ export const getStrokeWidthByKey = (
 export const DEFAULT_ELEMENT_STROKE_WIDTH_KEY: StrokeWidthKey = "medium";
 
 export const DEFAULT_ELEMENT_PROPS: {
-  strokeColor: ExcalidrawElement["strokeColor"];
-  backgroundColor: ExcalidrawElement["backgroundColor"];
-  fillStyle: ExcalidrawElement["fillStyle"];
-  strokeWidth: ExcalidrawElement["strokeWidth"];
-  strokeStyle: ExcalidrawElement["strokeStyle"];
-  roughness: ExcalidrawElement["roughness"];
-  opacity: ExcalidrawElement["opacity"];
-  locked: ExcalidrawElement["locked"];
+  strokeColor: MosaicElement["strokeColor"];
+  backgroundColor: MosaicElement["backgroundColor"];
+  fillStyle: MosaicElement["fillStyle"];
+  strokeWidth: MosaicElement["strokeWidth"];
+  strokeStyle: MosaicElement["strokeStyle"];
+  roughness: MosaicElement["roughness"];
+  opacity: MosaicElement["opacity"];
+  locked: MosaicElement["locked"];
 } = {
   strokeColor: COLOR_PALETTE.black,
   backgroundColor: COLOR_PALETTE.transparent,
@@ -571,7 +599,7 @@ export const TOOL_TYPE = {
 export const EDITOR_LS_KEYS = {
   OAI_API_KEY: "excalidraw-oai-api-key",
   // legacy naming (non)scheme
-  MERMAID_TO_EXCALIDRAW: "mermaid-to-excalidraw",
+  MERMAID_TO_MOSAIC: "mermaid-to-excalidraw",
   PUBLISH_LIBRARY: "publish-library-data",
 } as const;
 

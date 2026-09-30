@@ -8,7 +8,7 @@ import {
   pointFrom,
   pointRotateRads,
   type Radians,
-} from "@excalidraw/math";
+} from "@mosaic/math";
 
 import {
   BOUND_TEXT_PADDING,
@@ -30,7 +30,7 @@ import {
   STICKY_NOTE_FOOTER,
   STICKY_NOTE_SHADOW_OPACITY,
   DEFAULT_ZOOM,
-} from "@excalidraw/common";
+} from "@mosaic/common";
 
 import type {
   AppState,
@@ -38,13 +38,13 @@ import type {
   Zoom,
   InteractiveCanvasAppState,
   ElementRenderOverrides,
-} from "@excalidraw/excalidraw/types";
+} from "@mosaic/mosaic/types";
 
 import type {
   StaticCanvasRenderConfig,
   RenderableElementsMap,
   InteractiveCanvasRenderConfig,
-} from "@excalidraw/excalidraw/scene/types";
+} from "@mosaic/mosaic/scene/types";
 
 import { getElementAbsoluteCoords, getElementBounds } from "./bounds";
 import { getUncroppedImageElement } from "./cropElement";
@@ -79,13 +79,13 @@ import {
 } from "./stickyNote";
 
 import type {
-  ExcalidrawElement,
-  ExcalidrawTextElement,
+  MosaicElement,
+  MosaicTextElement,
   NonDeleted,
-  NonDeletedExcalidrawElement,
-  ExcalidrawFreeDrawElement,
-  ExcalidrawImageElement,
-  ExcalidrawTextElementWithContainer,
+  NonDeletedMosaicElement,
+  MosaicFreeDrawElement,
+  MosaicImageElement,
+  MosaicTextElementWithContainer,
   NonDeletedSceneElementsMap,
   ElementsMap,
 } from "./types";
@@ -93,13 +93,13 @@ import type {
 import type { RoughCanvas } from "roughjs/bin/canvas";
 
 const isPendingImageElement = (
-  element: ExcalidrawElement,
+  element: MosaicElement,
   renderConfig: StaticCanvasRenderConfig,
 ) =>
   isInitializedImageElement(element) &&
   !renderConfig.imageCache.has(element.fileId);
 
-const getCanvasPadding = (element: ExcalidrawElement) => {
+const getCanvasPadding = (element: MosaicElement) => {
   switch (element.type) {
     case "freedraw":
       return element.strokeWidth * 12;
@@ -121,7 +121,7 @@ const ZERO_RENDER_OFFSET: RenderPositionOffset = { x: 0, y: 0 };
 
 /** Bound labels follow their container; a label's own offset is ignored. */
 export const getElementRenderOffset = (
-  element: ExcalidrawElement,
+  element: MosaicElement,
   elementsMap: ElementsMap,
   overrides: ElementRenderOverrides | undefined,
 ): RenderPositionOffset | undefined => {
@@ -132,7 +132,7 @@ export const getElementRenderOffset = (
 };
 
 export const getRenderElementWithPositionOverride = <
-  TElement extends ExcalidrawElement,
+  TElement extends MosaicElement,
 >(
   element: TElement,
   positionOffset: RenderPositionOffset,
@@ -156,7 +156,7 @@ export type ElementRenderState = Readonly<{
 
 /** Resolve visual state at the drawing boundary, preserving document cache keys. */
 export const resolveElementRenderState = (
-  element: ExcalidrawElement,
+  element: MosaicElement,
   elementsMap: ElementsMap,
   renderConfig: Pick<
     StaticCanvasRenderConfig,
@@ -201,20 +201,20 @@ export const resolveElementRenderState = (
   return { opacity, offset: offset ?? ZERO_RENDER_OFFSET };
 };
 
-export interface ExcalidrawElementWithCanvas {
-  element: ExcalidrawElement | ExcalidrawTextElement;
+export interface MosaicElementWithCanvas {
+  element: MosaicElement | MosaicTextElement;
   canvas: HTMLCanvasElement;
   theme: AppState["theme"];
   scale: number;
   zoomValue: AppState["zoom"]["value"];
   canvasOffsetX: number;
   canvasOffsetY: number;
-  imageCrop: ExcalidrawImageElement["crop"] | null;
+  imageCrop: MosaicImageElement["crop"] | null;
   containingFrameOpacity: number;
 }
 
 const cappedElementCanvasSize = (
-  element: NonDeletedExcalidrawElement,
+  element: NonDeletedMosaicElement,
   elementsMap: ElementsMap,
   zoom: Zoom,
 ): {
@@ -269,12 +269,12 @@ const cappedElementCanvasSize = (
 };
 
 const generateElementCanvas = (
-  element: NonDeletedExcalidrawElement,
+  element: NonDeletedMosaicElement,
   elementsMap: NonDeletedSceneElementsMap,
   zoom: Zoom,
   renderConfig: StaticCanvasRenderConfig,
   appState: StaticCanvasAppState | InteractiveCanvasAppState,
-): ExcalidrawElementWithCanvas | null => {
+): MosaicElementWithCanvas | null => {
   const canvas = document.createElement("canvas");
   const context = canvas.getContext("2d")!;
   const padding = getCanvasPadding(element);
@@ -359,7 +359,7 @@ IMAGE_ERROR_PLACEHOLDER_IMG.src = `data:${MIME_TYPES.svg},${encodeURIComponent(
 )}`;
 
 const drawImagePlaceholder = (
-  element: ExcalidrawImageElement,
+  element: MosaicImageElement,
   context: CanvasRenderingContext2D,
   theme: StaticCanvasRenderConfig["theme"],
 ) => {
@@ -429,7 +429,7 @@ const strokeStickyNoteEdge = (
 };
 
 const drawElementOnCanvas = (
-  element: NonDeletedExcalidrawElement,
+  element: NonDeletedMosaicElement,
   rc: RoughCanvas,
   context: CanvasRenderingContext2D,
   renderConfig: StaticCanvasRenderConfig,
@@ -680,12 +680,12 @@ const drawElementOnCanvas = (
 };
 
 export const elementWithCanvasCache = new WeakMap<
-  ExcalidrawElement,
-  ExcalidrawElementWithCanvas
+  MosaicElement,
+  MosaicElementWithCanvas
 >();
 
 const generateElementWithCanvas = (
-  element: NonDeletedExcalidrawElement,
+  element: NonDeletedMosaicElement,
   elementsMap: NonDeletedSceneElementsMap,
   renderConfig: StaticCanvasRenderConfig,
   appState: StaticCanvasAppState | InteractiveCanvasAppState,
@@ -745,7 +745,7 @@ const generateElementWithCanvas = (
  * tolerates float arithmetic.
  */
 const canSnapElement = (
-  element: ExcalidrawElement,
+  element: MosaicElement,
   appState: StaticCanvasAppState | InteractiveCanvasAppState,
 ) =>
   !appState?.shouldCacheIgnoreZoom &&
@@ -760,7 +760,7 @@ const canSnapElement = (
 const SNAP_TIE_BIAS = 1e-6;
 
 const drawElementFromCanvas = (
-  elementWithCanvas: ExcalidrawElementWithCanvas,
+  elementWithCanvas: MosaicElementWithCanvas,
   context: CanvasRenderingContext2D,
   renderConfig: StaticCanvasRenderConfig,
   appState: StaticCanvasAppState | InteractiveCanvasAppState,
@@ -917,7 +917,7 @@ const drawElementFromCanvas = (
     const textElement = getBoundTextElement(
       element,
       allElementsMap,
-    ) as ExcalidrawTextElementWithContainer;
+    ) as MosaicTextElementWithContainer;
     const coords = getContainerCoords(element);
     context.strokeStyle = "#c92a2a";
     context.lineWidth = 3;
@@ -934,7 +934,7 @@ const drawElementFromCanvas = (
 };
 
 export const renderSelectionElement = (
-  element: NonDeletedExcalidrawElement,
+  element: NonDeletedMosaicElement,
   context: CanvasRenderingContext2D,
   appState: InteractiveCanvasAppState,
   selectionColor: InteractiveCanvasRenderConfig["selectionColor"],
@@ -961,7 +961,7 @@ export const renderSelectionElement = (
 };
 
 export const renderElement = (
-  element: NonDeletedExcalidrawElement,
+  element: NonDeletedMosaicElement,
   elementsMap: RenderableElementsMap,
   allElementsMap: NonDeletedSceneElementsMap,
   rc: RoughCanvas,
@@ -1009,7 +1009,7 @@ export const renderElement = (
 };
 
 const drawElement = (
-  element: NonDeletedExcalidrawElement,
+  element: NonDeletedMosaicElement,
   elementsMap: RenderableElementsMap,
   allElementsMap: NonDeletedSceneElementsMap,
   rc: RoughCanvas,
@@ -1122,7 +1122,7 @@ const drawElement = (
             const boundTextCoords =
               LinearElementEditor.getBoundTextElementPosition(
                 container,
-                element as ExcalidrawTextElementWithContainer,
+                element as MosaicTextElementWithContainer,
                 elementsMap,
               );
             shiftX = (x2 - x1) / 2 - (boundTextCoords.x - x1);
@@ -1229,7 +1229,7 @@ const drawElement = (
             getUncroppedImageElement(
               elementWithCanvas.element,
               elementsMap,
-            ) as NonDeleted<ExcalidrawImageElement>,
+            ) as NonDeleted<MosaicImageElement>,
             allElementsMap,
             appState.zoom,
             renderConfig,
@@ -1273,7 +1273,7 @@ const drawElement = (
 };
 
 export function getFreedrawOutlineAsSegments(
-  element: ExcalidrawFreeDrawElement,
+  element: MosaicFreeDrawElement,
   points: [number, number][],
   elementsMap: ElementsMap,
 ) {

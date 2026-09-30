@@ -1,0 +1,52 @@
+// Mosaic brand tokens.
+//
+// The palette mirrors branding/mosaic-brand.json. Keep the two in sync: the
+// JSON is what the build scripts and the app's TS read, this file is what the
+// stylesheets read.
+
+.excalidraw {
+  // -- brand ramp -------------------------------------------------------------
+  // A single blue, four steps, from the mark. Use these for anything that
+  // should read as "Mosaic" rather than as a generic UI accent.
+  --mosaic-hero: #3977df;
+  --mosaic-mid: #5f96ea;
+  --mosaic-light: #8fb4f2;
+  --mosaic-soft: #c7dbfb;
+
+  // Neutrals, for text on light and dark surfaces.
+  --mosaic-ink: #253144;
+  --mosaic-muted: #8390a0;
+  --mosaic-night: #0f1729;
+
+  // -- derived brand surfaces -------------------------------------------------
+  // A very low-alpha wash of the hero, for selected rows, active states and
+  // anywhere the product wants to read as itself without shouting.
+  --mosaic-wash: #{rgba(57, 119, 223, 0.08)};
+  --mosaic-wash-strong: #{rgba(57, 119, 223, 0.14)};
+
+  // -- light theme ------------------------------------------------------------
+  --mosaic-accent: var(--mosaic-hero);
+  --mosaic-accent-hover: #2f66c9;
+  --mosaic-on-accent: #ffffff;
+  --mosaic-surface: #ffffff;
+  --mosaic-text: var(--mosaic-ink);
+  --mosaic-text-muted: var(--mosaic-muted);
+  --mosaic-border: #{rgba(37, 49, 68, 0.12)};
+  --mosaic-focus-ring: #{rgba(57, 119, 223, 0.45)};
+}
+
+// -- dark theme ---------------------------------------------------------------
+// The ramp is reused, but the surfaces invert and the hero lifts slightly so
+// it stays legible against a dark canvas without glowing.
+.excalidraw.theme--dark {
+  --mosaic-accent: #6b9ff0;
+  --mosaic-accent-hover: #85b1f3;
+  --mosaic-on-accent: #0f1729;
+  --mosaic-surface: #1b1b1f;
+  --mosaic-text: #e8eaed;
+  --mosaic-text-muted: #9aa0a6;
+  --mosaic-border: #{rgba(232, 234, 237, 0.16)};
+  --mosaic-focus-ring: #{rgba(107, 159, 240, 0.55)};
+  --mosaic-wash: #{rgba(107, 159, 240, 0.12)};
+  --mosaic-wash-strong: #{rgba(107, 159, 240, 0.2)};
+}

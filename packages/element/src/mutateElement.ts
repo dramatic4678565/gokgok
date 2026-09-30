@@ -2,11 +2,11 @@ import {
   getSizeFromPoints,
   randomInteger,
   getUpdatedTimestamp,
-} from "@excalidraw/common";
+} from "@mosaic/common";
 
-import type { Radians } from "@excalidraw/math";
+import type { Radians } from "@mosaic/math";
 
-import type { Mutable } from "@excalidraw/common/utility-types";
+import type { Mutable } from "@mosaic/common/utility-types";
 
 import { ShapeCache } from "./shape";
 
@@ -16,15 +16,15 @@ import { isElbowArrow } from "./typeChecks";
 
 import type {
   ElementsMap,
-  ExcalidrawElbowArrowElement,
-  ExcalidrawElement,
+  MosaicElbowArrowElement,
+  MosaicElement,
   NonDeletedSceneElementsMap,
 } from "./types";
 
 // `created` is lifetime metadata: it is set once when an element instance is
 // constructed (or duplicated) and never updated, so it is not part of an
 // element update. An explicit repair must construct a new element object.
-export type ElementUpdate<TElement extends ExcalidrawElement> = Omit<
+export type ElementUpdate<TElement extends MosaicElement> = Omit<
   Partial<TElement>,
   "id" | "updated" | "created"
 >;
@@ -35,9 +35,9 @@ export type ElementUpdate<TElement extends ExcalidrawElement> = Omit<
  * the same drawing.
  *
  * WARNING: this won't trigger the component to update, so if you need to trigger component update,
- * use `scene.mutateElement` or `ExcalidrawImperativeAPI.mutateElement` instead.
+ * use `scene.mutateElement` or `MosaicImperativeAPI.mutateElement` instead.
  */
-export const mutateElement = <TElement extends Mutable<ExcalidrawElement>>(
+export const mutateElement = <TElement extends Mutable<MosaicElement>>(
   element: TElement,
   elementsMap: ElementsMap,
   updates: ElementUpdate<TElement>,
@@ -64,12 +64,12 @@ export const mutateElement = <TElement extends Mutable<ExcalidrawElement>>(
       angle: 0 as Radians,
       ...updateElbowArrowPoints(
         {
-          ...(element as ExcalidrawElbowArrowElement),
+          ...(element as MosaicElbowArrowElement),
           x: updates.x || element.x,
           y: updates.y || element.y,
         },
         elementsMap as NonDeletedSceneElementsMap,
-        updates as ElementUpdate<ExcalidrawElbowArrowElement>,
+        updates as ElementUpdate<MosaicElbowArrowElement>,
         options,
       ),
     };
@@ -146,7 +146,7 @@ export const mutateElement = <TElement extends Mutable<ExcalidrawElement>>(
   return element;
 };
 
-export const newElementWith = <TElement extends ExcalidrawElement>(
+export const newElementWith = <TElement extends MosaicElement>(
   element: TElement,
   updates: ElementUpdate<TElement>,
   /** pass `true` to always regenerate */
@@ -185,9 +185,9 @@ export const newElementWith = <TElement extends ExcalidrawElement>(
  *
  * NOTE: does not trigger re-render.
  */
-export const bumpVersion = <T extends Mutable<ExcalidrawElement>>(
+export const bumpVersion = <T extends Mutable<MosaicElement>>(
   element: T,
-  version?: ExcalidrawElement["version"],
+  version?: MosaicElement["version"],
 ) => {
   element.version = (version ?? element.version) + 1;
   element.versionNonce = randomInteger();

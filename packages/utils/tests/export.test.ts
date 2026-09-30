@@ -1,9 +1,9 @@
-import { MIME_TYPES } from "@excalidraw/common";
-import * as clipboardModule from "@excalidraw/excalidraw/clipboard";
-import * as imageModule from "@excalidraw/excalidraw/data/image";
-import * as jsonModule from "@excalidraw/excalidraw/data/json";
-import * as mockedSceneExportUtils from "@excalidraw/excalidraw/scene/export";
-import { diagramFactory } from "@excalidraw/excalidraw/tests/fixtures/diagramFixture";
+import { MIME_TYPES } from "@mosaic/common";
+import * as clipboardModule from "@mosaic/mosaic/clipboard";
+import * as imageModule from "@mosaic/mosaic/data/image";
+import * as jsonModule from "@mosaic/mosaic/data/json";
+import * as mockedSceneExportUtils from "@mosaic/mosaic/scene/export";
+import { diagramFactory } from "@mosaic/mosaic/tests/fixtures/diagramFixture";
 import { vi } from "vitest";
 
 import * as utils from "../src";

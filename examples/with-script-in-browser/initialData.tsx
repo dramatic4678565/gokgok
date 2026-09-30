@@ -1,7 +1,7 @@
-import type { ExcalidrawElementSkeleton } from "@excalidraw/excalidraw/element/transform";
-import type { FileId } from "@excalidraw/excalidraw/element/types";
+import type { MosaicElementSkeleton } from "@mosaic/mosaic/element/transform";
+import type { FileId } from "@mosaic/mosaic/element/types";
 
-const elements: ExcalidrawElementSkeleton[] = [
+const elements: MosaicElementSkeleton[] = [
   {
     type: "rectangle",
     x: 10,
@@ -16,7 +16,7 @@ const elements: ExcalidrawElementSkeleton[] = [
     backgroundColor: "#fff3bf",
     strokeWidth: 2,
     label: {
-      text: "HELLO EXCALIDRAW",
+      text: "HELLO MOSAIC",
       strokeColor: "#099268",
       fontSize: 30,
     },

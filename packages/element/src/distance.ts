@@ -3,11 +3,11 @@ import {
   distanceToLineSegment,
   pointRotateRads,
   polygonIncludesPointNonZero,
-} from "@excalidraw/math";
+} from "@mosaic/math";
 
-import { ellipse, ellipseDistanceFromPoint } from "@excalidraw/math/ellipse";
+import { ellipse, ellipseDistanceFromPoint } from "@mosaic/math/ellipse";
 
-import type { GlobalPoint, Radians } from "@excalidraw/math";
+import type { GlobalPoint, Radians } from "@mosaic/math";
 
 import {
   deconstructDiamondElement,
@@ -19,16 +19,16 @@ import { elementCenterPoint } from "./bounds";
 
 import type {
   ElementsMap,
-  ExcalidrawDiamondElement,
-  ExcalidrawElement,
-  ExcalidrawEllipseElement,
-  ExcalidrawFreeDrawElement,
-  ExcalidrawLinearElement,
-  ExcalidrawRectanguloidElement,
+  MosaicDiamondElement,
+  MosaicElement,
+  MosaicEllipseElement,
+  MosaicFreeDrawElement,
+  MosaicLinearElement,
+  MosaicRectanguloidElement,
 } from "./types";
 
 export const distanceToElement = (
-  element: ExcalidrawElement,
+  element: MosaicElement,
   elementsMap: ElementsMap,
   p: GlobalPoint,
 ): number => {
@@ -64,7 +64,7 @@ export const distanceToElement = (
  * @returns The eucledian distance to the outline of the rectanguloid element
  */
 const distanceToRectanguloidElement = (
-  element: ExcalidrawRectanguloidElement,
+  element: MosaicRectanguloidElement,
   elementsMap: ElementsMap,
   p: GlobalPoint,
 ) => {
@@ -91,7 +91,7 @@ const distanceToRectanguloidElement = (
  * @returns The eucledian distance to the outline of the diamond
  */
 const distanceToDiamondElement = (
-  element: ExcalidrawDiamondElement,
+  element: MosaicDiamondElement,
   elementsMap: ElementsMap,
   p: GlobalPoint,
 ): number => {
@@ -118,7 +118,7 @@ const distanceToDiamondElement = (
  * @returns The eucledian distance to the outline of the ellipse
  */
 const distanceToEllipseElement = (
-  element: ExcalidrawEllipseElement,
+  element: MosaicEllipseElement,
   elementsMap: ElementsMap,
   p: GlobalPoint,
 ): number => {
@@ -131,7 +131,7 @@ const distanceToEllipseElement = (
 };
 
 const distanceToLinearOrFreeDraElement = (
-  element: ExcalidrawLinearElement | ExcalidrawFreeDrawElement,
+  element: MosaicLinearElement | MosaicFreeDrawElement,
   elementsMap: ElementsMap,
   p: GlobalPoint,
 ) => {
@@ -154,7 +154,7 @@ const distanceToLinearOrFreeDraElement = (
  * distance to the stroke outline
  */
 const distanceToFreeDrawElement = (
-  element: ExcalidrawFreeDrawElement,
+  element: MosaicFreeDrawElement,
   elementsMap: ElementsMap,
   p: GlobalPoint,
 ) => {

@@ -5,18 +5,18 @@ import styles from "./styles.module.css";
 
 const FeatureList = [
   {
-    title: "Learn how Excalidraw works",
+    title: "Learn how Mosaic works",
     Svg: require("@site/static/img/undraw_innovative.svg").default,
     description: (
-      <>Want to contribute to Excalidraw but got lost in the codebase?</>
+      <>Want to contribute to Mosaic but got lost in the codebase?</>
     ),
   },
   {
-    title: "Integrate Excalidraw",
+    title: "Integrate Mosaic",
     Svg: require("@site/static/img/undraw_blank_canvas.svg").default,
     description: (
       <>
-        Want to build your own app powered by Excalidraw but don't know where to
+        Want to build your own app powered by Mosaic but don't know where to
         start?
       </>
     ),

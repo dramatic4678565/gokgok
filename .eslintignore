@@ -5,7 +5,14 @@ package-lock.json
 firebase/
 dist/
 public/workbox
-packages/excalidraw/types
+packages/mosaic/types
 examples/**/public
 dev-dist
 coverage
+
+# `apps/dashboard` is a separate Next.js app with its own toolchain and its own
+# `.eslintrc.json` (see apps/dashboard/README.md). It is linted by
+# `yarn lint:dashboard`, not by `yarn test:code`: the root run resolves a
+# different eslint-plugin-import version than `next lint` does, and the two
+# disagree on where `import type` belongs, so a file cannot satisfy both.
+apps/dashboard/

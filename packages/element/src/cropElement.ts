@@ -11,7 +11,7 @@ import {
   pointFromVector,
   clamp,
   isCloseTo,
-} from "@excalidraw/math";
+} from "@mosaic/math";
 import { type Point } from "points-on-curve";
 
 import {
@@ -23,15 +23,15 @@ import {
 import type { TransformHandleType } from "./transformHandles";
 import type {
   ElementsMap,
-  ExcalidrawElement,
-  ExcalidrawImageElement,
+  MosaicElement,
+  MosaicImageElement,
   ImageCrop,
 } from "./types";
 
 export const MINIMAL_CROP_SIZE = 10;
 
 export const cropElement = (
-  element: ExcalidrawImageElement,
+  element: MosaicImageElement,
   elementsMap: ElementsMap,
   transformHandle: TransformHandleType,
   naturalWidth: number,
@@ -405,7 +405,7 @@ export const cropElement = (
 };
 
 const recomputeOrigin = (
-  stateAtCropStart: ExcalidrawElement,
+  stateAtCropStart: MosaicElement,
   transformHandle: TransformHandleType,
   width: number,
   height: number,
@@ -476,7 +476,7 @@ const recomputeOrigin = (
 
 // refer to https://link.excalidraw.com/l/6rfy1007QOo/6stx5PmRn0k
 export const getUncroppedImageElement = (
-  element: ExcalidrawImageElement,
+  element: MosaicImageElement,
   elementsMap: ElementsMap,
 ) => {
   if (element.crop) {
@@ -531,7 +531,7 @@ export const getUncroppedImageElement = (
       -element.angle as Radians,
     );
 
-    const uncroppedElement: ExcalidrawImageElement = {
+    const uncroppedElement: MosaicImageElement = {
       ...element,
       x: unrotatedTopLeft[0],
       y: unrotatedTopLeft[1],
@@ -546,7 +546,7 @@ export const getUncroppedImageElement = (
   return element;
 };
 
-export const getUncroppedWidthAndHeight = (element: ExcalidrawImageElement) => {
+export const getUncroppedWidthAndHeight = (element: MosaicImageElement) => {
   if (element.crop) {
     const width =
       element.width / (element.crop.width / element.crop.naturalWidth);
@@ -567,7 +567,7 @@ export const getUncroppedWidthAndHeight = (element: ExcalidrawImageElement) => {
 
 const adjustCropPosition = (
   crop: ImageCrop,
-  scale: ExcalidrawImageElement["scale"],
+  scale: MosaicImageElement["scale"],
 ) => {
   let cropX = crop.x;
   let cropY = crop.y;
@@ -590,7 +590,7 @@ const adjustCropPosition = (
 };
 
 export const getFlipAdjustedCropPosition = (
-  element: ExcalidrawImageElement,
+  element: MosaicImageElement,
   natural = false,
 ) => {
   const crop = element.crop;

@@ -7,7 +7,7 @@
         "groups": ["builtin", "external", "internal", "parent", "sibling", "index", "object", "type"],
         "pathGroups": [
           {
-            "pattern": "@excalidraw/**",
+            "pattern": "@mosaic/**",
             "group": "external",
             "position": "after"
           }
@@ -42,15 +42,15 @@
   },
   "overrides": [
     {
-      "files": ["packages/excalidraw/**/*.{ts,tsx}"],
-      "excludedFiles": ["packages/excalidraw/**/*.test.{ts,tsx}", "packages/excalidraw/**/*.test.*.{ts,tsx}"],
+      "files": ["packages/mosaic/**/*.{ts,tsx}"],
+      "excludedFiles": ["packages/mosaic/**/*.test.{ts,tsx}", "packages/mosaic/**/*.test.*.{ts,tsx}"],
       "rules": {
         "@typescript-eslint/no-restricted-imports": [
           "error",
           {
             "patterns": [
               {
-                "group": ["@excalidraw/excalidraw"],
+                "group": ["@mosaic/mosaic"],
                 "message": "Do not import from the barrel 'index.tsx' files. Use direct relative imports to the specific module instead.",
                 "allowTypeImports": true
               }

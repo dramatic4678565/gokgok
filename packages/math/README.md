@@ -1,19 +1,19 @@
-# @excalidraw/math
+# @mosaic/math
 
 ## Install
 
 ```bash
-npm install @excalidraw/math
+npm install @mosaic/math
 ```
 
-If you prefer Yarn over npm, use this command to install the Excalidraw utils package:
+If you prefer Yarn over npm, use this command to install the Mosaic utils package:
 
 ```bash
-yarn add @excalidraw/math
+yarn add @mosaic/math
 ```
 
 With PNPM, similarly install the package with this command:
 
 ```bash
-pnpm add @excalidraw/math
+pnpm add @mosaic/math
 ```

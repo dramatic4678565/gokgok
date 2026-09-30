@@ -1,21 +1,21 @@
 # JSON Schema
 
-The Excalidraw data format uses plaintext JSON.
+The Mosaic data format uses plaintext JSON.
 
-## Excalidraw files
+## Mosaic files
 
-When saving an Excalidraw scene locally to a file, the JSON file (`.excalidraw`) is using the below format.
+When saving an Mosaic scene locally to a file, the JSON file (`.excalidraw`) is using the below format.
 
 ### Attributes
 
 | Attribute | Description | Value |
 | --- | --- | --- |
-| `type` | The type of the Excalidraw schema | `"excalidraw"` |
-| `version` | The version of the Excalidraw schema | number |
-| `source` | The source URL of the Excalidraw application | `"https://excalidraw.com"` |
-| `elements` | An array of objects representing excalidraw elements on canvas | Array containing excalidraw element objects |
+| `type` | The type of the Mosaic schema | `"excalidraw"` |
+| `version` | The version of the Mosaic schema | number |
+| `source` | The source URL of the Mosaic application | `"https://excalidraw.com"` |
+| `elements` | An array of objects representing mosaic elements on canvas | Array containing mosaic element objects |
 | `appState` | Additional application state/configuration | Object containing application state properties |
-| `files` | Data for excalidraw `image` elements | Object containing image data |
+| `files` | Data for mosaic `image` elements | Object containing image data |
 
 ### JSON Schema example
 
@@ -74,14 +74,14 @@ Every normalized element has a `created: number | null` field. A number is the c
 | Restore/open/import an existing scene | Preserve the carried value; missing values become `null` |
 | Edit, change type while retaining the ID, capture, undo, or redo | Preserve the value |
 
-## Excalidraw clipboard format
+## Mosaic clipboard format
 
-When copying selected excalidraw elements to clipboard, the JSON schema is similar to `.excalidraw` format, except it differs in attributes.
+When copying selected mosaic elements to clipboard, the JSON schema is similar to `.excalidraw` format, except it differs in attributes.
 
 ### Attributes
 
 | Attribute | Description | Example Value |
 | --- | --- | --- |
-| `type` | The type of the Excalidraw document. | "excalidraw/clipboard" |
-| `elements` | An array of objects representing excalidraw elements on canvas. | Array containing excalidraw element objects (see example below) |
-| `files` | Data for excalidraw `image` elements. | Object containing image data |
+| `type` | The type of the Mosaic document. | "excalidraw/clipboard" |
+| `elements` | An array of objects representing mosaic elements on canvas. | Array containing mosaic element objects (see example below) |
+| `files` | Data for mosaic `image` elements. | Object containing image data |

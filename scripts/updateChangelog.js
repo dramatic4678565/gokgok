@@ -2,14 +2,11 @@ const fs = require("fs");
 const util = require("util");
 const exec = util.promisify(require("child_process").exec);
 
-const excalidrawDir = `${__dirname}/../packages/excalidraw`;
-const excalidrawPackage = `${excalidrawDir}/package.json`;
-const pkg = require(excalidrawPackage);
+const mosaicDir = `${__dirname}/../packages/mosaic`;
+const mosaicPackage = `${mosaicDir}/package.json`;
+const pkg = require(mosaicPackage);
 const lastVersion = pkg.version;
-const existingChangeLog = fs.readFileSync(
-  `${excalidrawDir}/CHANGELOG.md`,
-  "utf8",
-);
+const existingChangeLog = fs.readFileSync(`${mosaicDir}/CHANGELOG.md`, "utf8");
 
 const supportedTypes = ["feat", "fix", "style", "refactor", "perf", "build"];
 const headerForType = {
@@ -24,7 +21,7 @@ const headerForType = {
 const badCommits = [];
 const getCommitHashForLastVersion = async () => {
   try {
-    const commitMessage = `"release @excalidraw/excalidraw"`;
+    const commitMessage = `"release @mosaic/mosaic"`;
     const { stdout } = await exec(
       `git log --format=format:"%H" --grep=${commitMessage}`,
     );
@@ -81,7 +78,7 @@ const getLibraryCommitsSinceLastRelease = async () => {
 const updateChangelog = async (nextVersion) => {
   const commitList = await getLibraryCommitsSinceLastRelease();
   let changelogForLibrary =
-    "## Excalidraw Library\n\n**_This section lists the updates made to the excalidraw library and will not affect the integration._**\n\n";
+    "## Mosaic Library\n\n**_This section lists the updates made to the mosaic library and will not affect the integration._**\n\n";
   supportedTypes.forEach((type) => {
     if (commitList[type].length) {
       changelogForLibrary += `### ${headerForType[type]}\n\n`;
@@ -100,7 +97,7 @@ const updateChangelog = async (nextVersion) => {
   const currentDate = new Date().toISOString().slice(0, 10);
   const newVersion = `## ${nextVersion} (${currentDate})`;
   updatedContent = updatedContent.replace(`## Unreleased`, newVersion);
-  fs.writeFileSync(`${excalidrawDir}/CHANGELOG.md`, updatedContent, "utf8");
+  fs.writeFileSync(`${mosaicDir}/CHANGELOG.md`, updatedContent, "utf8");
 };
 
 module.exports = updateChangelog;

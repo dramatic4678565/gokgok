@@ -1,5 +1,15 @@
 {
+  "//": [
+    "Default project for `firebase deploy` in this directory.",
+    "",
+    "This MUST be your own Firebase project. It was inherited from upstream as",
+    "'excalidraw-room-persistence', which meant a deploy from this directory",
+    "would have written rules and indexes into someone else's live project.",
+    "The placeholder below will fail fast rather than do that.",
+    "See BRANDING.md for the setup steps."
+  ],
   "projects": {
-    "default": "excalidraw-room-persistence"
+    "default": "REPLACE-WITH-YOUR-FIREBASE-PROJECT-ID"
   }
 }
+

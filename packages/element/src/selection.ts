@@ -1,10 +1,10 @@
-import { arrayToMap, isShallowEqual, type Bounds } from "@excalidraw/common";
+import { arrayToMap, isShallowEqual, type Bounds } from "@mosaic/common";
 
 import type {
   AppState,
   BoxSelectionMode,
   InteractiveCanvasAppState,
-} from "@excalidraw/excalidraw/types";
+} from "@mosaic/mosaic/types";
 
 import { elementsOverlappingBBox, getElementAbsoluteCoords } from "./bounds";
 import { isElementInViewport } from "./sizeHelpers";
@@ -24,18 +24,18 @@ import { isNonDeletedElement } from ".";
 import type {
   ElementsMap,
   ElementsMapOrArray,
-  ExcalidrawElement,
-  ExcalidrawFrameLikeElement,
+  MosaicElement,
+  MosaicFrameLikeElement,
   NonDeleted,
-  NonDeletedExcalidrawElement,
+  NonDeletedMosaicElement,
 } from "./types";
 
-const shouldIgnoreElementFromSelection = (element: ExcalidrawElement) =>
+const shouldIgnoreElementFromSelection = (element: MosaicElement) =>
   element.locked || isBoundToContainer(element);
 
-const excludeElementsFromFrames = <T extends ExcalidrawElement>(
+const excludeElementsFromFrames = <T extends MosaicElement>(
   selectedElements: readonly T[],
-  framesInSelection: Set<ExcalidrawFrameLikeElement["id"]>,
+  framesInSelection: Set<MosaicFrameLikeElement["id"]>,
 ) => {
   return selectedElements.filter((element) => {
     if (element.frameId && framesInSelection.has(element.frameId)) {
@@ -51,9 +51,7 @@ const excludeElementsFromFrames = <T extends ExcalidrawElement>(
  * we only keep the frames.
  * @param selectedElements
  */
-export const excludeElementsInFramesFromSelection = <
-  T extends ExcalidrawElement,
->(
+export const excludeElementsInFramesFromSelection = <T extends MosaicElement>(
   selectedElements: readonly T[],
 ) => {
   const framesInSelection = new Set<T["id"]>();
@@ -67,9 +65,9 @@ export const excludeElementsInFramesFromSelection = <
   return excludeElementsFromFrames(selectedElements, framesInSelection);
 };
 
-export const getElementsWithinSelection = <T extends ExcalidrawElement>(
+export const getElementsWithinSelection = <T extends MosaicElement>(
   elements: readonly T[],
-  selection: ExcalidrawElement,
+  selection: MosaicElement,
   elementsMap: ElementsMap,
   // TODO remove (this flag is effectively unused AFAIK)
   excludeElementsInFrames: boolean = true,
@@ -99,10 +97,10 @@ export const getElementsWithinSelection = <T extends ExcalidrawElement>(
 };
 
 export const getVisibleAndNonSelectedElements = <
-  T extends NonDeletedExcalidrawElement,
+  T extends NonDeletedMosaicElement,
 >(
   elements: readonly T[],
-  selectedElements: readonly ExcalidrawElement[],
+  selectedElements: readonly MosaicElement[],
   appState: AppState,
   elementsMap: ElementsMap,
 ) => {
@@ -124,12 +122,12 @@ export const getVisibleAndNonSelectedElements = <
 
 // FIXME move this into the editor instance to keep utility methods stateless
 export const isSomeElementSelected = (function () {
-  let lastElements: readonly NonDeletedExcalidrawElement[] | null = null;
+  let lastElements: readonly NonDeletedMosaicElement[] | null = null;
   let lastSelectedElementIds: AppState["selectedElementIds"] | null = null;
   let isSelected: boolean | null = null;
 
   const ret = (
-    elements: readonly NonDeletedExcalidrawElement[],
+    elements: readonly NonDeletedMosaicElement[],
     appState: Pick<AppState, "selectedElementIds">,
   ): boolean => {
     if (
@@ -166,13 +164,13 @@ export const getSelectedElements = (
     includeElementsInFrames?: boolean;
   },
 ) => {
-  const addedElements = new Set<ExcalidrawElement["id"]>();
+  const addedElements = new Set<MosaicElement["id"]>();
   // selection can only contain non-deleted elements
-  const selectedElements: NonDeletedExcalidrawElement[] = [];
+  const selectedElements: NonDeletedMosaicElement[] = [];
   for (const element of elements.values()) {
     if (appState.selectedElementIds[element.id]) {
       if (isNonDeletedElement(element)) {
-        selectedElements.push(element as NonDeletedExcalidrawElement);
+        selectedElements.push(element as NonDeletedMosaicElement);
         addedElements.add(element.id);
       } else {
         console.error(
@@ -187,20 +185,20 @@ export const getSelectedElements = (
       isNonDeletedElement(element) &&
       appState.selectedElementIds[element?.containerId]
     ) {
-      selectedElements.push(element as NonDeletedExcalidrawElement);
+      selectedElements.push(element as NonDeletedMosaicElement);
       addedElements.add(element.id);
       continue;
     }
   }
 
   if (opts?.includeElementsInFrames) {
-    const elementsToInclude: NonDeletedExcalidrawElement[] = [];
+    const elementsToInclude: NonDeletedMosaicElement[] = [];
     selectedElements.forEach((element) => {
       if (isFrameLikeElement(element)) {
         getFrameChildren(elements, element.id).forEach(
           (e) =>
             !addedElements.has(e.id) &&
-            elementsToInclude.push(e as NonDeletedExcalidrawElement),
+            elementsToInclude.push(e as NonDeletedMosaicElement),
         );
       }
       elementsToInclude.push(element);
@@ -246,8 +244,8 @@ export const makeNextSelectedElementIds = (
 };
 
 const _getLinearElementEditor = (
-  targetElements: readonly NonDeletedExcalidrawElement[],
-  allElements: readonly NonDeletedExcalidrawElement[],
+  targetElements: readonly NonDeletedMosaicElement[],
+  allElements: readonly NonDeletedMosaicElement[],
 ) => {
   const linears = targetElements.filter(isLinearElement);
   if (linears.length === 1) {
@@ -266,8 +264,8 @@ const _getLinearElementEditor = (
 };
 
 export const getSelectionStateForElements = (
-  targetElements: readonly NonDeletedExcalidrawElement[],
-  allElements: readonly NonDeletedExcalidrawElement[],
+  targetElements: readonly NonDeletedMosaicElement[],
+  allElements: readonly NonDeletedMosaicElement[],
   appState: AppState,
 ) => {
   return {
@@ -277,7 +275,7 @@ export const getSelectionStateForElements = (
         editingGroupId: appState.editingGroupId,
         selectedElementIds: excludeElementsInFramesFromSelection(
           targetElements,
-        ).reduce((acc: Record<ExcalidrawElement["id"], true>, element) => {
+        ).reduce((acc: Record<MosaicElement["id"], true>, element) => {
           if (!isBoundToContainer(element)) {
             acc[element.id] = true;
           }
@@ -295,7 +293,7 @@ export const getSelectionStateForElements = (
  * Returns editing or single-selected text element, if any.
  */
 export const getActiveTextElement = (
-  selectedElements: readonly NonDeleted<ExcalidrawElement>[],
+  selectedElements: readonly NonDeleted<MosaicElement>[],
   appState: Pick<AppState, "editingTextElement">,
 ) => {
   const activeTextElement =

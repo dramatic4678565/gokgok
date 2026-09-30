@@ -1,4 +1,4 @@
-import type { App } from "@excalidraw/excalidraw/types";
+import type { App } from "@mosaic/mosaic/types";
 
 import { LinearElementEditor } from "../linearElementEditor";
 

@@ -1,17 +1,17 @@
-import { arrayToMap } from "@excalidraw/common";
+import { arrayToMap } from "@mosaic/common";
 import {
   isPointWithinBounds,
   pointFrom,
   segmentsIntersectAt,
-} from "@excalidraw/math";
+} from "@mosaic/math";
 
 import type {
   AppClassProperties,
   AppState,
   StaticCanvasAppState,
-} from "@excalidraw/excalidraw/types";
+} from "@mosaic/mosaic/types";
 
-import type { ReadonlySetLike } from "@excalidraw/common/utility-types";
+import type { ReadonlySetLike } from "@mosaic/common/utility-types";
 
 import { getElementsWithinSelection, getSelectedElements } from "./selection";
 import { getElementsInGroup, selectGroupsFromGivenElements } from "./groups";
@@ -35,26 +35,26 @@ import {
 
 import { getNonDeletedElements } from ".";
 
-import type { ExcalidrawElementsIncludingDeleted } from "./Scene";
+import type { MosaicElementsIncludingDeleted } from "./Scene";
 
 import type {
   ElementsMap,
   ElementsMapOrArray,
-  ExcalidrawElement,
-  ExcalidrawFrameLikeElement,
+  MosaicElement,
+  MosaicFrameLikeElement,
   NonDeleted,
-  NonDeletedExcalidrawElement,
+  NonDeletedMosaicElement,
 } from "./types";
 
 // --------------------------- Frame State ------------------------------------
 export const bindElementsToFramesAfterDuplication = (
-  nextElements: readonly ExcalidrawElement[],
-  origElements: readonly ExcalidrawElement[],
-  origIdToDuplicateId: Map<ExcalidrawElement["id"], ExcalidrawElement["id"]>,
+  nextElements: readonly MosaicElement[],
+  origElements: readonly MosaicElement[],
+  origIdToDuplicateId: Map<MosaicElement["id"], MosaicElement["id"]>,
 ) => {
   const nextElementMap = arrayToMap(nextElements) as Map<
-    ExcalidrawElement["id"],
-    ExcalidrawElement
+    MosaicElement["id"],
+    MosaicElement
   >;
 
   for (const element of origElements) {
@@ -73,8 +73,8 @@ export const bindElementsToFramesAfterDuplication = (
 };
 
 export function isElementIntersectingFrame(
-  element: ExcalidrawElement,
-  frame: ExcalidrawFrameLikeElement,
+  element: MosaicElement,
+  frame: MosaicFrameLikeElement,
   elementsMap: ElementsMap,
 ) {
   const frameLineSegments = getElementLineSegments(frame, elementsMap);
@@ -91,8 +91,8 @@ export function isElementIntersectingFrame(
 }
 
 export const getElementsCompletelyInFrame = (
-  elements: readonly ExcalidrawElement[],
-  frame: ExcalidrawFrameLikeElement,
+  elements: readonly MosaicElement[],
+  frame: MosaicFrameLikeElement,
   elementsMap: ElementsMap,
 ) =>
   omitGroupsContainingFrameLikes(
@@ -104,8 +104,8 @@ export const getElementsCompletelyInFrame = (
   );
 
 export const isElementContainingFrame = (
-  element: ExcalidrawElement,
-  frame: ExcalidrawFrameLikeElement,
+  element: MosaicElement,
+  frame: MosaicFrameLikeElement,
   elementsMap: ElementsMap,
 ) => {
   return boundsContainBounds(
@@ -115,8 +115,8 @@ export const isElementContainingFrame = (
 };
 
 export const getElementsIntersectingFrame = (
-  elements: readonly ExcalidrawElement[],
-  frame: ExcalidrawFrameLikeElement,
+  elements: readonly MosaicElement[],
+  frame: MosaicFrameLikeElement,
 ) => {
   const elementsMap = arrayToMap(elements);
   return elements.filter((element) =>
@@ -125,8 +125,8 @@ export const getElementsIntersectingFrame = (
 };
 
 export const elementsAreInFrameBounds = (
-  elements: readonly ExcalidrawElement[],
-  frame: ExcalidrawFrameLikeElement,
+  elements: readonly MosaicElement[],
+  frame: MosaicFrameLikeElement,
   elementsMap: ElementsMap,
 ) => {
   const [frameX1, frameY1, frameX2, frameY2] = getElementAbsoluteCoords(
@@ -146,8 +146,8 @@ export const elementsAreInFrameBounds = (
 };
 
 export const elementOverlapsWithFrame = (
-  element: ExcalidrawElement,
-  frame: ExcalidrawFrameLikeElement,
+  element: MosaicElement,
+  frame: MosaicFrameLikeElement,
   elementsMap: ElementsMap,
 ) => {
   return (
@@ -162,7 +162,7 @@ export const isCursorInFrame = (
     x: number;
     y: number;
   },
-  frame: NonDeleted<ExcalidrawFrameLikeElement>,
+  frame: NonDeleted<MosaicFrameLikeElement>,
   elementsMap: ElementsMap,
 ) => {
   const [fx1, fy1, fx2, fy2] = getElementAbsoluteCoords(frame, elementsMap);
@@ -175,9 +175,9 @@ export const isCursorInFrame = (
 };
 
 export const groupsAreAtLeastIntersectingTheFrame = (
-  elements: readonly NonDeletedExcalidrawElement[],
+  elements: readonly NonDeletedMosaicElement[],
   groupIds: readonly string[],
-  frame: ExcalidrawFrameLikeElement,
+  frame: MosaicFrameLikeElement,
 ) => {
   const elementsMap = arrayToMap(elements);
   const elementsInGroup = groupIds.flatMap((groupId) =>
@@ -196,9 +196,9 @@ export const groupsAreAtLeastIntersectingTheFrame = (
 };
 
 export const groupsAreCompletelyOutOfFrame = (
-  elements: readonly NonDeletedExcalidrawElement[],
+  elements: readonly NonDeletedMosaicElement[],
   groupIds: readonly string[],
-  frame: ExcalidrawFrameLikeElement,
+  frame: MosaicFrameLikeElement,
 ) => {
   const elementsMap = arrayToMap(elements);
   const elementsInGroup = groupIds.flatMap((groupId) =>
@@ -223,11 +223,8 @@ export const groupsAreCompletelyOutOfFrame = (
 /**
  * Returns a map of frameId to frame elements. Includes empty frames.
  */
-export const groupByFrameLikes = (elements: readonly ExcalidrawElement[]) => {
-  const frameElementsMap = new Map<
-    ExcalidrawElement["id"],
-    ExcalidrawElement[]
-  >();
+export const groupByFrameLikes = (elements: readonly MosaicElement[]) => {
+  const frameElementsMap = new Map<MosaicElement["id"], MosaicElement[]>();
 
   for (const element of elements) {
     const frameId = isFrameLikeElement(element) ? element.id : element.frameId;
@@ -243,7 +240,7 @@ export const getFrameChildren = (
   allElements: ElementsMapOrArray,
   frameId: string,
 ) => {
-  const frameChildren: ExcalidrawElement[] = [];
+  const frameChildren: MosaicElement[] = [];
   for (const element of allElements.values()) {
     if (element.frameId === frameId) {
       frameChildren.push(element);
@@ -253,22 +250,22 @@ export const getFrameChildren = (
 };
 
 export const getFrameLikeElements = (
-  allElements: ExcalidrawElementsIncludingDeleted,
-): ExcalidrawFrameLikeElement[] => {
-  return allElements.filter((element): element is ExcalidrawFrameLikeElement =>
+  allElements: MosaicElementsIncludingDeleted,
+): MosaicFrameLikeElement[] => {
+  return allElements.filter((element): element is MosaicFrameLikeElement =>
     isFrameLikeElement(element),
   );
 };
 
 /**
- * Returns ExcalidrawFrameElements and non-frame-children elements.
+ * Returns MosaicFrameElements and non-frame-children elements.
  *
  * Considers children as root elements if they point to a frame parent
  * non-existing in the elements set.
  *
  * Considers non-frame bound elements (container or arrow labels) as root.
  */
-export const getRootElements = <T extends ExcalidrawElement>(
+export const getRootElements = <T extends MosaicElement>(
   allElements: readonly T[],
 ) => {
   const frameElements = arrayToMap(getFrameLikeElements(allElements));
@@ -281,13 +278,13 @@ export const getRootElements = <T extends ExcalidrawElement>(
 };
 
 export const getElementsInResizingFrame = (
-  allElements: ExcalidrawElementsIncludingDeleted,
-  frame: ExcalidrawFrameLikeElement,
+  allElements: MosaicElementsIncludingDeleted,
+  frame: MosaicFrameLikeElement,
   appState: AppState,
   elementsMap: ElementsMap,
-): ExcalidrawElement[] => {
+): MosaicElement[] => {
   const prevElementsInFrame = getFrameChildren(allElements, frame.id);
-  const nextElementsInFrame = new Set<ExcalidrawElement>(prevElementsInFrame);
+  const nextElementsInFrame = new Set<MosaicElement>(prevElementsInFrame);
 
   const elementsCompletelyInFrame = new Set([
     ...getElementsCompletelyInFrame(allElements, frame, elementsMap),
@@ -378,8 +375,8 @@ export const getElementsInResizingFrame = (
 };
 
 export const getElementsInNewFrame = (
-  elements: ExcalidrawElementsIncludingDeleted,
-  frame: ExcalidrawFrameLikeElement,
+  elements: MosaicElementsIncludingDeleted,
+  frame: MosaicFrameLikeElement,
   elementsMap: ElementsMap,
 ) => {
   return omitPartialGroups(
@@ -393,8 +390,8 @@ export const getElementsInNewFrame = (
 };
 
 export const omitPartialGroups = (
-  elements: ExcalidrawElement[],
-  frame: ExcalidrawFrameLikeElement,
+  elements: MosaicElement[],
+  frame: MosaicFrameLikeElement,
   allElementsMap: ElementsMap,
 ) => {
   const elementsToReturn = [];
@@ -434,24 +431,24 @@ export const omitPartialGroups = (
 };
 
 export const getContainingFrame = (
-  element: ExcalidrawElement,
+  element: MosaicElement,
   elementsMap: ElementsMap,
 ) => {
   if (!element.frameId) {
     return null;
   }
   return (elementsMap.get(element.frameId) ||
-    null) as null | ExcalidrawFrameLikeElement;
+    null) as null | MosaicFrameLikeElement;
 };
 
 // --------------------------- Frame Operations -------------------------------
 
 /** */
 export const filterElementsEligibleAsFrameChildren = (
-  elements: readonly ExcalidrawElement[],
-  frame: ExcalidrawFrameLikeElement,
+  elements: readonly MosaicElement[],
+  frame: MosaicFrameLikeElement,
 ) => {
-  const otherFrames = new Set<ExcalidrawFrameLikeElement["id"]>();
+  const otherFrames = new Set<MosaicFrameLikeElement["id"]>();
   const elementsMap = arrayToMap(elements);
   elements = omitGroupsContainingFrameLikes(elements);
 
@@ -461,9 +458,9 @@ export const filterElementsEligibleAsFrameChildren = (
     }
   }
 
-  const processedGroups = new Set<ExcalidrawElement["id"]>();
+  const processedGroups = new Set<MosaicElement["id"]>();
 
-  const eligibleElements: ExcalidrawElement[] = [];
+  const eligibleElements: MosaicElement[] = [];
 
   for (const element of elements) {
     // don't add frames or their children
@@ -500,8 +497,8 @@ export const filterElementsEligibleAsFrameChildren = (
   return eligibleElements;
 };
 
-export const getCommonFrameId = (elements: readonly ExcalidrawElement[]) => {
-  let commonFrameId: ExcalidrawElement["frameId"] | undefined;
+export const getCommonFrameId = (elements: readonly MosaicElement[]) => {
+  let commonFrameId: MosaicElement["frameId"] | undefined;
 
   for (const element of elements) {
     if (isFrameLikeElement(element) || !element.frameId) {
@@ -519,8 +516,8 @@ export const getCommonFrameId = (elements: readonly ExcalidrawElement[]) => {
 };
 
 export const getFrameChildrenInsertionIndex = (
-  elements: readonly ExcalidrawElement[],
-  frameId: ExcalidrawFrameLikeElement["id"],
+  elements: readonly MosaicElement[],
+  frameId: MosaicFrameLikeElement["id"],
 ): number | null => {
   for (let index = elements.length - 1; index >= 0; index--) {
     const element = elements[index];
@@ -543,15 +540,15 @@ export const getFrameChildrenInsertionIndex = (
  */
 export const addElementsToFrame = <T extends ElementsMapOrArray>(
   allElements: T,
-  elementsToAdd: ExcalidrawElement[],
-  frame: ExcalidrawFrameLikeElement,
+  elementsToAdd: MosaicElement[],
+  frame: MosaicFrameLikeElement,
 ): T => {
   const elementsMap = arrayToMap(allElements);
   const commonFrameId = getCommonFrameId(elementsToAdd);
 
-  const finalElementsToAdd = new Set<ExcalidrawElement>();
+  const finalElementsToAdd = new Set<MosaicElement>();
 
-  const otherFrames = new Set<ExcalidrawFrameLikeElement["id"]>();
+  const otherFrames = new Set<MosaicFrameLikeElement["id"]>();
 
   for (const element of elementsToAdd) {
     if (isFrameLikeElement(element) && element.id !== frame.id) {
@@ -635,17 +632,14 @@ export const addElementsToFrame = <T extends ElementsMapOrArray>(
 };
 
 export const removeElementsFromFrame = (
-  elementsToRemove: ReadonlySetLike<ExcalidrawElement>,
+  elementsToRemove: ReadonlySetLike<MosaicElement>,
   elementsMap: ElementsMap,
 ) => {
-  const _elementsToRemove = new Map<
-    ExcalidrawElement["id"],
-    ExcalidrawElement
-  >();
+  const _elementsToRemove = new Map<MosaicElement["id"], MosaicElement>();
 
   const toRemoveElementsByFrame = new Map<
-    ExcalidrawFrameLikeElement["id"],
-    ExcalidrawElement[]
+    MosaicFrameLikeElement["id"],
+    MosaicElement[]
   >();
 
   for (const element of elementsToRemove) {
@@ -672,19 +666,19 @@ export const removeElementsFromFrame = (
   }
 };
 
-export const removeAllElementsFromFrame = <T extends ExcalidrawElement>(
+export const removeAllElementsFromFrame = <T extends MosaicElement>(
   allElements: readonly T[],
-  frame: ExcalidrawFrameLikeElement,
+  frame: MosaicFrameLikeElement,
 ) => {
   const elementsInFrame = getFrameChildren(allElements, frame.id);
   removeElementsFromFrame(elementsInFrame, arrayToMap(allElements));
   return allElements;
 };
 
-export const replaceAllElementsInFrame = <T extends ExcalidrawElement>(
+export const replaceAllElementsInFrame = <T extends MosaicElement>(
   allElements: readonly T[],
-  nextElementsInFrame: ExcalidrawElement[],
-  frame: ExcalidrawFrameLikeElement,
+  nextElementsInFrame: MosaicElement[],
+  frame: MosaicFrameLikeElement,
 ): T[] => {
   return addElementsToFrame(
     removeAllElementsFromFrame(allElements, frame),
@@ -706,7 +700,7 @@ export const updateFrameMembershipOfSelectedElements = <
     // supplying elements explicitly in case we're passed non-state elements
     elements: allElements,
   });
-  const elementsToFilter = new Set<ExcalidrawElement>(selectedElements);
+  const elementsToFilter = new Set<MosaicElement>(selectedElements);
 
   if (appState.editingGroupId) {
     for (const element of selectedElements) {
@@ -720,7 +714,7 @@ export const updateFrameMembershipOfSelectedElements = <
     }
   }
 
-  const elementsToRemove = new Set<ExcalidrawElement>();
+  const elementsToRemove = new Set<MosaicElement>();
 
   const elementsMap = arrayToMap(allElements);
 
@@ -749,7 +743,7 @@ export const omitGroupsContainingFrameLikes = (
   /** subset of elements you want to filter. Optional perf optimization so we
    * don't have to filter all elements unnecessarily
    */
-  selectedElements?: readonly ExcalidrawElement[],
+  selectedElements?: readonly MosaicElement[],
 ) => {
   const uniqueGroupIds = new Set<string>();
   const elements = selectedElements || allElements;
@@ -772,7 +766,7 @@ export const omitGroupsContainingFrameLikes = (
     }
   }
 
-  const ret: ExcalidrawElement[] = [];
+  const ret: MosaicElement[] = [];
 
   for (const element of elements.values()) {
     if (!rejectedGroupIds.has(element.groupIds[element.groupIds.length - 1])) {
@@ -788,7 +782,7 @@ export const omitGroupsContainingFrameLikes = (
  * is going to be added to or remove from
  */
 export const getTargetFrame = (
-  element: ExcalidrawElement,
+  element: MosaicElement,
   elementsMap: ElementsMap,
   appState: StaticCanvasAppState,
 ) => {
@@ -815,11 +809,11 @@ export const getTargetFrame = (
 // TODO: this a huge bottleneck for large scenes, optimise
 // given an element, return if the element is in some frame
 export const isElementInFrame = (
-  element: ExcalidrawElement,
+  element: MosaicElement,
   allElementsMap: ElementsMap,
   appState: StaticCanvasAppState,
   opts?: {
-    targetFrame?: ExcalidrawFrameLikeElement;
+    targetFrame?: MosaicFrameLikeElement;
     checkedGroups?: Map<string, boolean>;
   },
 ) => {
@@ -909,8 +903,8 @@ export const isElementInFrame = (
 };
 
 export const shouldApplyFrameClip = (
-  element: ExcalidrawElement,
-  frame: ExcalidrawFrameLikeElement,
+  element: MosaicElement,
+  frame: MosaicFrameLikeElement,
   appState: StaticCanvasAppState,
   elementsMap: ElementsMap,
   checkedGroups?: Map<string, boolean>,
@@ -971,18 +965,18 @@ export const shouldApplyFrameClip = (
 const DEFAULT_FRAME_NAME = "Frame";
 const DEFAULT_AI_FRAME_NAME = "AI Frame";
 
-export const getDefaultFrameName = (element: ExcalidrawFrameLikeElement) => {
+export const getDefaultFrameName = (element: MosaicFrameLikeElement) => {
   // TODO name frames "AI" only if specific to AI frames
   return isFrameElement(element) ? DEFAULT_FRAME_NAME : DEFAULT_AI_FRAME_NAME;
 };
 
-export const getFrameLikeTitle = (element: ExcalidrawFrameLikeElement) => {
+export const getFrameLikeTitle = (element: MosaicFrameLikeElement) => {
   return element.name === null ? getDefaultFrameName(element) : element.name;
 };
 
-export const getElementsOverlappingFrame = <T extends ExcalidrawElement>(
+export const getElementsOverlappingFrame = <T extends MosaicElement>(
   elements: readonly T[],
-  frame: ExcalidrawFrameLikeElement,
+  frame: MosaicFrameLikeElement,
   elementsMap: ElementsMap,
 ) => {
   return elements.filter(
@@ -998,7 +992,7 @@ export const getElementsOverlappingFrame = <T extends ExcalidrawElement>(
 };
 
 export const frameAndChildrenSelectedTogether = (
-  selectedElements: readonly ExcalidrawElement[],
+  selectedElements: readonly MosaicElement[],
 ) => {
   const selectedElementsMap = arrayToMap(selectedElements);
 

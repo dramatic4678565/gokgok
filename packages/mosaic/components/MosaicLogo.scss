@@ -1,0 +1,87 @@
+.excalidraw {
+  .MosaicLogo {
+    --logo-icon--mobile: 1rem;
+    --logo-text--mobile: 0.75rem;
+
+    --logo-icon--xs: 2rem;
+    --logo-text--xs: 1.5rem;
+
+    --logo-icon--small: 2.5rem;
+    --logo-text--small: 1.75rem;
+
+    --logo-icon--normal: 3rem;
+    --logo-text--normal: 2.2rem;
+
+    --logo-icon--large: 90px;
+    --logo-text--large: 65px;
+
+    display: flex;
+    align-items: center;
+
+    svg {
+      flex: 0 0 auto;
+    }
+
+    .MosaicLogo-icon {
+      width: auto;
+      color: var(--color-logo-icon);
+    }
+
+    .MosaicLogo-text {
+      margin-left: 0.75rem;
+      width: auto;
+      color: var(--color-logo-text);
+    }
+
+    &.is-mobile {
+      .MosaicLogo-icon {
+        height: var(--logo-icon--mobile);
+      }
+
+      .MosaicLogo-text {
+        height: var(--logo-text--mobile);
+        margin-left: 0.5rem;
+      }
+    }
+
+    &.is-xs {
+      .MosaicLogo-icon {
+        height: var(--logo-icon--xs);
+      }
+
+      .MosaicLogo-text {
+        height: var(--logo-text--xs);
+      }
+    }
+
+    &.is-small {
+      .MosaicLogo-icon {
+        height: var(--logo-icon--small);
+      }
+
+      .MosaicLogo-text {
+        height: var(--logo-text--small);
+      }
+    }
+
+    &.is-normal {
+      .MosaicLogo-icon {
+        height: var(--logo-icon--normal);
+      }
+
+      .MosaicLogo-text {
+        height: var(--logo-text--normal);
+      }
+    }
+
+    &.is-large {
+      .MosaicLogo-icon {
+        height: var(--logo-icon--large);
+      }
+
+      .MosaicLogo-text {
+        height: var(--logo-text--large);
+      }
+    }
+  }
+}

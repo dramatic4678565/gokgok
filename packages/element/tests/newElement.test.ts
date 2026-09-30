@@ -1,6 +1,6 @@
-import * as common from "@excalidraw/common";
+import * as common from "@mosaic/common";
 
-import { API } from "@excalidraw/excalidraw/tests/helpers/api";
+import { API } from "@mosaic/mosaic/tests/helpers/api";
 
 import { newElement, newLinearElement } from "../src/newElement";
 import { mutateElement, newElementWith } from "../src/mutateElement";

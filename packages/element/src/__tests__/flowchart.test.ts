@@ -1,6 +1,6 @@
-import { ROUNDNESS } from "@excalidraw/common";
+import { ROUNDNESS } from "@mosaic/common";
 
-import type { AppState } from "@excalidraw/excalidraw/types";
+import type { AppState } from "@mosaic/mosaic/types";
 
 import { Scene } from "../Scene";
 import { addNewNodes } from "../flowchart";

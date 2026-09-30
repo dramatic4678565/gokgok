@@ -13,11 +13,11 @@ import {
   getFontString,
   getUpdatedTimestamp,
   getLineHeight,
-} from "@excalidraw/common";
+} from "@mosaic/common";
 
-import type { Radians } from "@excalidraw/math";
+import type { Radians } from "@mosaic/math";
 
-import type { MarkOptional, Merge } from "@excalidraw/common/utility-types";
+import type { MarkOptional, Merge } from "@mosaic/common/utility-types";
 
 import {
   getElementAbsoluteCoords,
@@ -35,31 +35,31 @@ import { wrapText } from "./textWrapping";
 import { isLineElement } from "./typeChecks";
 
 import type {
-  ExcalidrawElement,
-  ExcalidrawImageElement,
-  ExcalidrawTextElement,
-  ExcalidrawLinearElement,
-  ExcalidrawGenericElement,
+  MosaicElement,
+  MosaicImageElement,
+  MosaicTextElement,
+  MosaicLinearElement,
+  MosaicGenericElement,
   NonDeleted,
   TextAlign,
   VerticalAlign,
   Arrowhead,
-  ExcalidrawFreeDrawElement,
+  MosaicFreeDrawElement,
   FontFamilyValues,
-  ExcalidrawTextContainer,
-  ExcalidrawFrameElement,
-  ExcalidrawEmbeddableElement,
-  ExcalidrawMagicFrameElement,
-  ExcalidrawIframeElement,
+  MosaicTextContainer,
+  MosaicFrameElement,
+  MosaicEmbeddableElement,
+  MosaicMagicFrameElement,
+  MosaicIframeElement,
   ElementsMap,
-  ExcalidrawArrowElement,
-  ExcalidrawElbowArrowElement,
-  ExcalidrawLineElement,
-  ExcalidrawStickyNoteElement,
+  MosaicArrowElement,
+  MosaicElbowArrowElement,
+  MosaicLineElement,
+  MosaicStickyNoteElement,
 } from "./types";
 
 export type ElementConstructorOpts = MarkOptional<
-  Omit<ExcalidrawGenericElement, "id" | "type" | "isDeleted" | "updated">,
+  Omit<MosaicGenericElement, "id" | "type" | "isDeleted" | "updated">,
   | "width"
   | "height"
   | "angle"
@@ -84,7 +84,7 @@ export type ElementConstructorOpts = MarkOptional<
   | "created"
 >;
 
-const _newElementBase = <T extends ExcalidrawElement>(
+const _newElementBase = <T extends MosaicElement>(
   type: T["type"],
   {
     x,
@@ -107,7 +107,7 @@ const _newElementBase = <T extends ExcalidrawElement>(
     link = null,
     locked = DEFAULT_ELEMENT_PROPS.locked,
     ...rest
-  }: ElementConstructorOpts & Omit<Partial<ExcalidrawGenericElement>, "type">,
+  }: ElementConstructorOpts & Omit<Partial<MosaicGenericElement>, "type">,
 ) => {
   // NOTE (mtolmacs): This is a temporary check to detect extremely large
   // element position or sizing
@@ -135,7 +135,7 @@ const _newElementBase = <T extends ExcalidrawElement>(
 
   // assign type to guard against excess properties
   const element: Merge<
-    ExcalidrawGenericElement,
+    MosaicGenericElement,
     { type: T["type"]; isDeleted: false }
   > = {
     id: rest.id || randomId(),
@@ -173,20 +173,20 @@ const _newElementBase = <T extends ExcalidrawElement>(
 
 export const newElement = (
   opts: {
-    type: ExcalidrawGenericElement["type"];
+    type: MosaicGenericElement["type"];
   } & ElementConstructorOpts,
-): NonDeleted<ExcalidrawGenericElement> =>
-  _newElementBase<ExcalidrawGenericElement>(opts.type, opts);
+): NonDeleted<MosaicGenericElement> =>
+  _newElementBase<MosaicGenericElement>(opts.type, opts);
 
 /**
  * Style invariants of a sticky note: never-transparent colors, solid fill.
  * Applied by the constructor and by every normalization pass. Returns the
  * same object when nothing needs fixing.
  */
-export const normalizeStickyNoteStyle = <T extends ExcalidrawStickyNoteElement>(
+export const normalizeStickyNoteStyle = <T extends MosaicStickyNoteElement>(
   element: T,
 ): T => {
-  return newElementWith(element as ExcalidrawStickyNoteElement, {
+  return newElementWith(element as MosaicStickyNoteElement, {
     backgroundColor: normalizeStickyNoteBackgroundColor(
       element.backgroundColor,
     ),
@@ -202,9 +202,7 @@ export const normalizeStickyNoteStyle = <T extends ExcalidrawStickyNoteElement>(
  * its true dragged size; pointer-up, restore, the skeleton path and the
  * action post-passes enforce this.
  */
-export const normalizeStickyNoteGeometry = <
-  T extends ExcalidrawStickyNoteElement,
->(
+export const normalizeStickyNoteGeometry = <T extends MosaicStickyNoteElement>(
   element: T,
 ): T => {
   const width = Math.max(element.width, STICKY_NOTE_MIN_SIZE);
@@ -213,7 +211,7 @@ export const normalizeStickyNoteGeometry = <
     STICKY_NOTE_MIN_SIZE,
   );
 
-  return newElementWith(element as ExcalidrawStickyNoteElement, {
+  return newElementWith(element as MosaicStickyNoteElement, {
     width,
     height: Math.max(element.height, baseHeight),
     baseHeight,
@@ -221,7 +219,7 @@ export const normalizeStickyNoteGeometry = <
 };
 
 /** all sticky note invariants (style + finalized geometry) */
-export const normalizeStickyNote = <T extends ExcalidrawStickyNoteElement>(
+export const normalizeStickyNote = <T extends MosaicStickyNoteElement>(
   element: T,
 ): T => {
   return normalizeStickyNoteGeometry(normalizeStickyNoteStyle(element));
@@ -232,8 +230,8 @@ export const newStickyNoteElement = (
     type: "stickynote";
     baseHeight?: number;
   } & ElementConstructorOpts,
-): NonDeleted<ExcalidrawStickyNoteElement> => {
-  const base = _newElementBase<ExcalidrawStickyNoteElement>("stickynote", opts);
+): NonDeleted<MosaicStickyNoteElement> => {
+  const base = _newElementBase<MosaicStickyNoteElement>("stickynote", opts);
 
   // no size inflation here (see `normalizeStickyNoteGeometry`)
   return normalizeStickyNoteStyle({
@@ -246,17 +244,17 @@ export const newEmbeddableElement = (
   opts: {
     type: "embeddable";
   } & ElementConstructorOpts,
-): NonDeleted<ExcalidrawEmbeddableElement> => {
-  return _newElementBase<ExcalidrawEmbeddableElement>("embeddable", opts);
+): NonDeleted<MosaicEmbeddableElement> => {
+  return _newElementBase<MosaicEmbeddableElement>("embeddable", opts);
 };
 
 export const newIframeElement = (
   opts: {
     type: "iframe";
   } & ElementConstructorOpts,
-): NonDeleted<ExcalidrawIframeElement> => {
+): NonDeleted<MosaicIframeElement> => {
   return {
-    ..._newElementBase<ExcalidrawIframeElement>("iframe", opts),
+    ..._newElementBase<MosaicIframeElement>("iframe", opts),
   };
 };
 
@@ -264,10 +262,10 @@ export const newFrameElement = (
   opts: {
     name?: string;
   } & ElementConstructorOpts,
-): NonDeleted<ExcalidrawFrameElement> => {
+): NonDeleted<MosaicFrameElement> => {
   const frameElement = newElementWith(
     {
-      ..._newElementBase<ExcalidrawFrameElement>("frame", opts),
+      ..._newElementBase<MosaicFrameElement>("frame", opts),
       type: "frame",
       name: opts?.name || null,
     },
@@ -281,10 +279,10 @@ export const newMagicFrameElement = (
   opts: {
     name?: string;
   } & ElementConstructorOpts,
-): NonDeleted<ExcalidrawMagicFrameElement> => {
+): NonDeleted<MosaicMagicFrameElement> => {
   const frameElement = newElementWith(
     {
-      ..._newElementBase<ExcalidrawMagicFrameElement>("magicframe", opts),
+      ..._newElementBase<MosaicMagicFrameElement>("magicframe", opts),
       type: "magicframe",
       name: opts?.name || null,
     },
@@ -301,8 +299,8 @@ export const newMagicFrameElement = (
  * `adjustXYWithRotation` in `getAdjustedDimensions`.
  */
 export const getTextAnchorRatios = (opts: {
-  textAlign: ExcalidrawTextElement["textAlign"];
-  verticalAlign: ExcalidrawTextElement["verticalAlign"];
+  textAlign: MosaicTextElement["textAlign"];
+  verticalAlign: MosaicTextElement["verticalAlign"];
 }) => ({
   x: opts.textAlign === "center" ? 0.5 : opts.textAlign === "right" ? 1 : 0,
   y:
@@ -316,8 +314,8 @@ export const getTextAnchorRatios = (opts: {
 /** computes element x/y offset based on textAlign/verticalAlign */
 const getTextElementPositionOffsets = (
   opts: {
-    textAlign: ExcalidrawTextElement["textAlign"];
-    verticalAlign: ExcalidrawTextElement["verticalAlign"];
+    textAlign: MosaicTextElement["textAlign"];
+    verticalAlign: MosaicTextElement["verticalAlign"];
   },
   metrics: {
     width: number;
@@ -340,13 +338,13 @@ export const newTextElement = (
     fontFamily?: FontFamilyValues;
     textAlign?: TextAlign;
     verticalAlign?: VerticalAlign;
-    containerId?: ExcalidrawTextContainer["id"] | null;
-    lineHeight?: ExcalidrawTextElement["lineHeight"];
-    autoResize?: ExcalidrawTextElement["autoResize"];
-    labelPosition?: ExcalidrawTextElement["labelPosition"];
-    baseFontSize?: ExcalidrawTextElement["baseFontSize"];
+    containerId?: MosaicTextContainer["id"] | null;
+    lineHeight?: MosaicTextElement["lineHeight"];
+    autoResize?: MosaicTextElement["autoResize"];
+    labelPosition?: MosaicTextElement["labelPosition"];
+    baseFontSize?: MosaicTextElement["baseFontSize"];
   } & ElementConstructorOpts,
-): NonDeleted<ExcalidrawTextElement> => {
+): NonDeleted<MosaicTextElement> => {
   const fontFamily = opts.fontFamily || DEFAULT_FONT_FAMILY;
   const fontSize = opts.fontSize || DEFAULT_FONT_SIZE;
   const lineHeight = opts.lineHeight || getLineHeight(fontFamily);
@@ -363,8 +361,8 @@ export const newTextElement = (
     metrics,
   );
 
-  const textElementProps: NonDeleted<ExcalidrawTextElement> = {
-    ..._newElementBase<ExcalidrawTextElement>("text", opts),
+  const textElementProps: NonDeleted<MosaicTextElement> = {
+    ..._newElementBase<MosaicTextElement>("text", opts),
     text,
     fontSize,
     baseFontSize: opts.baseFontSize ?? null,
@@ -382,7 +380,7 @@ export const newTextElement = (
     labelPosition: opts.labelPosition ?? null,
   };
 
-  const textElement: NonDeleted<ExcalidrawTextElement> = newElementWith(
+  const textElement: NonDeleted<MosaicTextElement> = newElementWith(
     textElementProps,
     {},
   );
@@ -391,7 +389,7 @@ export const newTextElement = (
 };
 
 const getAdjustedDimensions = (
-  element: ExcalidrawTextElement,
+  element: MosaicTextElement,
   elementsMap: ElementsMap,
   nextText: string,
   /** the width the text is to take regardless of its content */
@@ -531,8 +529,8 @@ const adjustXYWithRotation = (
 };
 
 export const refreshTextDimensions = (
-  textElement: ExcalidrawTextElement,
-  container: ExcalidrawTextContainer | null,
+  textElement: MosaicTextElement,
+  container: MosaicTextContainer | null,
   elementsMap: ElementsMap,
   text = textElement.text,
   /**
@@ -583,14 +581,14 @@ export const refreshTextDimensions = (
 export const newFreeDrawElement = (
   opts: {
     type: "freedraw";
-    points?: ExcalidrawFreeDrawElement["points"];
+    points?: MosaicFreeDrawElement["points"];
     simulatePressure: boolean;
-    strokeOptions?: ExcalidrawFreeDrawElement["strokeOptions"];
-    pressures?: ExcalidrawFreeDrawElement["pressures"];
+    strokeOptions?: MosaicFreeDrawElement["strokeOptions"];
+    pressures?: MosaicFreeDrawElement["pressures"];
   } & ElementConstructorOpts,
-): NonDeleted<ExcalidrawFreeDrawElement> => {
+): NonDeleted<MosaicFreeDrawElement> => {
   return {
-    ..._newElementBase<ExcalidrawFreeDrawElement>(opts.type, opts),
+    ..._newElementBase<MosaicFreeDrawElement>(opts.type, opts),
     points: opts.points || [],
     pressures: opts.pressures || [],
     simulatePressure: opts.simulatePressure,
@@ -603,13 +601,13 @@ export const newFreeDrawElement = (
 
 export const newLinearElement = (
   opts: {
-    type: ExcalidrawLinearElement["type"];
-    points?: ExcalidrawLinearElement["points"];
-    polygon?: ExcalidrawLineElement["polygon"];
+    type: MosaicLinearElement["type"];
+    points?: MosaicLinearElement["points"];
+    polygon?: MosaicLineElement["polygon"];
   } & ElementConstructorOpts,
-): NonDeleted<ExcalidrawLinearElement> => {
+): NonDeleted<MosaicLinearElement> => {
   const element = {
-    ..._newElementBase<ExcalidrawLinearElement>(opts.type, opts),
+    ..._newElementBase<MosaicLinearElement>(opts.type, opts),
     points: opts.points || [],
 
     startBinding: null,
@@ -619,7 +617,7 @@ export const newLinearElement = (
   };
 
   if (isLineElement(element)) {
-    const lineElement: NonDeleted<ExcalidrawLineElement> = {
+    const lineElement: NonDeleted<MosaicLineElement> = {
       ...element,
       polygon: opts.polygon ?? false,
     };
@@ -632,19 +630,19 @@ export const newLinearElement = (
 
 export const newArrowElement = <T extends boolean>(
   opts: {
-    type: ExcalidrawArrowElement["type"];
+    type: MosaicArrowElement["type"];
     startArrowhead?: Arrowhead | null;
     endArrowhead?: Arrowhead | null;
-    points?: ExcalidrawArrowElement["points"];
+    points?: MosaicArrowElement["points"];
     elbowed?: T;
-    fixedSegments?: ExcalidrawElbowArrowElement["fixedSegments"] | null;
+    fixedSegments?: MosaicElbowArrowElement["fixedSegments"] | null;
   } & ElementConstructorOpts,
 ): T extends true
-  ? NonDeleted<ExcalidrawElbowArrowElement>
-  : NonDeleted<ExcalidrawArrowElement> => {
+  ? NonDeleted<MosaicElbowArrowElement>
+  : NonDeleted<MosaicArrowElement> => {
   if (opts.elbowed) {
     return {
-      ..._newElementBase<ExcalidrawElbowArrowElement>(opts.type, opts),
+      ..._newElementBase<MosaicElbowArrowElement>(opts.type, opts),
       points: opts.points || [],
       startBinding: null,
       endBinding: null,
@@ -654,11 +652,11 @@ export const newArrowElement = <T extends boolean>(
       fixedSegments: opts.fixedSegments || [],
       startIsSpecial: false,
       endIsSpecial: false,
-    } as NonDeleted<ExcalidrawElbowArrowElement>;
+    } as NonDeleted<MosaicElbowArrowElement>;
   }
 
   return {
-    ..._newElementBase<ExcalidrawArrowElement>(opts.type, opts),
+    ..._newElementBase<MosaicArrowElement>(opts.type, opts),
     points: opts.points || [],
     startBinding: null,
     endBinding: null,
@@ -666,21 +664,21 @@ export const newArrowElement = <T extends boolean>(
     endArrowhead: opts.endArrowhead || null,
     elbowed: false,
   } as T extends true
-    ? NonDeleted<ExcalidrawElbowArrowElement>
-    : NonDeleted<ExcalidrawArrowElement>;
+    ? NonDeleted<MosaicElbowArrowElement>
+    : NonDeleted<MosaicArrowElement>;
 };
 
 export const newImageElement = (
   opts: {
-    type: ExcalidrawImageElement["type"];
-    status?: ExcalidrawImageElement["status"];
-    fileId?: ExcalidrawImageElement["fileId"];
-    scale?: ExcalidrawImageElement["scale"];
-    crop?: ExcalidrawImageElement["crop"];
+    type: MosaicImageElement["type"];
+    status?: MosaicImageElement["status"];
+    fileId?: MosaicImageElement["fileId"];
+    scale?: MosaicImageElement["scale"];
+    crop?: MosaicImageElement["crop"];
   } & ElementConstructorOpts,
-): NonDeleted<ExcalidrawImageElement> => {
+): NonDeleted<MosaicImageElement> => {
   return {
-    ..._newElementBase<ExcalidrawImageElement>("image", opts),
+    ..._newElementBase<MosaicImageElement>("image", opts),
     // in the future we'll support changing stroke color for some SVG elements,
     // and `transparent` will likely mean "use original colors of the image"
     strokeColor: "transparent",

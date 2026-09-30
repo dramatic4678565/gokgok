@@ -1,4 +1,4 @@
-import { invariant, isTransparent, type Bounds } from "@excalidraw/common";
+import { invariant, isTransparent, type Bounds } from "@mosaic/common";
 import {
   curveIntersectLineSegment,
   isPointWithinBounds,
@@ -12,12 +12,9 @@ import {
   vectorFromPoint,
   vectorNormalize,
   vectorScale,
-} from "@excalidraw/math";
+} from "@mosaic/math";
 
-import {
-  ellipse,
-  ellipseSegmentInterceptPoints,
-} from "@excalidraw/math/ellipse";
+import { ellipse, ellipseSegmentInterceptPoints } from "@mosaic/math/ellipse";
 
 import type {
   Curve,
@@ -25,9 +22,9 @@ import type {
   LineSegment,
   LocalPoint,
   Radians,
-} from "@excalidraw/math";
+} from "@mosaic/math";
 
-import type { AppState, FrameNameBounds } from "@excalidraw/excalidraw/types";
+import type { AppState, FrameNameBounds } from "@mosaic/mosaic/types";
 
 import { isPathALoop } from "./utils";
 import {
@@ -71,20 +68,20 @@ import { getFreedrawFillPolygon, getFreedrawMaxStrokeRadius } from "./shape";
 
 import type {
   ElementsMap,
-  ExcalidrawBindableElement,
-  ExcalidrawDiamondElement,
-  ExcalidrawElement,
-  ExcalidrawEllipseElement,
-  ExcalidrawFreeDrawElement,
-  ExcalidrawLinearElement,
-  ExcalidrawRectanguloidElement,
+  MosaicBindableElement,
+  MosaicDiamondElement,
+  MosaicElement,
+  MosaicEllipseElement,
+  MosaicFreeDrawElement,
+  MosaicLinearElement,
+  MosaicRectanguloidElement,
   NonDeleted,
-  NonDeletedExcalidrawElement,
+  NonDeletedMosaicElement,
   NonDeletedSceneElementsMap,
   Ordered,
 } from "./types";
 
-export const shouldTestInside = (element: ExcalidrawElement) => {
+export const shouldTestInside = (element: MosaicElement) => {
   if (element.type === "arrow") {
     return false;
   }
@@ -108,7 +105,7 @@ export const shouldTestInside = (element: ExcalidrawElement) => {
 
 export type HitTestArgs = {
   point: GlobalPoint;
-  element: ExcalidrawElement;
+  element: MosaicElement;
   threshold: number;
   elementsMap: ElementsMap;
   frameNameBound?: FrameNameBounds | null;
@@ -116,7 +113,7 @@ export type HitTestArgs = {
 };
 
 let cachedPoint: GlobalPoint | null = null;
-let cachedElement: WeakRef<ExcalidrawElement> | null = null;
+let cachedElement: WeakRef<MosaicElement> | null = null;
 let cachedThreshold: number = Infinity;
 let cachedHit: boolean = false;
 let cachedOverrideShouldTestInside = false;
@@ -249,7 +246,7 @@ const isPointInRotatedBounds = (
 
 export const hitElementBoundingBox = (
   point: GlobalPoint,
-  element: ExcalidrawElement,
+  element: MosaicElement,
   elementsMap: ElementsMap,
   tolerance = 0,
 ) => {
@@ -268,7 +265,7 @@ export const hitElementBoundingBoxOnly = (
 
 export const hitElementBoundText = (
   point: GlobalPoint,
-  element: ExcalidrawElement,
+  element: MosaicElement,
   elementsMap: ElementsMap,
 ): boolean => {
   const boundTextElementCandidate = getBoundTextElement(element, elementsMap);
@@ -287,7 +284,7 @@ export const hitElementBoundText = (
 // Frame children are clipped to their enclosing frame, so a point outside
 // the frame cannot hit them
 const isPointClippedByEnclosingFrame = (
-  element: ExcalidrawElement,
+  element: MosaicElement,
   point: Readonly<GlobalPoint>,
   elementsMap: ElementsMap,
 ) => {
@@ -305,7 +302,7 @@ const isPointClippedByEnclosingFrame = (
 };
 
 const bindableElementBorderDistanceIfClose = (
-  element: NonDeleted<ExcalidrawBindableElement>,
+  element: NonDeleted<MosaicBindableElement>,
   point: GlobalPoint,
   elementsMap: ElementsMap,
   tolerance: number = 0,
@@ -340,7 +337,7 @@ const bindableElementBorderDistanceIfClose = (
 };
 
 type BindingCandidate = {
-  element: NonDeleted<ExcalidrawBindableElement>;
+  element: NonDeleted<MosaicBindableElement>;
   /** distance to the outline: positive inside, negative outside */
   distance: number;
 };
@@ -349,7 +346,7 @@ type BindingCandidate = {
  * Whether the element hides what is behind it from binding. Images count as
  * opaque, and frames once they support a background.
  */
-const isOpaqueForBinding = (element: ExcalidrawElement) =>
+const isOpaqueForBinding = (element: MosaicElement) =>
   isImageElement(element) ||
   (hasBackground(element.type) && !isTransparent(element.backgroundColor));
 
@@ -361,7 +358,7 @@ const isOpaqueForBinding = (element: ExcalidrawElement) =>
  */
 const getBindingCandidates = (
   point: Readonly<GlobalPoint>,
-  elements: readonly Ordered<NonDeletedExcalidrawElement>[],
+  elements: readonly Ordered<NonDeletedMosaicElement>[],
   elementsMap: NonDeletedSceneElementsMap,
   zoom: AppState["zoom"],
 ): BindingCandidate[] => {
@@ -369,7 +366,7 @@ const getBindingCandidates = (
   const candidates: BindingCandidate[] = [];
   // A frame's children sit just below it in z-order, so a frame's background
   // can't end the search: it only hides the non-children behind it
-  let occludingFrameId: ExcalidrawElement["id"] | null = null;
+  let occludingFrameId: MosaicElement["id"] | null = null;
   // We need to do hit testing from front (end of the array) to back (beginning of the array)
   // because array is ordered from lower z-index to highest and we want element z-index
   // with higher z-index
@@ -425,20 +422,20 @@ const getBindingCandidates = (
  */
 export const getAllHoveredElementAtPoint = (
   point: Readonly<GlobalPoint>,
-  elements: readonly Ordered<NonDeletedExcalidrawElement>[],
+  elements: readonly Ordered<NonDeletedMosaicElement>[],
   elementsMap: NonDeletedSceneElementsMap,
   zoom: AppState["zoom"],
-): NonDeleted<ExcalidrawBindableElement>[] =>
+): NonDeleted<MosaicBindableElement>[] =>
   getBindingCandidates(point, elements, elementsMap, zoom).map(
     ({ element }) => element,
   );
 
 export const getHoveredElementForBinding = (
   point: Readonly<GlobalPoint>,
-  elements: readonly Ordered<NonDeletedExcalidrawElement>[],
+  elements: readonly Ordered<NonDeletedMosaicElement>[],
   elementsMap: NonDeletedSceneElementsMap,
   zoom: AppState["zoom"],
-): NonDeleted<ExcalidrawBindableElement> | null => {
+): NonDeleted<MosaicBindableElement> | null => {
   const candidates = getBindingCandidates(point, elements, elementsMap, zoom);
 
   if (candidates.length === 0) {
@@ -492,7 +489,7 @@ export const getHoveredElementForBinding = (
  * @returns
  */
 export const intersectElementWithLineSegment = (
-  element: ExcalidrawElement,
+  element: MosaicElement,
   elementsMap: ElementsMap,
   line: LineSegment<GlobalPoint>,
   offset: number = 0,
@@ -624,7 +621,7 @@ const lineIntersections = (
 };
 
 const intersectLinearOrFreeDrawWithLineSegment = (
-  element: ExcalidrawLinearElement | ExcalidrawFreeDrawElement,
+  element: MosaicLinearElement | MosaicFreeDrawElement,
   segment: LineSegment<GlobalPoint>,
   elementsMap: ElementsMap,
   onlyFirst = false,
@@ -679,7 +676,7 @@ const intersectLinearOrFreeDrawWithLineSegment = (
 };
 
 const intersectRectanguloidWithLineSegment = (
-  element: ExcalidrawRectanguloidElement,
+  element: MosaicRectanguloidElement,
   elementsMap: ElementsMap,
   segment: LineSegment<GlobalPoint>,
   offset: number = 0,
@@ -738,7 +735,7 @@ const intersectRectanguloidWithLineSegment = (
  * @returns
  */
 const intersectDiamondWithLineSegment = (
-  element: ExcalidrawDiamondElement,
+  element: MosaicDiamondElement,
   elementsMap: ElementsMap,
   l: LineSegment<GlobalPoint>,
   offset: number = 0,
@@ -788,7 +785,7 @@ const intersectDiamondWithLineSegment = (
  * @returns
  */
 const intersectEllipseWithLineSegment = (
-  element: ExcalidrawEllipseElement,
+  element: MosaicEllipseElement,
   elementsMap: ElementsMap,
   l: LineSegment<GlobalPoint>,
   offset: number = 0,
@@ -814,7 +811,7 @@ const intersectEllipseWithLineSegment = (
  */
 const isPointOnElementOutline = (
   point: GlobalPoint,
-  element: ExcalidrawElement,
+  element: MosaicElement,
   elementsMap: ElementsMap,
   tolerance = 1,
 ) => distanceToElement(element, elementsMap, point) <= tolerance;
@@ -828,7 +825,7 @@ const isPointOnElementOutline = (
  */
 export const isPointInElement = (
   point: GlobalPoint,
-  element: ExcalidrawElement,
+  element: MosaicElement,
   elementsMap: ElementsMap,
 ) => {
   if (
@@ -884,13 +881,13 @@ export const isPointInElement = (
 };
 
 export const isBindableElementInsideOtherBindable = (
-  innerElement: ExcalidrawBindableElement,
-  outerElement: ExcalidrawBindableElement,
+  innerElement: MosaicBindableElement,
+  outerElement: MosaicBindableElement,
   elementsMap: ElementsMap,
 ): boolean => {
   // Get corner points of the inner element based on its type
   const getCornerPoints = (
-    element: ExcalidrawElement,
+    element: MosaicElement,
     offset: number,
   ): GlobalPoint[] => {
     const { x, y, width, height, angle } = element;

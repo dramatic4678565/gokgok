@@ -1,15 +1,12 @@
-import { KEYS, reseed } from "@excalidraw/common";
+import { KEYS, reseed } from "@mosaic/common";
 
-import { Excalidraw } from "@excalidraw/excalidraw";
+import { Mosaic } from "@mosaic/mosaic";
 
-import { API } from "@excalidraw/excalidraw/tests/helpers/api";
-import { UI, Keyboard, Pointer } from "@excalidraw/excalidraw/tests/helpers/ui";
-import {
-  render,
-  unmountComponent,
-} from "@excalidraw/excalidraw/tests/test-utils";
+import { API } from "@mosaic/mosaic/tests/helpers/api";
+import { UI, Keyboard, Pointer } from "@mosaic/mosaic/tests/helpers/ui";
+import { render, unmountComponent } from "@mosaic/mosaic/tests/test-utils";
 
-import type { NonDeletedExcalidrawElement } from "@excalidraw/element/types";
+import type { NonDeletedMosaicElement } from "@mosaic/element/types";
 
 unmountComponent();
 
@@ -21,7 +18,7 @@ beforeEach(async () => {
   reseed(7);
   mouse.reset();
 
-  await render(<Excalidraw handleKeyboardGlobally={true} />);
+  await render(<Mosaic handleKeyboardGlobally={true} />);
   h.state.width = 1000;
   h.state.height = 1000;
 
@@ -111,7 +108,7 @@ describe("flow chart creation", () => {
     expect(firstChildNode).not.toBe(null);
     expect(firstChildNode.id).toBe(Object.keys(h.state.selectedElementIds)[0]);
 
-    API.setSelectedElements([initialNode] as NonDeletedExcalidrawElement[]);
+    API.setSelectedElements([initialNode] as NonDeletedMosaicElement[]);
 
     Keyboard.withModifierKeys({ ctrl: true }, () => {
       Keyboard.keyPress(KEYS.ARROW_RIGHT);
@@ -131,7 +128,7 @@ describe("flow chart creation", () => {
     expect(secondChildNode).not.toBe(null);
     expect(secondChildNode.id).toBe(Object.keys(h.state.selectedElementIds)[0]);
 
-    API.setSelectedElements([initialNode] as NonDeletedExcalidrawElement[]);
+    API.setSelectedElements([initialNode] as NonDeletedMosaicElement[]);
 
     Keyboard.withModifierKeys({ ctrl: true }, () => {
       Keyboard.keyPress(KEYS.ARROW_RIGHT);
@@ -265,7 +262,7 @@ describe("flow chart creation", () => {
 
     // add a child below the upper sibling; it must not land on the lower one
     // that sits directly beneath it
-    API.setSelectedElements([upper] as NonDeletedExcalidrawElement[]);
+    API.setSelectedElements([upper] as NonDeletedMosaicElement[]);
     Keyboard.withModifierKeys({ ctrl: true }, () => {
       Keyboard.keyPress(KEYS.ARROW_DOWN);
     });
@@ -291,7 +288,7 @@ describe("flow chart creation", () => {
 });
 
 describe("flow chart band-search placement", () => {
-  const addChild = (parent: NonDeletedExcalidrawElement, key: string) => {
+  const addChild = (parent: NonDeletedMosaicElement, key: string) => {
     API.setSelectedElements([parent]);
     Keyboard.withModifierKeys({ ctrl: true }, () => {
       Keyboard.keyPress(key);
@@ -299,7 +296,7 @@ describe("flow chart band-search placement", () => {
     Keyboard.keyUp(KEYS.CTRL_OR_CMD);
   };
 
-  const children = (parent: NonDeletedExcalidrawElement) =>
+  const children = (parent: NonDeletedMosaicElement) =>
     h.elements.filter((el) => el.type === "rectangle" && el.id !== parent.id);
 
   const pendingRects = () =>
@@ -652,7 +649,7 @@ describe("flow chart navigation", () => {
     const predecessorToRightMostNode = h.elements[h.elements.length - 4];
     expect(predecessorToRightMostNode.type).toBe("rectangle");
 
-    API.setSelectedElements([rightMostNode] as NonDeletedExcalidrawElement[]);
+    API.setSelectedElements([rightMostNode] as NonDeletedMosaicElement[]);
     Keyboard.withModifierKeys({ alt: true }, () => {
       Keyboard.keyPress(KEYS.ARROW_RIGHT);
     });
@@ -661,7 +658,7 @@ describe("flow chart navigation", () => {
     expect(h.state.selectedElementIds[predecessorToRightMostNode.id]).toBe(
       true,
     );
-    API.setSelectedElements([rightMostNode] as NonDeletedExcalidrawElement[]);
+    API.setSelectedElements([rightMostNode] as NonDeletedMosaicElement[]);
     Keyboard.withModifierKeys({ alt: true }, () => {
       Keyboard.keyPress(KEYS.ARROW_UP);
     });
@@ -670,7 +667,7 @@ describe("flow chart navigation", () => {
     expect(h.state.selectedElementIds[predecessorToRightMostNode.id]).toBe(
       true,
     );
-    API.setSelectedElements([rightMostNode] as NonDeletedExcalidrawElement[]);
+    API.setSelectedElements([rightMostNode] as NonDeletedMosaicElement[]);
     Keyboard.withModifierKeys({ alt: true }, () => {
       Keyboard.keyPress(KEYS.ARROW_DOWN);
     });

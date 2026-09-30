@@ -1,4 +1,4 @@
-import { pointCenter, pointFrom } from "@excalidraw/math";
+import { pointCenter, pointFrom } from "@mosaic/math";
 import { act, queryByTestId, queryByText } from "@testing-library/react";
 import { vi } from "vitest";
 
@@ -9,23 +9,23 @@ import {
   KEYS,
   reseed,
   arrayToMap,
-} from "@excalidraw/common";
+} from "@mosaic/common";
 
-import { Excalidraw } from "@excalidraw/excalidraw";
-import * as InteractiveCanvas from "@excalidraw/excalidraw/renderer/interactiveScene";
-import * as StaticScene from "@excalidraw/excalidraw/renderer/staticScene";
-import { API } from "@excalidraw/excalidraw/tests/helpers/api";
+import { Mosaic } from "@mosaic/mosaic";
+import * as InteractiveCanvas from "@mosaic/mosaic/renderer/interactiveScene";
+import * as StaticScene from "@mosaic/mosaic/renderer/staticScene";
+import { API } from "@mosaic/mosaic/tests/helpers/api";
 
-import { Keyboard, Pointer, UI } from "@excalidraw/excalidraw/tests/helpers/ui";
+import { Keyboard, Pointer, UI } from "@mosaic/mosaic/tests/helpers/ui";
 import {
   screen,
   render,
   fireEvent,
   GlobalTestState,
   unmountComponent,
-} from "@excalidraw/excalidraw/tests/test-utils";
+} from "@mosaic/mosaic/tests/test-utils";
 
-import type { GlobalPoint, LocalPoint } from "@excalidraw/math";
+import type { GlobalPoint, LocalPoint } from "@mosaic/math";
 
 import { hasBoundingBox, wrapText } from "../src";
 import * as textElementUtils from "../src/textElement";
@@ -37,15 +37,15 @@ import { getLinearElementPathSegments } from "../src/utils";
 import {
   getTextEditor,
   TEXT_EDITOR_SELECTOR,
-} from "../../excalidraw/tests/queries/dom";
+} from "../../mosaic/tests/queries/dom";
 
 import type {
-  ExcalidrawArrowElement,
-  ExcalidrawElement,
-  ExcalidrawLinearElement,
-  ExcalidrawTextElementWithContainer,
+  MosaicArrowElement,
+  MosaicElement,
+  MosaicLinearElement,
+  MosaicTextElementWithContainer,
   FontString,
-  NonDeletedExcalidrawElement,
+  NonDeletedMosaicElement,
 } from "../src/types";
 
 const renderInteractiveScene = vi.spyOn(
@@ -67,7 +67,7 @@ describe("Test Linear Elements", () => {
     renderInteractiveScene.mockClear();
     renderStaticScene.mockClear();
     reseed(7);
-    const comp = await render(<Excalidraw handleKeyboardGlobally={true} />);
+    const comp = await render(<Mosaic handleKeyboardGlobally={true} />);
     h.state.width = 1000;
     h.state.height = 1000;
     container = comp.container;
@@ -81,9 +81,9 @@ describe("Test Linear Elements", () => {
   const mouse = new Pointer("mouse");
 
   const createTwoPointerLinearElement = (
-    type: ExcalidrawLinearElement["type"],
-    roundness: ExcalidrawElement["roundness"] = null,
-    roughness: ExcalidrawLinearElement["roughness"] = 0,
+    type: MosaicLinearElement["type"],
+    roundness: MosaicElement["roundness"] = null,
+    roughness: MosaicLinearElement["roughness"] = 0,
   ) => {
     const line = API.createElement({
       x: p1[0],
@@ -102,9 +102,9 @@ describe("Test Linear Elements", () => {
   };
 
   const createThreePointerLinearElement = (
-    type: ExcalidrawLinearElement["type"],
-    roundness: ExcalidrawElement["roundness"] = null,
-    roughness: ExcalidrawLinearElement["roughness"] = 0,
+    type: MosaicLinearElement["type"],
+    roundness: MosaicElement["roundness"] = null,
+    roughness: MosaicLinearElement["roughness"] = 0,
   ) => {
     //dragging line from midpoint
     const p3 = [midpoint[0] + delta - p1[0], midpoint[1] + delta - p1[1]];
@@ -129,11 +129,11 @@ describe("Test Linear Elements", () => {
   };
 
   const enterLineEditingMode = (
-    line: ExcalidrawLinearElement,
+    line: MosaicLinearElement,
     selectProgrammatically = false,
   ) => {
     if (selectProgrammatically) {
-      API.setSelectedElements([line] as NonDeletedExcalidrawElement[]);
+      API.setSelectedElements([line] as NonDeletedMosaicElement[]);
     } else {
       mouse.clickAt(p1[0], p1[1]);
     }
@@ -191,7 +191,7 @@ describe("Test Linear Elements", () => {
 
   it("should not drag line and add midpoint until dragged beyond a threshold", () => {
     createTwoPointerLinearElement("line");
-    const line = h.elements[0] as ExcalidrawLinearElement;
+    const line = h.elements[0] as MosaicLinearElement;
     const originalX = line.x;
     const originalY = line.y;
     expect(line.points.length).toEqual(2);
@@ -213,11 +213,11 @@ describe("Test Linear Elements", () => {
 
   it("should allow dragging line from midpoint in 2 pointer lines outside editor", async () => {
     createTwoPointerLinearElement("line");
-    const line = h.elements[0] as ExcalidrawLinearElement;
+    const line = h.elements[0] as MosaicLinearElement;
 
     expect(renderInteractiveScene.mock.calls.length).toMatchInlineSnapshot(`6`);
     expect(renderStaticScene.mock.calls.length).toMatchInlineSnapshot(`5`);
-    expect((h.elements[0] as ExcalidrawLinearElement).points.length).toEqual(2);
+    expect((h.elements[0] as MosaicLinearElement).points.length).toEqual(2);
 
     // drag line from midpoint
     drag(midpoint, pointFrom(midpoint[0] + delta, midpoint[1] + delta));
@@ -450,7 +450,7 @@ describe("Test Linear Elements", () => {
       const endpoint = side === "start" ? p1 : p2;
       mouse.doubleClickAt(endpoint[0], endpoint[1]);
 
-      const updatedArrow = h.elements[0] as ExcalidrawArrowElement;
+      const updatedArrow = h.elements[0] as MosaicArrowElement;
       expect(
         side === "start"
           ? updatedArrow.startArrowhead
@@ -463,7 +463,7 @@ describe("Test Linear Elements", () => {
 
   it("shouldn't create text element on double click in line editor (arrow)", async () => {
     createTwoPointerLinearElement("arrow");
-    const arrow = h.elements[0] as ExcalidrawLinearElement;
+    const arrow = h.elements[0] as MosaicLinearElement;
     enterLineEditingMode(arrow);
 
     expect(h.state.selectedLinearElement?.isEditing).toBe(true);
@@ -480,7 +480,7 @@ describe("Test Linear Elements", () => {
   describe("Inside editor", () => {
     it("should not drag line and add midpoint when dragged irrespective of threshold", () => {
       createTwoPointerLinearElement("line");
-      const line = h.elements[0] as ExcalidrawLinearElement;
+      const line = h.elements[0] as MosaicLinearElement;
       const originalX = line.x;
       const originalY = line.y;
       enterLineEditingMode(line);
@@ -500,7 +500,7 @@ describe("Test Linear Elements", () => {
     it("should allow dragging line from midpoint in 2 pointer lines", async () => {
       createTwoPointerLinearElement("line");
 
-      const line = h.elements[0] as ExcalidrawLinearElement;
+      const line = h.elements[0] as MosaicLinearElement;
       enterLineEditingMode(line);
 
       // drag line from midpoint
@@ -532,7 +532,7 @@ describe("Test Linear Elements", () => {
     it("should update the midpoints when element roundness changed", async () => {
       createThreePointerLinearElement("line");
 
-      const line = h.elements[0] as ExcalidrawLinearElement;
+      const line = h.elements[0] as MosaicLinearElement;
       expect(line.points.length).toEqual(3);
 
       enterLineEditingMode(line);
@@ -552,7 +552,7 @@ describe("Test Linear Elements", () => {
       expect(renderStaticScene.mock.calls.length).toMatchInlineSnapshot(`6`);
 
       const midPointsWithRoundEdge = LinearElementEditor.getEditorMidPoints(
-        h.elements[0] as ExcalidrawLinearElement,
+        h.elements[0] as MosaicLinearElement,
         h.app.scene.getNonDeletedElementsMap(),
         h.state,
       );
@@ -580,7 +580,7 @@ describe("Test Linear Elements", () => {
         type: ROUNDNESS.PROPORTIONAL_RADIUS,
       });
 
-      const line = h.elements[0] as ExcalidrawLinearElement;
+      const line = h.elements[0] as MosaicLinearElement;
       expect(line.points.length).toEqual(3);
       enterLineEditingMode(line);
 
@@ -645,7 +645,7 @@ describe("Test Linear Elements", () => {
       const firstSegmentMidpoint = pointFrom<GlobalPoint>(55, 45);
       const lastSegmentMidpoint = pointFrom<GlobalPoint>(75, 40);
 
-      let line: ExcalidrawLinearElement;
+      let line: MosaicLinearElement;
 
       beforeEach(() => {
         line = createThreePointerLinearElement("line");
@@ -682,7 +682,7 @@ describe("Test Linear Elements", () => {
 
         expect(line.points.length).toEqual(5);
 
-        expect((h.elements[0] as ExcalidrawLinearElement).points)
+        expect((h.elements[0] as MosaicLinearElement).points)
           .toMatchInlineSnapshot(`
             [
               [
@@ -792,7 +792,7 @@ describe("Test Linear Elements", () => {
       });
 
       it("should remove the midpoint when one of the points in the segment is deleted", async () => {
-        const line = h.elements[0] as ExcalidrawLinearElement;
+        const line = h.elements[0] as MosaicLinearElement;
         enterLineEditingMode(line);
         const points = LinearElementEditor.getPointsGlobalCoordinates(
           line,
@@ -843,7 +843,7 @@ describe("Test Linear Elements", () => {
         76.08587175006699,
         43.294165939653226,
       );
-      let line: ExcalidrawLinearElement;
+      let line: MosaicLinearElement;
 
       beforeEach(() => {
         line = createThreePointerLinearElement("line", {
@@ -879,7 +879,7 @@ describe("Test Linear Elements", () => {
         expect(renderStaticScene.mock.calls.length).toMatchInlineSnapshot(`9`);
         expect(line.points.length).toEqual(5);
 
-        expect((h.elements[0] as ExcalidrawLinearElement).points)
+        expect((h.elements[0] as MosaicLinearElement).points)
           .toMatchInlineSnapshot(`
             [
               [
@@ -1046,7 +1046,7 @@ describe("Test Linear Elements", () => {
 
     it("in-editor dragging a line point covered by another element", () => {
       createTwoPointerLinearElement("line");
-      const line = h.elements[0] as ExcalidrawLinearElement;
+      const line = h.elements[0] as MosaicLinearElement;
       API.setElements([
         line,
         API.createElement({
@@ -1060,7 +1060,7 @@ describe("Test Linear Elements", () => {
         }),
       ]);
       const dragEndPositionOffset = [100, 100] as const;
-      API.setSelectedElements([line] as NonDeletedExcalidrawElement[]);
+      API.setSelectedElements([line] as NonDeletedMosaicElement[]);
       enterLineEditingMode(line, true);
       drag(
         pointFrom(line.points[0][0] + line.x, line.points[0][1] + line.y),
@@ -1089,7 +1089,7 @@ describe("Test Linear Elements", () => {
 
     const createBoundTextElement = (
       text: string,
-      container: ExcalidrawLinearElement,
+      container: MosaicLinearElement,
     ) => {
       const textElement = API.createElement({
         type: "text",
@@ -1099,7 +1099,7 @@ describe("Test Linear Elements", () => {
         containerId: container.id,
         width: 30,
         height: 20,
-      }) as ExcalidrawTextElementWithContainer;
+      }) as MosaicTextElementWithContainer;
 
       container = {
         ...container,
@@ -1109,7 +1109,7 @@ describe("Test Linear Elements", () => {
         }),
       };
 
-      const elements: ExcalidrawElement[] = [];
+      const elements: MosaicElement[] = [];
       h.elements.forEach((element) => {
         if (element.id === container.id) {
           elements.push(container);
@@ -1125,7 +1125,7 @@ describe("Test Linear Elements", () => {
     describe("Test getBoundTextElementPosition", () => {
       it("should return correct position for 2 pointer arrow", () => {
         createTwoPointerLinearElement("arrow");
-        const arrow = h.elements[0] as ExcalidrawLinearElement;
+        const arrow = h.elements[0] as MosaicLinearElement;
         const { textElement, container } = createBoundTextElement(
           DEFAULT_TEXT,
           arrow,
@@ -1147,7 +1147,7 @@ describe("Test Linear Elements", () => {
         createThreePointerLinearElement("arrow", {
           type: ROUNDNESS.PROPORTIONAL_RADIUS,
         });
-        const arrow = h.elements[0] as ExcalidrawLinearElement;
+        const arrow = h.elements[0] as MosaicLinearElement;
         const { textElement, container } = createBoundTextElement(
           DEFAULT_TEXT,
           arrow,
@@ -1170,7 +1170,7 @@ describe("Test Linear Elements", () => {
         createThreePointerLinearElement("arrow", {
           type: ROUNDNESS.PROPORTIONAL_RADIUS,
         });
-        const arrow = h.elements[0] as ExcalidrawLinearElement;
+        const arrow = h.elements[0] as MosaicLinearElement;
         const { textElement, container } = createBoundTextElement(
           DEFAULT_TEXT,
           arrow,
@@ -1302,14 +1302,14 @@ describe("Test Linear Elements", () => {
 
     it("should bind text to arrow when double clicked", async () => {
       createTwoPointerLinearElement("arrow");
-      const arrow = h.elements[0] as ExcalidrawLinearElement;
+      const arrow = h.elements[0] as MosaicLinearElement;
 
       expect(h.elements.length).toBe(1);
       expect(h.elements[0].id).toBe(arrow.id);
       mouse.doubleClickAt(midpoint[0], midpoint[1]);
       expect(h.elements.length).toBe(2);
 
-      const text = h.elements[1] as ExcalidrawTextElementWithContainer;
+      const text = h.elements[1] as MosaicTextElementWithContainer;
       expect(text.type).toBe("text");
       expect(text.containerId).toBe(arrow.id);
       mouse.down();
@@ -1324,7 +1324,7 @@ describe("Test Linear Elements", () => {
         { id: text.id, type: "text" },
       ]);
       expect(
-        (h.elements[1] as ExcalidrawTextElementWithContainer).text,
+        (h.elements[1] as MosaicTextElementWithContainer).text,
       ).toMatchSnapshot();
     });
 
@@ -1338,7 +1338,7 @@ describe("Test Linear Elements", () => {
 
       expect(h.elements.length).toBe(2);
 
-      const textElement = h.elements[1] as ExcalidrawTextElementWithContainer;
+      const textElement = h.elements[1] as MosaicTextElementWithContainer;
       expect(textElement.type).toBe("text");
       expect(textElement.containerId).toBe(arrow.id);
       const editor = await getTextEditor();
@@ -1351,7 +1351,7 @@ describe("Test Linear Elements", () => {
         { id: textElement.id, type: "text" },
       ]);
       expect(
-        (h.elements[1] as ExcalidrawTextElementWithContainer).text,
+        (h.elements[1] as MosaicTextElementWithContainer).text,
       ).toMatchSnapshot();
     });
 
@@ -1373,7 +1373,7 @@ describe("Test Linear Elements", () => {
         type: ROUNDNESS.PROPORTIONAL_RADIUS,
       });
 
-      const arrow = h.elements[0] as ExcalidrawLinearElement;
+      const arrow = h.elements[0] as MosaicLinearElement;
 
       const { textElement, container } = createBoundTextElement(
         DEFAULT_TEXT,
@@ -1434,7 +1434,7 @@ describe("Test Linear Elements", () => {
         }
       `);
       expect(
-        (h.elements[1] as ExcalidrawTextElementWithContainer).text,
+        (h.elements[1] as MosaicTextElementWithContainer).text,
       ).toMatchSnapshot();
       expect(
         LinearElementEditor.getElementAbsoluteCoords(
@@ -1457,7 +1457,7 @@ describe("Test Linear Elements", () => {
     it("should resize and position the bound text correctly when 2 pointer linear element resized", () => {
       createTwoPointerLinearElement("arrow");
 
-      const arrow = h.elements[0] as ExcalidrawLinearElement;
+      const arrow = h.elements[0] as MosaicLinearElement;
       const { textElement, container } = createBoundTextElement(
         DEFAULT_TEXT,
         arrow,
@@ -1500,10 +1500,10 @@ describe("Test Linear Elements", () => {
 
     it("should not render vertical align tool when element selected", () => {
       createTwoPointerLinearElement("arrow");
-      const arrow = h.elements[0] as ExcalidrawLinearElement;
+      const arrow = h.elements[0] as MosaicLinearElement;
 
       createBoundTextElement(DEFAULT_TEXT, arrow);
-      API.setSelectedElements([arrow] as NonDeletedExcalidrawElement[]);
+      API.setSelectedElements([arrow] as NonDeletedMosaicElement[]);
 
       expect(queryByTestId(container, "align-top")).toBeNull();
       expect(queryByTestId(container, "align-middle")).toBeNull();
@@ -1529,7 +1529,7 @@ describe("Test Linear Elements", () => {
       fireEvent.change(editor, { target: { value: DEFAULT_TEXT } });
       Keyboard.exitTextEditor(editor);
 
-      const textElement = h.elements[2] as ExcalidrawTextElementWithContainer;
+      const textElement = h.elements[2] as MosaicTextElementWithContainer;
 
       expect(arrow.endBinding?.elementId).toBe(rect.id);
       expect(arrow.width).toBeCloseTo(404);
@@ -1573,10 +1573,10 @@ describe("Test Linear Elements", () => {
 
     it("should not render horizontal align tool when element selected", () => {
       createTwoPointerLinearElement("arrow");
-      const arrow = h.elements[0] as ExcalidrawLinearElement;
+      const arrow = h.elements[0] as MosaicLinearElement;
 
       createBoundTextElement(DEFAULT_TEXT, arrow);
-      API.setSelectedElements([arrow] as NonDeletedExcalidrawElement[]);
+      API.setSelectedElements([arrow] as NonDeletedMosaicElement[]);
 
       expect(queryByTestId(container, "align-left")).toBeNull();
       expect(queryByTestId(container, "align-horizontal-center")).toBeNull();
@@ -1595,10 +1595,7 @@ describe("Test Linear Elements", () => {
       API.setElements([h.elements[0], text]);
 
       const container = h.elements[0];
-      API.setSelectedElements([
-        container,
-        text,
-      ] as NonDeletedExcalidrawElement[]);
+      API.setSelectedElements([container, text] as NonDeletedMosaicElement[]);
       fireEvent.contextMenu(GlobalTestState.interactiveCanvas, {
         button: 2,
         clientX: 20,
@@ -1625,7 +1622,7 @@ describe("Test Linear Elements", () => {
       API.setSelectedElements([
         h.elements[0],
         h.elements[1],
-      ] as NonDeletedExcalidrawElement[]);
+      ] as NonDeletedMosaicElement[]);
 
       fireEvent.contextMenu(GlobalTestState.interactiveCanvas, {
         button: 2,
@@ -1648,9 +1645,9 @@ describe("Test Linear Elements", () => {
 
     it("should not update label position when arrow dragged", () => {
       createTwoPointerLinearElement("arrow");
-      let arrow = h.elements[0] as ExcalidrawLinearElement;
+      let arrow = h.elements[0] as MosaicLinearElement;
       createBoundTextElement(DEFAULT_TEXT, arrow);
-      let label = h.elements[1] as ExcalidrawTextElementWithContainer;
+      let label = h.elements[1] as MosaicTextElementWithContainer;
       expect(arrow.x).toBe(20);
       expect(arrow.y).toBe(20);
       expect(label.x).toBe(0);
@@ -1662,8 +1659,8 @@ describe("Test Linear Elements", () => {
       mouse.moveTo(arrow.x + 20, arrow.y + 30);
       mouse.up(arrow.x + 20, arrow.y + 30);
 
-      arrow = h.elements[0] as ExcalidrawLinearElement;
-      label = h.elements[1] as ExcalidrawTextElementWithContainer;
+      arrow = h.elements[0] as MosaicLinearElement;
+      label = h.elements[1] as MosaicTextElementWithContainer;
       expect(arrow.x).toBe(80);
       expect(arrow.y).toBe(100);
       expect(label.x).toBe(0);
@@ -1691,7 +1688,7 @@ describe("Test Linear Elements", () => {
             height: 60,
           }),
           labelPosition: 0.5,
-        } as ExcalidrawTextElementWithContainer;
+        } as MosaicTextElementWithContainer;
 
         return {
           label,
@@ -1737,7 +1734,7 @@ describe("Test Linear Elements", () => {
           }),
           // centered on the end point
           labelPosition: 1,
-        } as ExcalidrawTextElementWithContainer;
+        } as MosaicTextElementWithContainer;
         API.setElements([
           {
             ...arrow,
@@ -1763,11 +1760,11 @@ describe("Test Linear Elements", () => {
         drag(point, pointFrom<GlobalPoint>(point[0] + 40, point[1]));
 
         expect(
-          (h.elements[1] as ExcalidrawTextElementWithContainer).labelPosition,
+          (h.elements[1] as MosaicTextElementWithContainer).labelPosition,
         ).toBe(1);
-        expect(
-          (h.elements[0] as ExcalidrawLinearElement).points[1][0],
-        ).toBeCloseTo(p2[0] - p1[0] + 40);
+        expect((h.elements[0] as MosaicLinearElement).points[1][0]).toBeCloseTo(
+          p2[0] - p1[0] + 40,
+        );
       });
 
       it("keeps the arrow selected when a point handle is grabbed beyond the arrow's tip", () => {
@@ -1797,9 +1794,9 @@ describe("Test Linear Elements", () => {
         expect(h.state.selectionElement).toBeNull();
         expect(h.state.selectedElementIds[arrow.id]).toBe(true);
         expect(h.state.selectedLinearElement?.elementId).toBe(arrow.id);
-        expect(
-          (h.elements[0] as ExcalidrawLinearElement).points[1][0],
-        ).toBeCloseTo(p2[0] - p1[0] + 40);
+        expect((h.elements[0] as MosaicLinearElement).points[1][0]).toBeCloseTo(
+          p2[0] - p1[0] + 40,
+        );
       });
 
       it("grabs the label when the covering element is below the arrow", () => {
@@ -1813,7 +1810,7 @@ describe("Test Linear Elements", () => {
         drag(labelOnlyPoint, pointFrom<GlobalPoint>(50, 45));
 
         expect(
-          (h.elements[2] as ExcalidrawTextElementWithContainer).labelPosition,
+          (h.elements[2] as MosaicTextElementWithContainer).labelPosition,
         ).toBeCloseTo(0.75);
       });
 
@@ -1828,7 +1825,7 @@ describe("Test Linear Elements", () => {
         drag(labelOnlyPoint, pointFrom<GlobalPoint>(50, 45));
 
         expect(
-          (h.elements[1] as ExcalidrawTextElementWithContainer).labelPosition,
+          (h.elements[1] as MosaicTextElementWithContainer).labelPosition,
         ).toBe(0.5);
       });
 
@@ -1857,7 +1854,7 @@ describe("Test Linear Elements", () => {
           // the arc-length middle of this symmetric elbow sits on the
           // rounded corner, right next to the route point at (100, 0)
           labelPosition: 0.5,
-        } as ExcalidrawTextElementWithContainer;
+        } as MosaicTextElementWithContainer;
         API.setElements([
           {
             ...arrow,
@@ -1881,7 +1878,7 @@ describe("Test Linear Elements", () => {
         );
 
         expect(
-          (h.elements[1] as ExcalidrawTextElementWithContainer).labelPosition,
+          (h.elements[1] as MosaicTextElementWithContainer).labelPosition,
         ).not.toBe(0.5);
       });
 
@@ -1892,19 +1889,15 @@ describe("Test Linear Elements", () => {
         mouse.reset();
         mouse.clickAt(p1[0], p1[1]);
         expect(h.state.selectedLinearElement?.elementId).toBe(arrow.id);
-        expect((h.elements[0] as ExcalidrawLinearElement).points.length).toBe(
-          2,
-        );
+        expect((h.elements[0] as MosaicLinearElement).points.length).toBe(2);
 
         // the label sits centered on the midpoint knob; dragging there must
         // bend the arrow, not slide the label
         drag(midpoint, pointFrom<GlobalPoint>(midpoint[0], midpoint[1] + 40));
 
-        expect((h.elements[0] as ExcalidrawLinearElement).points.length).toBe(
-          3,
-        );
+        expect((h.elements[0] as MosaicLinearElement).points.length).toBe(3);
         expect(
-          (h.elements[1] as ExcalidrawTextElementWithContainer).labelPosition,
+          (h.elements[1] as MosaicTextElementWithContainer).labelPosition,
         ).toBe(0.5);
       });
 
@@ -1915,9 +1908,7 @@ describe("Test Linear Elements", () => {
         mouse.reset();
         mouse.clickAt(p1[0], p1[1]);
         expect(h.state.selectedLinearElement?.elementId).toBe(arrow.id);
-        expect((h.elements[0] as ExcalidrawLinearElement).points.length).toBe(
-          2,
-        );
+        expect((h.elements[0] as MosaicLinearElement).points.length).toBe(2);
 
         // the midpoint handle sits under the label, which is itself covered
         drag(midpoint, pointFrom<GlobalPoint>(midpoint[0], midpoint[1] + 40));
@@ -1925,11 +1916,9 @@ describe("Test Linear Elements", () => {
         expect(
           h.state.selectedLinearElement?.initialState.segmentMidpoint.value,
         ).not.toBeNull();
-        expect((h.elements[0] as ExcalidrawLinearElement).points.length).toBe(
-          3,
-        );
+        expect((h.elements[0] as MosaicLinearElement).points.length).toBe(3);
         expect(
-          (h.elements[1] as ExcalidrawTextElementWithContainer).labelPosition,
+          (h.elements[1] as MosaicTextElementWithContainer).labelPosition,
         ).toBe(0.5);
       });
     });
@@ -1975,7 +1964,7 @@ describe("Test Linear Elements", () => {
 
     it("should preserve original angle when dragging endpoint with SHIFT key", () => {
       createTwoPointerLinearElement("line");
-      const line = h.elements[0] as ExcalidrawLinearElement;
+      const line = h.elements[0] as MosaicLinearElement;
       enterLineEditingMode(line);
 
       const elementsMap = arrayToMap(h.elements);

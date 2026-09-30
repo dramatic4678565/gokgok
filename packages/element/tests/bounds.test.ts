@@ -1,8 +1,8 @@
-import { pointFrom } from "@excalidraw/math";
-import { arrayToMap, type Bounds, ROUNDNESS } from "@excalidraw/common";
-import { API } from "@excalidraw/excalidraw/tests/helpers/api";
+import { pointFrom } from "@mosaic/math";
+import { arrayToMap, type Bounds, ROUNDNESS } from "@mosaic/common";
+import { API } from "@mosaic/mosaic/tests/helpers/api";
 
-import type { LocalPoint } from "@excalidraw/math";
+import type { LocalPoint } from "@mosaic/math";
 
 import {
   elementsOverlappingBBox,
@@ -10,7 +10,7 @@ import {
   getElementBounds,
 } from "../src/bounds";
 
-import type { ExcalidrawElement, ExcalidrawLinearElement } from "../src/types";
+import type { MosaicElement, MosaicLinearElement } from "../src/types";
 
 const _ce = ({
   x,
@@ -41,7 +41,7 @@ const _ce = ({
     width: w,
     height: h,
     angle: a,
-  } as ExcalidrawElement);
+  } as MosaicElement);
 
 describe("getElementAbsoluteCoords", () => {
   it("test x1 coordinate", () => {
@@ -136,7 +136,7 @@ describe("getElementBounds", () => {
         pointFrom<LocalPoint>(67.33984375, 92.48828125),
         pointFrom<LocalPoint>(-102.7890625, 52.15625),
       ],
-    } as ExcalidrawLinearElement;
+    } as MosaicLinearElement;
 
     const [x1, y1, x2, y2] = getElementBounds(element, arrayToMap([element]));
     expect(x1).toEqual(360.9291017525165);

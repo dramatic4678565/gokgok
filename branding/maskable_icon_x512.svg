@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512"><title>Mosaic</title><rect width="512" height="512" fill="#0f1729"/><g transform="translate(72.5 72.5) scale(0.7168)">
+  <rect x="44" y="44" width="200" height="200" rx="48" fill="#3977df"/>
+  <rect x="268" y="44" width="200" height="200" rx="48" fill="#8fb4f2"/>
+  <rect x="44" y="268" width="200" height="200" rx="48" fill="#5f96ea"/>
+  <rect x="268" y="268" width="200" height="200" rx="48" fill="#c7dbfb"/></g></svg>

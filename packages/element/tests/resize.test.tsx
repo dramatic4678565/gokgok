@@ -3,28 +3,24 @@ import {
   isCurve,
   pointDistance,
   pointFrom,
-} from "@excalidraw/math";
+} from "@mosaic/math";
 
-import { Excalidraw } from "@excalidraw/excalidraw";
+import { Mosaic } from "@mosaic/mosaic";
 import {
   type Bounds,
   KEYS,
   getSizeFromPoints,
   reseed,
   arrayToMap,
-} from "@excalidraw/common";
+} from "@mosaic/common";
 
-import { API } from "@excalidraw/excalidraw/tests/helpers/api";
-import { UI, Keyboard, Pointer } from "@excalidraw/excalidraw/tests/helpers/ui";
-import {
-  act,
-  render,
-  unmountComponent,
-} from "@excalidraw/excalidraw/tests/test-utils";
+import { API } from "@mosaic/mosaic/tests/helpers/api";
+import { UI, Keyboard, Pointer } from "@mosaic/mosaic/tests/helpers/ui";
+import { act, render, unmountComponent } from "@mosaic/mosaic/tests/test-utils";
 
-import type { GlobalPoint } from "@excalidraw/math";
+import type { GlobalPoint } from "@mosaic/math";
 
-import type { LocalPoint } from "@excalidraw/math";
+import type { LocalPoint } from "@mosaic/math";
 
 import { isLinearElement } from "../src/typeChecks";
 import { resizeSingleElement } from "../src/resizeElements";
@@ -35,9 +31,9 @@ import { getElementPointsCoords } from "../src/bounds";
 import { computeContainerDimensionForBoundText } from "../src/textElement";
 
 import type {
-  ExcalidrawElbowArrowElement,
-  ExcalidrawFreeDrawElement,
-  ExcalidrawLinearElement,
+  MosaicElbowArrowElement,
+  MosaicFreeDrawElement,
+  MosaicLinearElement,
   NonDeleted,
 } from "../src/types";
 import type { TransformHandleDirection } from "../src/transformHandles";
@@ -47,7 +43,7 @@ const { h } = window;
 const mouse = new Pointer("mouse");
 
 const getBoundsFromPoints = (
-  element: ExcalidrawLinearElement | ExcalidrawFreeDrawElement,
+  element: MosaicLinearElement | MosaicFreeDrawElement,
 ): Bounds => {
   if (isLinearElement(element)) {
     return getElementPointsCoords(element, element.points);
@@ -70,7 +66,7 @@ beforeEach(async () => {
   reseed(7);
   mouse.reset();
 
-  await render(<Excalidraw handleKeyboardGlobally={true} />);
+  await render(<Mosaic handleKeyboardGlobally={true} />);
   h.state.width = 1000;
   h.state.height = 1000;
 
@@ -437,7 +433,7 @@ describe("line element", () => {
   it("resizes", async () => {
     UI.createElement("line", { points });
 
-    const element = h.elements[0] as NonDeleted<ExcalidrawLinearElement>;
+    const element = h.elements[0] as NonDeleted<MosaicLinearElement>;
 
     const {
       x: prevX,
@@ -474,7 +470,7 @@ describe("line element", () => {
 
   it("flips while resizing", async () => {
     UI.createElement("line", { points });
-    const element = h.elements[0] as NonDeleted<ExcalidrawLinearElement>;
+    const element = h.elements[0] as NonDeleted<MosaicLinearElement>;
 
     const {
       width: prevWidth,
@@ -506,7 +502,7 @@ describe("line element", () => {
 
   it("resizes with locked aspect ratio", async () => {
     UI.createElement("line", { points });
-    const element = h.elements[0] as ExcalidrawLinearElement;
+    const element = h.elements[0] as MosaicLinearElement;
 
     const { width: prevWidth, height: prevHeight } = element;
 
@@ -528,7 +524,7 @@ describe("line element", () => {
         pointFrom(-338.05644048727373, -180.4761618151104),
       ],
     });
-    const element = h.elements[0] as NonDeleted<ExcalidrawLinearElement>;
+    const element = h.elements[0] as NonDeleted<MosaicLinearElement>;
 
     const {
       x: prevX,
@@ -679,7 +675,7 @@ describe("arrow element", () => {
 
     const arrow = h.scene.getSelectedElements(
       h.state,
-    )[0] as ExcalidrawElbowArrowElement;
+    )[0] as MosaicElbowArrowElement;
 
     expect(arrow.startBinding?.fixedPoint?.[0]).toBeCloseTo(1.06);
     expect(arrow.startBinding?.fixedPoint?.[1]).toBeCloseTo(0.75);
@@ -707,7 +703,7 @@ describe("arrow element", () => {
 
     const arrow = h.scene.getSelectedElements(
       h.state,
-    )[0] as ExcalidrawElbowArrowElement;
+    )[0] as MosaicElbowArrowElement;
 
     expect(arrow.startBinding?.fixedPoint?.[0]).toBeCloseTo(1.06);
     expect(arrow.startBinding?.fixedPoint?.[1]).toBeCloseTo(0.75);

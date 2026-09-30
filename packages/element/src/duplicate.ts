@@ -7,11 +7,11 @@ import {
   findLastIndex,
   getUpdatedTimestamp,
   isTestEnv,
-} from "@excalidraw/common";
+} from "@mosaic/common";
 
-import type { Mutable } from "@excalidraw/common/utility-types";
+import type { Mutable } from "@mosaic/common/utility-types";
 
-import type { AppState } from "@excalidraw/excalidraw/types";
+import type { AppState } from "@mosaic/mosaic/types";
 
 import {
   getElementsInGroup,
@@ -47,10 +47,10 @@ import type { ElementUpdate } from "./mutateElement";
 
 import type {
   ElementsMap,
-  ExcalidrawArrowElement,
-  ExcalidrawElement,
+  MosaicArrowElement,
+  MosaicElement,
   GroupId,
-  NonDeletedExcalidrawElement,
+  NonDeletedMosaicElement,
   NonDeletedSceneElementsMap,
 } from "./types";
 
@@ -60,7 +60,7 @@ import type {
  */
 export type OnDuplicateData = {
   /** the duplicates, by their id */
-  duplicateElements: ReadonlyMap<ExcalidrawElement["id"], ExcalidrawElement>;
+  duplicateElements: ReadonlyMap<MosaicElement["id"], MosaicElement>;
   /**
    * The elements the duplicates were made from, by their id.
    *
@@ -68,23 +68,17 @@ export type OnDuplicateData = {
    * part of the scene (though they may share ids with the scene elements they
    * were copied from).
    */
-  originalElements: ReadonlyMap<ExcalidrawElement["id"], ExcalidrawElement>;
+  originalElements: ReadonlyMap<MosaicElement["id"], MosaicElement>;
   /**
    * id of an original -> id of its duplicate (e.g. to remap element ids you
    * keep in `customData`, which the duplicate copied from its original)
    */
-  origIdToDuplicateId: ReadonlyMap<
-    ExcalidrawElement["id"],
-    ExcalidrawElement["id"]
-  >;
+  origIdToDuplicateId: ReadonlyMap<MosaicElement["id"], MosaicElement["id"]>;
   /**
    * id of a duplicate -> id of its original (e.g. to look up the original in
    * `originalElements` while modifying the duplicate)
    */
-  duplicateIdToOrigId: ReadonlyMap<
-    ExcalidrawElement["id"],
-    ExcalidrawElement["id"]
-  >;
+  duplicateIdToOrigId: ReadonlyMap<MosaicElement["id"], MosaicElement["id"]>;
 };
 
 /**
@@ -100,7 +94,7 @@ export type OnDuplicateData = {
  *                               amongst all of them
  * @param element Element to duplicate
  */
-export const duplicateElement = <TElement extends ExcalidrawElement>(
+export const duplicateElement = <TElement extends MosaicElement>(
   editingGroupId: AppState["editingGroupId"],
   groupIdMapForOperation: Map<GroupId, GroupId>,
   element: TElement,
@@ -135,16 +129,13 @@ export const duplicateElement = <TElement extends ExcalidrawElement>(
 
 export const duplicateElements = (
   opts: {
-    elements: readonly ExcalidrawElement[];
+    elements: readonly MosaicElement[];
     randomizeSeed?: boolean;
     overrides?: (data: {
-      duplicateElement: ExcalidrawElement;
-      origElement: ExcalidrawElement;
-      origIdToDuplicateId: Map<
-        ExcalidrawElement["id"],
-        ExcalidrawElement["id"]
-      >;
-    }) => Partial<ExcalidrawElement>;
+      duplicateElement: MosaicElement;
+      origElement: MosaicElement;
+      origIdToDuplicateId: Map<MosaicElement["id"], MosaicElement["id"]>;
+    }) => Partial<MosaicElement>;
   } & (
     | {
         /**
@@ -167,10 +158,7 @@ export const duplicateElements = (
          * such as alt-drag or on duplicate action.
          */
         type: "in-place";
-        idsOfElementsToDuplicate: Map<
-          ExcalidrawElement["id"],
-          ExcalidrawElement
-        >;
+        idsOfElementsToDuplicate: Map<MosaicElement["id"], MosaicElement>;
         appState: {
           editingGroupId: AppState["editingGroupId"];
           selectedGroupIds: AppState["selectedGroupIds"];
@@ -198,20 +186,20 @@ export const duplicateElements = (
   //
   // For convenience we mark even the newly created ones even though we don't
   // loop over them.
-  const processedIds = new Map<ExcalidrawElement["id"], true>();
+  const processedIds = new Map<MosaicElement["id"], true>();
   const groupIdMap = new Map();
-  const duplicatedElements: NonDeletedExcalidrawElement[] = [];
-  const origElements: ExcalidrawElement[] = [];
+  const duplicatedElements: NonDeletedMosaicElement[] = [];
+  const origElements: MosaicElement[] = [];
   const origIdToDuplicateId = new Map<
-    ExcalidrawElement["id"],
-    ExcalidrawElement["id"]
+    MosaicElement["id"],
+    MosaicElement["id"]
   >();
   const duplicateIdToOrigId = new Map<
-    ExcalidrawElement["id"],
-    ExcalidrawElement["id"]
+    MosaicElement["id"],
+    MosaicElement["id"]
   >();
-  const duplicateElementsMap = new Map<string, NonDeletedExcalidrawElement>();
-  const origElementsMap = new Map<ExcalidrawElement["id"], ExcalidrawElement>();
+  const duplicateElementsMap = new Map<string, NonDeletedMosaicElement>();
+  const origElementsMap = new Map<MosaicElement["id"], MosaicElement>();
   const elementsMap = arrayToMap(elements) as ElementsMap;
   const _idsOfElementsToDuplicate =
     opts.type === "in-place"
@@ -231,70 +219,63 @@ export const duplicateElements = (
 
   elements = normalizeElementOrder(elements);
 
-  const elementsWithDuplicates: ExcalidrawElement[] = elements.slice();
+  const elementsWithDuplicates: MosaicElement[] = elements.slice();
 
   // helper functions
   // -------------------------------------------------------------------------
 
   // Used for the heavy lifing of copying a single element, a group of elements
   // an element with bound text etc.
-  const copyElements = <T extends ExcalidrawElement | ExcalidrawElement[]>(
+  const copyElements = <T extends MosaicElement | MosaicElement[]>(
     element: T,
-  ): T extends ExcalidrawElement[]
-    ? ExcalidrawElement[]
-    : ExcalidrawElement | null => {
+  ): T extends MosaicElement[] ? MosaicElement[] : MosaicElement | null => {
     const elements = castArray(element);
 
-    const _newElements = elements.reduce(
-      (acc: ExcalidrawElement[], element) => {
-        if (processedIds.has(element.id)) {
-          return acc;
-        }
-
-        processedIds.set(element.id, true);
-
-        // SAFETY: this should never happen, but we
-        // want to make sure we log it if it does
-        if (!isNonDeletedElement(element)) {
-          console.error(
-            "[NONDELETED][INVARIANT] Element to duplicate should be non-deleted",
-          );
-        }
-
-        const newElement = duplicateElement(
-          appState.editingGroupId,
-          groupIdMap,
-          element,
-          opts.randomizeSeed,
-        ) as NonDeletedExcalidrawElement;
-
-        processedIds.set(newElement.id, true);
-
-        duplicateElementsMap.set(newElement.id, newElement);
-        origElementsMap.set(element.id, element);
-        origIdToDuplicateId.set(element.id, newElement.id);
-        duplicateIdToOrigId.set(newElement.id, element.id);
-
-        origElements.push(element);
-        duplicatedElements.push(newElement);
-
-        acc.push(newElement);
+    const _newElements = elements.reduce((acc: MosaicElement[], element) => {
+      if (processedIds.has(element.id)) {
         return acc;
-      },
-      [],
-    );
+      }
+
+      processedIds.set(element.id, true);
+
+      // SAFETY: this should never happen, but we
+      // want to make sure we log it if it does
+      if (!isNonDeletedElement(element)) {
+        console.error(
+          "[NONDELETED][INVARIANT] Element to duplicate should be non-deleted",
+        );
+      }
+
+      const newElement = duplicateElement(
+        appState.editingGroupId,
+        groupIdMap,
+        element,
+        opts.randomizeSeed,
+      ) as NonDeletedMosaicElement;
+
+      processedIds.set(newElement.id, true);
+
+      duplicateElementsMap.set(newElement.id, newElement);
+      origElementsMap.set(element.id, element);
+      origIdToDuplicateId.set(element.id, newElement.id);
+      duplicateIdToOrigId.set(newElement.id, element.id);
+
+      origElements.push(element);
+      duplicatedElements.push(newElement);
+
+      acc.push(newElement);
+      return acc;
+    }, []);
 
     return (
       Array.isArray(element) ? _newElements : _newElements[0] || null
-    ) as T extends ExcalidrawElement[]
-      ? ExcalidrawElement[]
-      : ExcalidrawElement | null;
+    ) as T extends MosaicElement[] ? MosaicElement[] : MosaicElement | null;
   };
 
   // Helper to position cloned elements in the Z-order the product needs it
   const insertBeforeOrAfterIndex = (
     index: number,
-    elements: ExcalidrawElement | null | ExcalidrawElement[],
+    elements: MosaicElement | null | MosaicElement[],
   ) => {
     if (!elements) {
       return;
@@ -502,16 +483,14 @@ export const duplicateElements = (
  *
  * @returns next elements, and the duplicates that weren't vetoed
  */
-export const reconcileDuplicatedElements = <
-  TDuplicate extends ExcalidrawElement,
->(
+export const reconcileDuplicatedElements = <TDuplicate extends MosaicElement>(
   /** what the host returned from `props.onDuplicate`, if anything */
-  hostElements: readonly ExcalidrawElement[] | void | false,
+  hostElements: readonly MosaicElement[] | void | false,
   /** elements that were passed to the host */
-  nextElements: ExcalidrawElement[],
+  nextElements: MosaicElement[],
   duplicatedElements: TDuplicate[],
 ): {
-  elements: ExcalidrawElement[];
+  elements: MosaicElement[];
   duplicatedElements: TDuplicate[];
 } => {
   if (hostElements === false) {
@@ -524,7 +503,7 @@ export const reconcileDuplicatedElements = <
 
   const duplicatesMap = arrayToMap(duplicatedElements);
   // (if a duplicate is returned more than once, the last one wins)
-  const hostDuplicates = new Map<ExcalidrawElement["id"], ExcalidrawElement>();
+  const hostDuplicates = new Map<MosaicElement["id"], MosaicElement>();
 
   for (const element of hostElements) {
     if (duplicatesMap.has(element.id)) {
@@ -534,7 +513,7 @@ export const reconcileDuplicatedElements = <
 
   // merge first, so that everything below sees the duplicates as the host
   // wants them (what the host returned may be partial)
-  const survivedIds = new Set<ExcalidrawElement["id"]>();
+  const survivedIds = new Set<MosaicElement["id"]>();
 
   for (const [id, element] of hostDuplicates) {
     const duplicate = duplicatesMap.get(id)!;
@@ -553,7 +532,7 @@ export const reconcileDuplicatedElements = <
     }
   }
 
-  const isVetoed = (id: ExcalidrawElement["id"]) =>
+  const isVetoed = (id: MosaicElement["id"]) =>
     duplicatesMap.has(id) && !survivedIds.has(id);
 
   for (const id of survivedIds) {
@@ -563,7 +542,7 @@ export const reconcileDuplicatedElements = <
     }
   }
 
-  const elements: ExcalidrawElement[] = [];
+  const elements: MosaicElement[] = [];
 
   for (const element of hostElements) {
     const duplicate = duplicatesMap.get(element.id);
@@ -587,7 +566,7 @@ export const reconcileDuplicatedElements = <
   );
 
   for (const duplicate of survivedDuplicates) {
-    const updates: Mutable<ElementUpdate<ExcalidrawArrowElement>> = {};
+    const updates: Mutable<ElementUpdate<MosaicArrowElement>> = {};
 
     if (duplicate.boundElements?.some((binding) => isVetoed(binding.id))) {
       updates.boundElements = duplicate.boundElements.filter(
@@ -615,7 +594,7 @@ export const reconcileDuplicatedElements = <
   return { elements, duplicatedElements: survivedDuplicates };
 };
 
-// Simplified deep clone for the purpose of cloning ExcalidrawElement.
+// Simplified deep clone for the purpose of cloning MosaicElement.
 //
 // Only clones plain objects and arrays. Doesn't clone Date, RegExp, Map, Set,
 // Typed arrays and other non-null objects.
@@ -623,7 +602,7 @@ export const reconcileDuplicatedElements = <
 // Adapted from https://github.com/lukeed/klona
 //
 // The reason for `deepCopyElement()` wrapper is type safety (only allow
-// passing ExcalidrawElement as the top-level argument).
+// passing MosaicElement as the top-level argument).
 const _deepCopyElement = (val: any, depth: number = 0) => {
   // only clone non-primitives
   if (val == null || typeof val !== "object") {
@@ -660,7 +639,7 @@ const _deepCopyElement = (val: any, depth: number = 0) => {
   }
 
   // we're not cloning non-array & non-plain-object objects because we
-  // don't support them on excalidraw elements yet. If we do, we need to make
+  // don't support them on mosaic elements yet. If we do, we need to make
   // sure we start cloning them, so let's warn about it.
   if (import.meta.env.DEV) {
     if (
@@ -678,7 +657,7 @@ const _deepCopyElement = (val: any, depth: number = 0) => {
 };
 
 /**
- * Clones ExcalidrawElement data structure. Does not regenerate id, nonce, or
+ * Clones MosaicElement data structure. Does not regenerate id, nonce, or
  * any value. The purpose is to to break object references for immutability
  * reasons, whenever we want to keep the original element, but ensure it's not
  * mutated.
@@ -686,7 +665,7 @@ const _deepCopyElement = (val: any, depth: number = 0) => {
  * Only clones plain objects and arrays. Doesn't clone Date, RegExp, Map, Set,
  * Typed arrays and other non-null objects.
  */
-export const deepCopyElement = <T extends ExcalidrawElement>(
+export const deepCopyElement = <T extends MosaicElement>(
   val: T,
 ): Mutable<T> => {
   return _deepCopyElement(val);

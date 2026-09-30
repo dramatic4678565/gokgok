@@ -1,4 +1,4 @@
-import type { LocalPoint, Radians } from "@excalidraw/math";
+import type { LocalPoint, Radians } from "@mosaic/math";
 
 import type {
   FONT_FAMILY,
@@ -6,14 +6,14 @@ import type {
   TEXT_ALIGN,
   THEME,
   VERTICAL_ALIGN,
-} from "@excalidraw/common";
+} from "@mosaic/common";
 
 import type {
   MakeBrand,
   MarkNonNullable,
   Merge,
   ValueOf,
-} from "@excalidraw/common/utility-types";
+} from "@mosaic/common/utility-types";
 
 export type ChartType = "bar" | "line" | "radar";
 export type FillStyle = "hachure" | "cross-hatch" | "solid" | "zigzag";
@@ -33,11 +33,11 @@ export type VerticalAlign = typeof VERTICAL_ALIGN[VerticalAlignKeys];
 export type FractionalIndex = string & { _brand: "franctionalIndex" };
 
 export type BoundElement = Readonly<{
-  id: ExcalidrawLinearElement["id"];
+  id: MosaicLinearElement["id"];
   type: "arrow" | "text";
 }>;
 
-type _ExcalidrawElementBase = Readonly<{
+type _MosaicElementBase = Readonly<{
   id: string;
   x: number;
   y: number;
@@ -86,15 +86,15 @@ type _ExcalidrawElementBase = Readonly<{
   customData?: Record<string, any>;
 }>;
 
-export type ExcalidrawSelectionElement = _ExcalidrawElementBase & {
+export type MosaicSelectionElement = _MosaicElementBase & {
   type: "selection";
 };
 
-export type ExcalidrawRectangleElement = _ExcalidrawElementBase & {
+export type MosaicRectangleElement = _MosaicElementBase & {
   type: "rectangle";
 };
 
-export type ExcalidrawStickyNoteElement = _ExcalidrawElementBase &
+export type MosaicStickyNoteElement = _MosaicElementBase &
   Readonly<{
     type: "stickynote";
     /**
@@ -104,15 +104,15 @@ export type ExcalidrawStickyNoteElement = _ExcalidrawElementBase &
     baseHeight: number;
   }>;
 
-export type ExcalidrawDiamondElement = _ExcalidrawElementBase & {
+export type MosaicDiamondElement = _MosaicElementBase & {
   type: "diamond";
 };
 
-export type ExcalidrawEllipseElement = _ExcalidrawElementBase & {
+export type MosaicEllipseElement = _MosaicElementBase & {
   type: "ellipse";
 };
 
-export type ExcalidrawEmbeddableElement = _ExcalidrawElementBase &
+export type MosaicEmbeddableElement = _MosaicElementBase &
   Readonly<{
     type: "embeddable";
   }>;
@@ -128,16 +128,16 @@ export type MagicGenerationData =
       code: "ERR_GENERATION_INTERRUPTED" | string;
     };
 
-export type ExcalidrawIframeElement = _ExcalidrawElementBase &
+export type MosaicIframeElement = _MosaicElementBase &
   Readonly<{
     type: "iframe";
     // TODO move later to AI-specific frame
     customData?: { generationData?: MagicGenerationData };
   }>;
 
-export type ExcalidrawIframeLikeElement =
-  | ExcalidrawIframeElement
-  | ExcalidrawEmbeddableElement;
+export type MosaicIframeLikeElement =
+  | MosaicIframeElement
+  | MosaicEmbeddableElement;
 
 export type IframeData =
   | {
@@ -158,7 +158,7 @@ export type ImageCrop = {
   naturalHeight: number;
 };
 
-export type ExcalidrawImageElement = _ExcalidrawElementBase &
+export type MosaicImageElement = _MosaicElementBase &
   Readonly<{
     type: "image";
     fileId: FileId | null;
@@ -170,87 +170,87 @@ export type ExcalidrawImageElement = _ExcalidrawElementBase &
     crop: ImageCrop | null;
   }>;
 
-export type InitializedExcalidrawImageElement = MarkNonNullable<
-  ExcalidrawImageElement,
+export type InitializedMosaicImageElement = MarkNonNullable<
+  MosaicImageElement,
   "fileId"
 >;
 
-export type ExcalidrawFrameElement = _ExcalidrawElementBase & {
+export type MosaicFrameElement = _MosaicElementBase & {
   type: "frame";
   name: string | null;
 };
 
-export type ExcalidrawMagicFrameElement = _ExcalidrawElementBase & {
+export type MosaicMagicFrameElement = _MosaicElementBase & {
   type: "magicframe";
   name: string | null;
 };
 
-export type ExcalidrawFrameLikeElement =
-  | ExcalidrawFrameElement
-  | ExcalidrawMagicFrameElement;
+export type MosaicFrameLikeElement =
+  | MosaicFrameElement
+  | MosaicMagicFrameElement;
 
 /**
  * These are elements that don't have any additional properties.
  */
-export type ExcalidrawGenericElement =
-  | ExcalidrawSelectionElement
-  | ExcalidrawRectangleElement
-  | ExcalidrawDiamondElement
-  | ExcalidrawEllipseElement;
+export type MosaicGenericElement =
+  | MosaicSelectionElement
+  | MosaicRectangleElement
+  | MosaicDiamondElement
+  | MosaicEllipseElement;
 
-export type ExcalidrawFlowchartNodeElement =
-  | ExcalidrawRectangleElement
-  | ExcalidrawStickyNoteElement
-  | ExcalidrawDiamondElement
-  | ExcalidrawEllipseElement;
+export type MosaicFlowchartNodeElement =
+  | MosaicRectangleElement
+  | MosaicStickyNoteElement
+  | MosaicDiamondElement
+  | MosaicEllipseElement;
 
-export type ExcalidrawRectanguloidElement =
-  | ExcalidrawRectangleElement
-  | ExcalidrawStickyNoteElement
-  | ExcalidrawImageElement
-  | ExcalidrawTextElement
-  | ExcalidrawFreeDrawElement
-  | ExcalidrawIframeLikeElement
-  | ExcalidrawFrameLikeElement
-  | ExcalidrawEmbeddableElement
-  | ExcalidrawSelectionElement;
+export type MosaicRectanguloidElement =
+  | MosaicRectangleElement
+  | MosaicStickyNoteElement
+  | MosaicImageElement
+  | MosaicTextElement
+  | MosaicFreeDrawElement
+  | MosaicIframeLikeElement
+  | MosaicFrameLikeElement
+  | MosaicEmbeddableElement
+  | MosaicSelectionElement;
 
 /**
- * ExcalidrawElement should be JSON serializable and (eventually) contain
- * no computed data. The list of all ExcalidrawElements should be shareable
+ * MosaicElement should be JSON serializable and (eventually) contain
+ * no computed data. The list of all MosaicElements should be shareable
  * between peers and contain no state local to the peer.
  */
-export type ExcalidrawElement =
-  | ExcalidrawGenericElement
-  | ExcalidrawStickyNoteElement
-  | ExcalidrawTextElement
-  | ExcalidrawLinearElement
-  | ExcalidrawArrowElement
-  | ExcalidrawFreeDrawElement
-  | ExcalidrawImageElement
-  | ExcalidrawFrameElement
-  | ExcalidrawMagicFrameElement
-  | ExcalidrawIframeElement
-  | ExcalidrawEmbeddableElement;
+export type MosaicElement =
+  | MosaicGenericElement
+  | MosaicStickyNoteElement
+  | MosaicTextElement
+  | MosaicLinearElement
+  | MosaicArrowElement
+  | MosaicFreeDrawElement
+  | MosaicImageElement
+  | MosaicFrameElement
+  | MosaicMagicFrameElement
+  | MosaicIframeElement
+  | MosaicEmbeddableElement;
 
-export type ExcalidrawNonSelectionElement = Exclude<
-  ExcalidrawElement,
-  ExcalidrawSelectionElement
+export type MosaicNonSelectionElement = Exclude<
+  MosaicElement,
+  MosaicSelectionElement
 >;
 
-export type Ordered<TElement extends ExcalidrawElement> = TElement & {
+export type Ordered<TElement extends MosaicElement> = TElement & {
   index: FractionalIndex;
 };
 
-export type OrderedExcalidrawElement = Ordered<ExcalidrawElement>;
+export type OrderedMosaicElement = Ordered<MosaicElement>;
 
-export type NonDeleted<TElement extends ExcalidrawElement> = TElement & {
+export type NonDeleted<TElement extends MosaicElement> = TElement & {
   isDeleted: false;
 };
 
-export type NonDeletedExcalidrawElement = NonDeleted<ExcalidrawElement>;
+export type NonDeletedMosaicElement = NonDeleted<MosaicElement>;
 
-export type ExcalidrawTextElement = _ExcalidrawElementBase &
+export type MosaicTextElement = _MosaicElementBase &
   Readonly<{
     type: "text";
     fontSize: number;
@@ -267,7 +267,7 @@ export type ExcalidrawTextElement = _ExcalidrawElementBase &
     text: string;
     textAlign: TextAlign;
     verticalAlign: VerticalAlign;
-    containerId: ExcalidrawTextContainer["id"] | null;
+    containerId: MosaicTextContainer["id"] | null;
     originalText: string;
     /**
      * If `true` the width will fit the text. If `false`, the text will
@@ -290,35 +290,35 @@ export type ExcalidrawTextElement = _ExcalidrawElementBase &
     labelPosition?: number | null;
   }>;
 
-export type ExcalidrawBindableElement =
-  | ExcalidrawRectangleElement
-  | ExcalidrawStickyNoteElement
-  | ExcalidrawDiamondElement
-  | ExcalidrawEllipseElement
-  | ExcalidrawTextElement
-  | ExcalidrawImageElement
-  | ExcalidrawIframeElement
-  | ExcalidrawEmbeddableElement
-  | ExcalidrawFrameElement
-  | ExcalidrawMagicFrameElement;
+export type MosaicBindableElement =
+  | MosaicRectangleElement
+  | MosaicStickyNoteElement
+  | MosaicDiamondElement
+  | MosaicEllipseElement
+  | MosaicTextElement
+  | MosaicImageElement
+  | MosaicIframeElement
+  | MosaicEmbeddableElement
+  | MosaicFrameElement
+  | MosaicMagicFrameElement;
 
-export type ExcalidrawTextContainer =
-  | ExcalidrawRectangleElement
-  | ExcalidrawStickyNoteElement
-  | ExcalidrawDiamondElement
-  | ExcalidrawEllipseElement
-  | ExcalidrawArrowElement;
+export type MosaicTextContainer =
+  | MosaicRectangleElement
+  | MosaicStickyNoteElement
+  | MosaicDiamondElement
+  | MosaicEllipseElement
+  | MosaicArrowElement;
 
-export type ExcalidrawTextElementWithContainer = {
-  containerId: ExcalidrawTextContainer["id"];
-} & ExcalidrawTextElement;
+export type MosaicTextElementWithContainer = {
+  containerId: MosaicTextContainer["id"];
+} & MosaicTextElement;
 
 export type FixedPoint = [number, number];
 
 export type BindMode = "inside" | "orbit" | "skip";
 
 export type FixedPointBinding = {
-  elementId: ExcalidrawBindableElement["id"];
+  elementId: MosaicBindableElement["id"];
 
   // Represents the fixed point binding information in form of a vertical and
   // horizontal ratio (i.e. a percentage value in the 0.0-1.0 range). This ratio
@@ -366,7 +366,7 @@ export type Arrowhead =
 
 export type AnyArrowhead = Arrowhead | ArrowheadLegacy;
 
-export type ExcalidrawLinearElement = _ExcalidrawElementBase &
+export type MosaicLinearElement = _MosaicElementBase &
   Readonly<{
     type: "line" | "arrow";
     points: readonly LocalPoint[];
@@ -376,7 +376,7 @@ export type ExcalidrawLinearElement = _ExcalidrawElementBase &
     endArrowhead: Arrowhead | null;
   }>;
 
-export type ExcalidrawLineElement = ExcalidrawLinearElement &
+export type MosaicLineElement = MosaicLinearElement &
   Readonly<{
     type: "line";
     polygon: boolean;
@@ -388,14 +388,14 @@ export type FixedSegment = {
   index: Index;
 };
 
-export type ExcalidrawArrowElement = ExcalidrawLinearElement &
+export type MosaicArrowElement = MosaicLinearElement &
   Readonly<{
     type: "arrow";
     elbowed: boolean;
   }>;
 
-export type ExcalidrawElbowArrowElement = Merge<
-  ExcalidrawArrowElement,
+export type MosaicElbowArrowElement = Merge<
+  MosaicArrowElement,
   {
     elbowed: true;
     fixedSegments: readonly FixedSegment[] | null;
@@ -427,7 +427,7 @@ export type StrokeOptions = Readonly<{
   streamline: number;
 }>;
 
-export type ExcalidrawFreeDrawElement = _ExcalidrawElementBase &
+export type MosaicFreeDrawElement = _MosaicElementBase &
   Readonly<{
     type: "freedraw";
     points: readonly LocalPoint[];
@@ -438,32 +438,32 @@ export type ExcalidrawFreeDrawElement = _ExcalidrawElementBase &
 
 export type FileId = string & { _brand: "FileId" };
 
-export type ExcalidrawElementType = ExcalidrawElement["type"];
+export type MosaicElementType = MosaicElement["type"];
 
 /**
- * Map of excalidraw elements.
+ * Map of mosaic elements.
  * Unspecified whether deleted or non-deleted.
  * Can be a subset of Scene elements.
  */
-export type ElementsMap = Map<ExcalidrawElement["id"], ExcalidrawElement>;
+export type ElementsMap = Map<MosaicElement["id"], MosaicElement>;
 
 /**
  * Map of non-deleted elements.
  * Can be a subset of Scene elements.
  */
 export type NonDeletedElementsMap = Map<
-  ExcalidrawElement["id"],
-  NonDeletedExcalidrawElement
+  MosaicElement["id"],
+  NonDeletedMosaicElement
 > &
   MakeBrand<"NonDeletedElementsMap">;
 
 /**
- * Map of all excalidraw Scene elements, including deleted.
+ * Map of all mosaic Scene elements, including deleted.
  * Not a subset. Use this type when you need access to current Scene elements.
  */
 export type SceneElementsMap = Map<
-  ExcalidrawElement["id"],
-  Ordered<ExcalidrawElement>
+  MosaicElement["id"],
+  Ordered<MosaicElement>
 > &
   MakeBrand<"SceneElementsMap">;
 
@@ -472,25 +472,25 @@ export type SceneElementsMap = Map<
  * Not a subset. Use this type when you need access to current Scene elements.
  */
 export type NonDeletedSceneElementsMap = Map<
-  ExcalidrawElement["id"],
-  Ordered<NonDeletedExcalidrawElement>
+  MosaicElement["id"],
+  Ordered<NonDeletedMosaicElement>
 > &
   MakeBrand<"NonDeletedSceneElementsMap">;
 
 export type ElementsMapOrArray =
-  | readonly ExcalidrawElement[]
+  | readonly MosaicElement[]
   | Readonly<ElementsMap>;
 
 export type NonDeletedElementsMapOrArray =
-  | readonly NonDeletedExcalidrawElement[]
+  | readonly NonDeletedMosaicElement[]
   | Readonly<NonDeletedElementsMap | NonDeletedSceneElementsMap>;
 
-export type ExcalidrawLinearElementSubType =
+export type MosaicLinearElementSubType =
   | "line"
   | "sharpArrow"
   | "curvedArrow"
   | "elbowArrow";
 
 export type ConvertibleGenericTypes = "rectangle" | "diamond" | "ellipse";
-export type ConvertibleLinearTypes = ExcalidrawLinearElementSubType;
+export type ConvertibleLinearTypes = MosaicLinearElementSubType;
 export type ConvertibleTypes = ConvertibleGenericTypes | ConvertibleLinearTypes;

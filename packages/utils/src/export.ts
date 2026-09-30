@@ -1,38 +1,35 @@
-import { MIME_TYPES } from "@excalidraw/common";
-import { getDefaultAppState } from "@excalidraw/excalidraw/appState";
+import { MIME_TYPES } from "@mosaic/common";
+import { getDefaultAppState } from "@mosaic/mosaic/appState";
 import {
   copyBlobToClipboardAsPng,
   copyTextToSystemClipboard,
   copyToClipboard,
-} from "@excalidraw/excalidraw/clipboard";
-import { encodePngMetadata } from "@excalidraw/excalidraw/data/image";
-import { getNonDeletedElements } from "@excalidraw/element";
-import { serializeAsJSON } from "@excalidraw/excalidraw/data/json";
-import {
-  restoreAppState,
-  restoreElements,
-} from "@excalidraw/excalidraw/data/restore";
+} from "@mosaic/mosaic/clipboard";
+import { encodePngMetadata } from "@mosaic/mosaic/data/image";
+import { getNonDeletedElements } from "@mosaic/element";
+import { serializeAsJSON } from "@mosaic/mosaic/data/json";
+import { restoreAppState, restoreElements } from "@mosaic/mosaic/data/restore";
 import {
   exportToCanvas as _exportToCanvas,
   exportToSvg as _exportToSvg,
-} from "@excalidraw/excalidraw/scene/export";
+} from "@mosaic/mosaic/scene/export";
 
 import type {
-  ExcalidrawFrameLikeElement,
+  MosaicFrameLikeElement,
   NonDeleted,
-  NonDeletedExcalidrawElement,
-} from "@excalidraw/element/types";
-import type { AppState, BinaryFiles } from "@excalidraw/excalidraw/types";
+  NonDeletedMosaicElement,
+} from "@mosaic/element/types";
+import type { AppState, BinaryFiles } from "@mosaic/mosaic/types";
 
 export { MIME_TYPES };
 
 type ExportOpts = {
   /** restored before exporting */
-  elements: readonly NonDeletedExcalidrawElement[];
+  elements: readonly NonDeletedMosaicElement[];
   appState?: Partial<Omit<AppState, "offsetTop" | "offsetLeft">>;
   files: BinaryFiles | null;
   maxWidthOrHeight?: number;
-  exportingFrame?: NonDeleted<ExcalidrawFrameLikeElement> | null;
+  exportingFrame?: NonDeleted<MosaicFrameLikeElement> | null;
   getDimensions?: (
     width: number,
     height: number,

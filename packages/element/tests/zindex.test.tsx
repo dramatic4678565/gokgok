@@ -1,4 +1,4 @@
-import { reseed } from "@excalidraw/common";
+import { reseed } from "@mosaic/common";
 
 import {
   actionSendBackward,
@@ -6,26 +6,26 @@ import {
   actionBringToFront,
   actionSendToBack,
   actionDuplicateSelection,
-} from "@excalidraw/excalidraw/actions";
+} from "@mosaic/mosaic/actions";
 
-import { Excalidraw, getNonDeletedElements } from "@excalidraw/excalidraw";
+import { Mosaic, getNonDeletedElements } from "@mosaic/mosaic";
 
-import { API } from "@excalidraw/excalidraw/tests/helpers/api";
+import { API } from "@mosaic/mosaic/tests/helpers/api";
 import {
   act,
   getCloneByOrigId,
   render,
   unmountComponent,
-} from "@excalidraw/excalidraw/tests/test-utils";
+} from "@mosaic/mosaic/tests/test-utils";
 
-import type { AppState } from "@excalidraw/excalidraw/types";
+import type { AppState } from "@mosaic/mosaic/types";
 
 import { selectGroupsForSelectedElements } from "../src/groups";
 
 import type {
-  ExcalidrawElement,
-  ExcalidrawFrameElement,
-  ExcalidrawSelectionElement,
+  MosaicElement,
+  MosaicFrameElement,
+  MosaicSelectionElement,
 } from "../src/types";
 
 unmountComponent();
@@ -37,15 +37,12 @@ beforeEach(() => {
 
 const { h } = window;
 
-type ExcalidrawElementType = Exclude<
-  ExcalidrawElement,
-  ExcalidrawSelectionElement
->["type"];
+type MosaicElementType = Exclude<MosaicElement, MosaicSelectionElement>["type"];
 
 const populateElements = (
   elements: {
     id: string;
-    type?: ExcalidrawElementType;
+    type?: MosaicElementType;
     isDeleted?: boolean;
     isSelected?: boolean;
     groupIds?: string[];
@@ -54,8 +51,8 @@ const populateElements = (
     width?: number;
     height?: number;
     containerId?: string;
-    frameId?: ExcalidrawFrameElement["id"];
-    index?: ExcalidrawElement["index"];
+    frameId?: MosaicFrameElement["id"];
+    index?: MosaicElement["index"];
   }[],
   appState?: Partial<AppState>,
 ) => {
@@ -145,8 +142,8 @@ const assertZindex = ({
     isSelected?: true;
     groupIds?: string[];
     containerId?: string;
-    frameId?: ExcalidrawFrameElement["id"];
-    type?: ExcalidrawElementType;
+    frameId?: MosaicFrameElement["id"];
+    type?: MosaicElementType;
   }[];
   appState?: Partial<AppState>;
   operations: [Actions, string[]][];
@@ -161,7 +158,7 @@ const assertZindex = ({
 
 describe("z-index manipulation", () => {
   beforeEach(async () => {
-    await render(<Excalidraw />);
+    await render(<Mosaic />);
   });
 
   it("send back", () => {
@@ -1231,7 +1228,7 @@ describe("z-index manipulation", () => {
 
 describe("z-indexing with frames", () => {
   beforeEach(async () => {
-    await render(<Excalidraw />);
+    await render(<Mosaic />);
   });
 
   // naming scheme:
@@ -1572,7 +1569,7 @@ describe("z-indexing with frames", () => {
  */
 describe("z-index reordering with broken contiguity (invariant-violating input)", () => {
   beforeEach(async () => {
-    await render(<Excalidraw />);
+    await render(<Mosaic />);
   });
 
   const assertReorderPreservesElements = (
@@ -1667,7 +1664,7 @@ describe("z-index reordering with broken contiguity (invariant-violating input)"
 
 describe("z-index reordering with inconsistent group-editing state", () => {
   beforeEach(async () => {
-    await render(<Excalidraw />);
+    await render(<Mosaic />);
   });
 
   it("does not duplicate or drop elements when selected elements fall outside the edited group scope", () => {

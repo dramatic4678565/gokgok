@@ -1,12 +1,12 @@
-import type { UIAppState } from "@excalidraw/excalidraw/types";
+import type { UIAppState } from "@mosaic/mosaic/types";
 
 import { getSelectedElements } from "./selection";
 
-import type { NonDeletedExcalidrawElement } from "./types";
+import type { NonDeletedMosaicElement } from "./types";
 
 export const showSelectedShapeActions = (
   appState: UIAppState,
-  elements: readonly NonDeletedExcalidrawElement[],
+  elements: readonly NonDeletedMosaicElement[],
 ) =>
   Boolean(
     !appState.viewModeEnabled &&

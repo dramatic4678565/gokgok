@@ -1,156 +1,156 @@
-import { ROUNDNESS, assertNever } from "@excalidraw/common";
+import { ROUNDNESS, assertNever } from "@mosaic/common";
 
-import { pointsEqual } from "@excalidraw/math";
+import { pointsEqual } from "@mosaic/math";
 
-import type { ElementOrToolType } from "@excalidraw/excalidraw/types";
+import type { ElementOrToolType } from "@mosaic/mosaic/types";
 
-import type { MarkNonNullable } from "@excalidraw/common/utility-types";
+import type { MarkNonNullable } from "@mosaic/common/utility-types";
 
 import type {
-  ExcalidrawElement,
-  ExcalidrawTextElement,
-  ExcalidrawEmbeddableElement,
-  ExcalidrawLinearElement,
-  ExcalidrawBindableElement,
-  ExcalidrawFreeDrawElement,
-  InitializedExcalidrawImageElement,
-  ExcalidrawImageElement,
-  ExcalidrawTextElementWithContainer,
-  ExcalidrawTextContainer,
-  ExcalidrawFrameElement,
+  MosaicElement,
+  MosaicTextElement,
+  MosaicEmbeddableElement,
+  MosaicLinearElement,
+  MosaicBindableElement,
+  MosaicFreeDrawElement,
+  InitializedMosaicImageElement,
+  MosaicImageElement,
+  MosaicTextElementWithContainer,
+  MosaicTextContainer,
+  MosaicFrameElement,
   RoundnessType,
-  ExcalidrawFrameLikeElement,
-  ExcalidrawElementType,
-  ExcalidrawIframeElement,
-  ExcalidrawIframeLikeElement,
-  ExcalidrawMagicFrameElement,
-  ExcalidrawArrowElement,
-  ExcalidrawElbowArrowElement,
-  ExcalidrawLineElement,
-  ExcalidrawFlowchartNodeElement,
-  ExcalidrawLinearElementSubType,
-  ExcalidrawStickyNoteElement,
+  MosaicFrameLikeElement,
+  MosaicElementType,
+  MosaicIframeElement,
+  MosaicIframeLikeElement,
+  MosaicMagicFrameElement,
+  MosaicArrowElement,
+  MosaicElbowArrowElement,
+  MosaicLineElement,
+  MosaicFlowchartNodeElement,
+  MosaicLinearElementSubType,
+  MosaicStickyNoteElement,
 } from "./types";
 
-export const isInitializedImageElement = <T extends ExcalidrawElement>(
+export const isInitializedImageElement = <T extends MosaicElement>(
   element: T | null,
-): element is T & InitializedExcalidrawImageElement => {
+): element is T & InitializedMosaicImageElement => {
   return !!element && element.type === "image" && !!element.fileId;
 };
 
-export const isImageElement = <T extends ExcalidrawElement>(
+export const isImageElement = <T extends MosaicElement>(
   element: T | null,
-): element is T & ExcalidrawImageElement => {
+): element is T & MosaicImageElement => {
   return !!element && element.type === "image";
 };
 
-export const isEmbeddableElement = <T extends ExcalidrawElement>(
+export const isEmbeddableElement = <T extends MosaicElement>(
   element: T | null | undefined,
-): element is T & ExcalidrawEmbeddableElement => {
+): element is T & MosaicEmbeddableElement => {
   return !!element && element.type === "embeddable";
 };
 
-export const isIframeElement = <T extends ExcalidrawElement>(
+export const isIframeElement = <T extends MosaicElement>(
   element: T | null,
-): element is T & ExcalidrawIframeElement => {
+): element is T & MosaicIframeElement => {
   return !!element && element.type === "iframe";
 };
 
-export const isIframeLikeElement = <T extends ExcalidrawElement>(
+export const isIframeLikeElement = <T extends MosaicElement>(
   element: T | null,
-): element is T & ExcalidrawIframeLikeElement => {
+): element is T & MosaicIframeLikeElement => {
   return (
     !!element && (element.type === "iframe" || element.type === "embeddable")
   );
 };
 
-export const isTextElement = <T extends ExcalidrawElement>(
+export const isTextElement = <T extends MosaicElement>(
   element: T | null,
-): element is T & ExcalidrawTextElement => {
+): element is T & MosaicTextElement => {
   return element != null && element.type === "text";
 };
 
-export const isStickyNoteElement = <T extends ExcalidrawElement>(
+export const isStickyNoteElement = <T extends MosaicElement>(
   element: T | null | undefined,
-): element is T & ExcalidrawStickyNoteElement => {
+): element is T & MosaicStickyNoteElement => {
   return element != null && element.type === "stickynote";
 };
 
-export const isFrameElement = <T extends ExcalidrawElement>(
+export const isFrameElement = <T extends MosaicElement>(
   element: T | null,
-): element is T & ExcalidrawFrameElement => {
+): element is T & MosaicFrameElement => {
   return element != null && element.type === "frame";
 };
 
-export const isMagicFrameElement = <T extends ExcalidrawElement>(
+export const isMagicFrameElement = <T extends MosaicElement>(
   element: T | null,
-): element is T & ExcalidrawMagicFrameElement => {
+): element is T & MosaicMagicFrameElement => {
   return element != null && element.type === "magicframe";
 };
 
-export const isFrameLikeElement = <T extends ExcalidrawElement>(
+export const isFrameLikeElement = <T extends MosaicElement>(
   element: T | null,
-): element is T & ExcalidrawFrameLikeElement => {
+): element is T & MosaicFrameLikeElement => {
   return (
     element != null &&
     (element.type === "frame" || element.type === "magicframe")
   );
 };
 
-export const isFreeDrawElement = <T extends ExcalidrawElement>(
+export const isFreeDrawElement = <T extends MosaicElement>(
   element?: T | null,
-): element is T & ExcalidrawFreeDrawElement => {
+): element is T & MosaicFreeDrawElement => {
   return element != null && isFreeDrawElementType(element.type);
 };
 
 export const isFreeDrawElementType = (
-  elementType: ExcalidrawElementType,
+  elementType: MosaicElementType,
 ): boolean => {
   return elementType === "freedraw";
 };
 
-export const isLinearElement = <T extends ExcalidrawElement>(
+export const isLinearElement = <T extends MosaicElement>(
   element?: T | null,
-): element is T & ExcalidrawLinearElement => {
+): element is T & MosaicLinearElement => {
   return element != null && isLinearElementType(element.type);
 };
 
-export const isLineElement = <T extends ExcalidrawElement>(
+export const isLineElement = <T extends MosaicElement>(
   element?: T | null,
-): element is T & ExcalidrawLineElement => {
+): element is T & MosaicLineElement => {
   return element != null && element.type === "line";
 };
 
-export const isArrowElement = <T extends ExcalidrawElement>(
+export const isArrowElement = <T extends MosaicElement>(
   element?: T | null,
-): element is T & ExcalidrawArrowElement => {
+): element is T & MosaicArrowElement => {
   return element != null && element.type === "arrow";
 };
 
-export const isElbowArrow = <T extends ExcalidrawElement>(
+export const isElbowArrow = <T extends MosaicElement>(
   element?: T,
-): element is T & ExcalidrawElbowArrowElement => {
+): element is T & MosaicElbowArrowElement => {
   return isArrowElement(element) && element.elbowed;
 };
 
 /**
  * sharp or curved arrow, but not elbow
  */
-export const isSimpleArrow = <T extends ExcalidrawElement>(
+export const isSimpleArrow = <T extends MosaicElement>(
   element?: T,
-): element is T & ExcalidrawArrowElement => {
+): element is T & MosaicArrowElement => {
   return isArrowElement(element) && !element.elbowed;
 };
 
-export const isSharpArrow = <T extends ExcalidrawElement>(
+export const isSharpArrow = <T extends MosaicElement>(
   element?: T,
-): element is T & ExcalidrawArrowElement => {
+): element is T & MosaicArrowElement => {
   return isArrowElement(element) && !element.elbowed && !element.roundness;
 };
 
-export const isCurvedArrow = <T extends ExcalidrawElement>(
+export const isCurvedArrow = <T extends MosaicElement>(
   element?: T,
-): element is T & ExcalidrawArrowElement => {
+): element is T & MosaicArrowElement => {
   return (
     isArrowElement(element) && !element.elbowed && element.roundness !== null
   );
@@ -164,10 +164,10 @@ export const isLinearElementType = (
   );
 };
 
-export const isBindingElement = <T extends ExcalidrawElement>(
+export const isBindingElement = <T extends MosaicElement>(
   element?: T | null,
   includeLocked = true,
-): element is T & ExcalidrawArrowElement => {
+): element is T & MosaicArrowElement => {
   return (
     element != null &&
     (!element.locked || includeLocked === true) &&
@@ -181,10 +181,10 @@ export const isBindingElementType = (
   return elementType === "arrow";
 };
 
-export const isBindableElement = <T extends ExcalidrawElement>(
+export const isBindableElement = <T extends MosaicElement>(
   element: T | null | undefined,
   includeLocked = true,
-): element is T & ExcalidrawBindableElement => {
+): element is T & MosaicBindableElement => {
   return (
     element != null &&
     (!element.locked || includeLocked === true) &&
@@ -201,9 +201,9 @@ export const isBindableElement = <T extends ExcalidrawElement>(
   );
 };
 
-export const isRectanguloidElement = <T extends ExcalidrawElement>(
+export const isRectanguloidElement = <T extends MosaicElement>(
   element?: T | null,
-): element is T & ExcalidrawBindableElement => {
+): element is T & MosaicBindableElement => {
   return (
     element != null &&
     (element.type === "rectangle" ||
@@ -220,9 +220,9 @@ export const isRectanguloidElement = <T extends ExcalidrawElement>(
 
 // TODO: Remove this when proper distance calculation is introduced
 // @see binding.ts:distanceToBindableElement()
-export const isRectangularElement = <T extends ExcalidrawElement>(
+export const isRectangularElement = <T extends MosaicElement>(
   element?: T | null,
-): element is T & ExcalidrawBindableElement => {
+): element is T & MosaicBindableElement => {
   return (
     element != null &&
     (element.type === "rectangle" ||
@@ -237,10 +237,10 @@ export const isRectangularElement = <T extends ExcalidrawElement>(
   );
 };
 
-export const isTextBindableContainer = <T extends ExcalidrawElement>(
+export const isTextBindableContainer = <T extends MosaicElement>(
   element: T | null,
   includeLocked = true,
-): element is T & ExcalidrawTextContainer => {
+): element is T & MosaicTextContainer => {
   return (
     element != null &&
     (!element.locked || includeLocked === true) &&
@@ -252,10 +252,8 @@ export const isTextBindableContainer = <T extends ExcalidrawElement>(
   );
 };
 
-export const isExcalidrawElement = (
-  element: any,
-): element is ExcalidrawElement => {
-  const type: ExcalidrawElementType | undefined = element?.type;
+export const isMosaicElement = (element: any): element is MosaicElement => {
+  const type: MosaicElementType | undefined = element?.type;
   if (!type) {
     return false;
   }
@@ -283,9 +281,9 @@ export const isExcalidrawElement = (
   }
 };
 
-export const isFlowchartNodeElement = <T extends ExcalidrawElement>(
+export const isFlowchartNodeElement = <T extends MosaicElement>(
   element: T,
-): element is T & ExcalidrawFlowchartNodeElement => {
+): element is T & MosaicFlowchartNodeElement => {
   return (
     element.type === "rectangle" ||
     element.type === "stickynote" ||
@@ -294,19 +292,18 @@ export const isFlowchartNodeElement = <T extends ExcalidrawElement>(
   );
 };
 
-export const hasBoundTextElement = <T extends ExcalidrawElement>(
+export const hasBoundTextElement = <T extends MosaicElement>(
   element: T | null,
-): element is T &
-  MarkNonNullable<ExcalidrawBindableElement, "boundElements"> => {
+): element is T & MarkNonNullable<MosaicBindableElement, "boundElements"> => {
   return (
     isTextBindableContainer(element) &&
     !!element.boundElements?.some(({ type }) => type === "text")
   );
 };
 
-export const isBoundToContainer = <T extends ExcalidrawElement>(
+export const isBoundToContainer = <T extends MosaicElement>(
   element: T | null,
-): element is T & ExcalidrawTextElementWithContainer => {
+): element is T & MosaicTextElementWithContainer => {
   return (
     element !== null &&
     "containerId" in element &&
@@ -315,7 +312,7 @@ export const isBoundToContainer = <T extends ExcalidrawElement>(
   );
 };
 
-export const isArrowBoundToElement = (element: ExcalidrawArrowElement) => {
+export const isArrowBoundToElement = (element: MosaicArrowElement) => {
   return !!element.startBinding || !!element.endBinding;
 };
 
@@ -333,7 +330,7 @@ export const isUsingProportionalRadius = (type: string) =>
 
 export const canApplyRoundnessTypeToElement = (
   roundnessType: RoundnessType,
-  element: ExcalidrawElement,
+  element: MosaicElement,
 ) => {
   if (
     (roundnessType === ROUNDNESS.ADAPTIVE_RADIUS ||
@@ -354,9 +351,7 @@ export const canApplyRoundnessTypeToElement = (
   return false;
 };
 
-export const getDefaultRoundnessTypeForElement = (
-  element: ExcalidrawElement,
-) => {
+export const getDefaultRoundnessTypeForElement = (element: MosaicElement) => {
   if (isUsingProportionalRadius(element.type)) {
     return {
       type: ROUNDNESS.PROPORTIONAL_RADIUS,
@@ -373,8 +368,8 @@ export const getDefaultRoundnessTypeForElement = (
 };
 
 export const getLinearElementSubType = (
-  element: ExcalidrawLinearElement,
-): ExcalidrawLinearElementSubType => {
+  element: MosaicLinearElement,
+): MosaicLinearElementSubType => {
   if (isSharpArrow(element)) {
     return "sharpArrow";
   }
@@ -395,13 +390,13 @@ export const getLinearElementSubType = (
  *  canBecomePolygon(points).
  */
 export const isValidPolygon = (
-  points: ExcalidrawLineElement["points"],
+  points: MosaicLineElement["points"],
 ): boolean => {
   return points.length > 3 && pointsEqual(points[0], points[points.length - 1]);
 };
 
 export const canBecomePolygon = (
-  points: ExcalidrawLineElement["points"],
+  points: MosaicLineElement["points"],
 ): boolean => {
   return (
     points.length > 3 ||
