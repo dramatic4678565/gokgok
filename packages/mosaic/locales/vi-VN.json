@@ -438,9 +438,9 @@
     "link_title": "Liên kết có thể chia sẻ",
     "link_details": "Tạo liên kết chỉ xem",
     "link_button": "Tạo liên kết",
-    "excalidrawplus_description": "Lưu bản vẽ vào không gian làm việc Excalidraw+ của bạn.",
+    "excalidrawplus_description": "Lưu bản vẽ vào không gian làm việc Mosaic+ của bạn.",
     "excalidrawplus_button": "Xuất",
-    "excalidrawplus_exportError": "Hiện tại không thể xuất sang Excalidraw+..."
+    "excalidrawplus_exportError": "Hiện tại không thể xuất sang Mosaic+..."
   },
   "helpDialog": {
     "blog": "Đọc blog của chúng tôi",

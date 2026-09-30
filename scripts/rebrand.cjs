@@ -118,6 +118,18 @@ const PATHS = [
 /* -------------------------------------------------------------------------- */
 
 const PROTECT = [
+  // -- format contract keys, spelled as bare object keys ---------------------
+  // This has to be first: the *values* these keys hold are protected further
+  // down (`"application/vnd.excalidraw+json"`, `"excalidraw"`), and `hide()`
+  // masks in order, so by the time a later rule runs the value is already a
+  // placeholder token and the key can no longer be recognised by looking at it.
+  // Without this rule, re-running the script on its own output turns
+  // `excalidraw: "application/vnd.excalidraw+json"` into `mosaic:`, silently
+  // changing the extension every `.excalidraw` document is keyed on.
+  // A bare `excalidraw` immediately followed by a colon is always a key, in an
+  // object literal or a type annotation, and a key is a contract either way.
+  /excalidraw(?=:)/g,
+
   // -- the file format -------------------------------------------------------
   // Longest / most specific first: excalidrawLibrary must win over excalidrawLib.
   /excalidrawLibraryIds/g,
@@ -180,10 +192,16 @@ const PROTECT = [
   /esexcalidraw|excalidraw\.com\.mx|x-excalidraw|xexcalidraw/gi,
 
   // -- named assets and the Excalidraw+ product -----------------------------
+  // NOTE: the product name "Excalidraw+" is deliberately NOT protected, so
+  // that it renames to "Mosaic+". It used to be, on the reasoning that the paid
+  // workspace is Excalidraw's own product rather than the app -- but every
+  // surface that mentions it is hidden behind SHOW_UPSTREAM_PROMOS, and a fork
+  // that flips the flag needs one coherent name. Leaving it protected meant the
+  // menu said "Mosaic+" while 46 locale files still said "Excalidraw+" in the
+  // same dialog. Only the i18n *keys* below are contracts and stay protected.
   /\bExcalifont\b/g,
   /Excalidraw Bot/g,
   /Excalidraw community/g,
-  /\bExcalidraw\+/g,
   /\bexcalidrawplus_\w*/g,
   /\bexcalidrawPlus\w*/g,
   /\bExcalidrawPlus\w*/g,
@@ -277,6 +295,10 @@ if (TEST) {
     ['VERSIONS.excalidrawLibrary', 'VERSIONS.excalidrawLibrary'],
     ['EXPORT_DATA_TYPES.excalidrawClipboard', 'EXPORT_DATA_TYPES.excalidrawClipboard'],
     ['EXPORT_DATA_TYPES.excalidraw', 'EXPORT_DATA_TYPES.excalidraw'],
+    // ...and the bare object keys, which must survive a re-run
+    ['excalidraw: "application/vnd.excalidraw+json"', 'excalidraw: "application/vnd.excalidraw+json"'],
+    ['excalidraw: "excalidraw"', 'excalidraw: "excalidraw"'],
+    ['excalidraw: 2,', 'excalidraw: 2,'],
     ['endsWith(".excalidrawlib")', 'endsWith(".excalidrawlib")'],
     ['endsWith(".excalidraw")', 'endsWith(".excalidraw")'],
     ['"mermaid-to-excalidraw"', '"mermaid-to-excalidraw"'],
@@ -288,7 +310,7 @@ if (TEST) {
     ['"madeWithExcalidraw": "Made with Excalidraw"', '"madeWithExcalidraw": "Made with Mosaic"'],
     ['"mermaidToExcalidraw": "Mermaid to Excalidraw"', '"mermaidToExcalidraw": "Mermaid to Mosaic"'],
     ['"excalidrawplus_button": "Export"', '"excalidrawplus_button": "Export"'],
-    ['"excalidrawPlus": { "title": "Excalidraw+" }', '"excalidrawPlus": { "title": "Excalidraw+" }'],
+    ['"excalidrawPlus": { "title": "Mosaic+" }', '"excalidrawPlus": { "title": "Mosaic+" }'],
     // persisted storage keys
     ['STORAGE_KEYS = { LOCAL_STORAGE_KEY: "excalidraw" }', 'STORAGE_KEYS = { LOCAL_STORAGE_KEY: "excalidraw" }'],
     ['"excalidraw-theme"', '"excalidraw-theme"'],
@@ -305,7 +327,6 @@ if (TEST) {
     ['<!-- PLACEHOLDER:EXCALIDRAW_APP_FONTS -->', '<!-- PLACEHOLDER:EXCALIDRAW_APP_FONTS -->'],
     // named assets and the Excalidraw+ product
     ['fontFamily: "Excalifont"', 'fontFamily: "Excalifont"'],
-    ['"Excalidraw+"', '"Excalidraw+"'],
     ['ExcMATH as ExcalidrawPlusFrame', 'ExcMATH as ExcalidrawPlusFrame'],
     ['EXCALIDRAW_PLUS_ORIGIN', 'EXCALIDRAW_PLUS_ORIGIN'],
     // CSS classes: documented styling API
@@ -353,6 +374,11 @@ if (TEST) {
     ['utm_source=excalidraw', "utm_source=mosaic"],
     ["ExcalidrawImperativeAPI", "MosaicImperativeAPI"],
     ["Excalifont", "Excalifont"],
+    // the paid workspace is branded too, so that a deployment which enables
+    // SHOW_UPSTREAM_PROMOS does not show "Mosaic+" in the menu and
+    // "Excalidraw+" in the dialog it opens
+    ['"Excalidraw+"', '"Mosaic+"'],
+    ["Export to Excalidraw+", "Export to Mosaic+"],
   ];
   for (const [input, expect] of positives) {
     const out = transform(input);

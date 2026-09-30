@@ -438,9 +438,9 @@
     "link_title": "Partekatzeko esteka",
     "link_details": "Esportatu irakurtzeko soilik moduko esteka.",
     "link_button": "Esportatu esteka",
-    "excalidrawplus_description": "Gorde eszena zure Excalidraw+ laneko areara.",
+    "excalidrawplus_description": "Gorde eszena zure Mosaic+ laneko areara.",
     "excalidrawplus_button": "Esportatu",
-    "excalidrawplus_exportError": "Une honetan ezin izan da esportatu Excalidraw+era..."
+    "excalidrawplus_exportError": "Une honetan ezin izan da esportatu Mosaic+era..."
   },
   "helpDialog": {
     "blog": "Irakurri gure bloga",
@@ -596,7 +596,7 @@
       "center_heading": "Zure marrazkiak zure nabigatzailearen biltegian gordetzen dira.",
       "center_heading_line2": "Nabigatzailearen biltegia ustekabean hustu daiteke.",
       "center_heading_line3": "Gorde zure lana maiz fitxategi batean, ez galtzeko.",
-      "center_heading_plus": "Horren ordez Excalidraw+-era joan nahi al zenuen?",
+      "center_heading_plus": "Horren ordez Mosaic+-era joan nahi al zenuen?",
       "menuHint": "Esportatu, hobespenak, hizkuntzak..."
     },
     "defaults": {
@@ -631,9 +631,9 @@
         "description": "Esportatu eszenaren datuak geroago inportatu ahal izango duzun fitxategi batan."
       },
       "excalidrawPlus": {
-        "title": "Excalidraw+",
-        "button": "Esportatu Excalidraw+ra",
-        "description": "Gorde eszena zure Excalidraw+ laneko areara."
+        "title": "Mosaic+",
+        "button": "Esportatu Mosaic+ra",
+        "description": "Gorde eszena zure Mosaic+ laneko areara."
       }
     },
     "modal": {
@@ -699,7 +699,7 @@
       "mermaidParseError": "Mermaid sintaxi errorea"
     },
     "rateLimit": {
-      "messageLimit": "Doako planean zure AA mugara iritsi zara. Probatu Excalidraw+ gehiago lortzeko edo itzuli bihar.",
+      "messageLimit": "Doako planean zure AA mugara iritsi zara. Probatu Mosaic+ gehiago lortzeko edo itzuli bihar.",
       "generalRateLimit": "Eutsi zaldiak, azkarregi zoaz guretzat! Mesedez, itxaron une bat berriro saiatu aurretik.",
       "messageLimitInputPlaceholder": "Mezuen mugara iritsi zara"
     },

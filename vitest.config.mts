@@ -1,5 +1,6 @@
 import path from "path";
 
+import { configDefaults } from "vitest/config";
 import { defineConfig } from "vitest/config";
 
 export default defineConfig({
@@ -74,6 +75,10 @@ export default defineConfig({
   },
   //@ts-ignore
   test: {
+    // `apps/dashboard` is a separate Next.js project with its own vitest config
+    // and its own `@/` alias. Left in scope, these files would be collected here
+    // and fail to resolve. Run them with `yarn --cwd apps/dashboard test`.
+    exclude: [...configDefaults.exclude, "apps/**"],
     // Since hooks are running in stack in v2, which means all hooks run serially whereas
     // we need to run them in parallel
     sequence: {

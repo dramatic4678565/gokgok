@@ -438,9 +438,9 @@
     "link_title": "Odkaz na zdieľanie",
     "link_details": "Exportovať ako odkaz iba na čítanie.",
     "link_button": "Exportovať ako odkaz",
-    "excalidrawplus_description": "Uložiť scénu do vášho Excalidraw+ pracovného priestoru.",
+    "excalidrawplus_description": "Uložiť scénu do vášho Mosaic+ pracovného priestoru.",
     "excalidrawplus_button": "Exportovať",
-    "excalidrawplus_exportError": "Nepodarilo sa vykonať export do Excalidraw+..."
+    "excalidrawplus_exportError": "Nepodarilo sa vykonať export do Mosaic+..."
   },
   "helpDialog": {
     "blog": "Prečítajte si náš blog",
@@ -596,7 +596,7 @@
       "center_heading": "Vaše kresby sú uložené v pamäti vášho prehliadača.",
       "center_heading_line2": "Pamäť prehliadača môže byť neočakávane vymazaná.",
       "center_heading_line3": "Pravidelne si ukladajte si vašu prácu do súboru, aby ste ju nestratili.",
-      "center_heading_plus": "Chceli ste namiesto toho prejsť do Excalidraw+?",
+      "center_heading_plus": "Chceli ste namiesto toho prejsť do Mosaic+?",
       "menuHint": "Exportovanie, nastavenia, jazyky, ..."
     },
     "defaults": {
@@ -631,9 +631,9 @@
         "description": "Exportovať údaje scény do súboru, z ktorého môžu byť neskôr importované."
       },
       "excalidrawPlus": {
-        "title": "Excalidraw+",
-        "button": "Exportovať ako Excalidraw+",
-        "description": "Uložiť scénu do vášho Excalidraw+ pracovného priestoru."
+        "title": "Mosaic+",
+        "button": "Exportovať ako Mosaic+",
+        "description": "Uložiť scénu do vášho Mosaic+ pracovného priestoru."
       }
     },
     "modal": {
@@ -699,7 +699,7 @@
       "mermaidParseError": "Chyba syntax Mermaid"
     },
     "rateLimit": {
-      "messageLimit": "Dosiahli ste limit pre AI v pláne zadarmo. Vyskúšajte viac s Excalidraw+ alebo sa vráťte opäť zajtra.",
+      "messageLimit": "Dosiahli ste limit pre AI v pláne zadarmo. Vyskúšajte viac s Mosaic+ alebo sa vráťte opäť zajtra.",
       "generalRateLimit": "Spomaľte, ste príliš rýchly! Prosím počkajte chvíľu predtým ako to skúsite znovu.",
       "messageLimitInputPlaceholder": "Dosiali ste denný limit správ"
     },

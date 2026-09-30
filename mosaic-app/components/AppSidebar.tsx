@@ -75,8 +75,8 @@ export const AppSidebar = () => {
       <DefaultSidebar.TabTriggers>
         {/*
           The two tabs below are promos for the upstream paid workspace
-          ("Make comments with Excalidraw+", "Create presentation with
-          Excalidraw+"). Mosaic does not resell that product, so they are gated
+          ("Make comments with Mosaic+", "Create presentation with
+          Mosaic+"). Mosaic does not resell that product, so they are gated
           on SHOW_UPSTREAM_PROMOS and hidden by default. The tab triggers
           further up are gated on the same flag so no empty tab is left behind.
 
@@ -112,11 +112,11 @@ export const AppSidebar = () => {
                   opacity: 0.9,
                 }}
               />
-              <SidebarPromoCopy text="Make comments with Excalidraw+" />
+              <SidebarPromoCopy text="Make comments with Mosaic+" />
               <LinkButton
                 href={`${
                   import.meta.env.VITE_APP_PLUS_LP
-                }/plus?utm_source=mosaic&utm_medium=app&utm_content=comments_promo#excalidraw-redirect`}
+                }/plus?utm_source=mosaic&utm_medium=app&utm_content=comments_promo`}
               >
                 Sign up now
               </LinkButton>
@@ -133,11 +133,11 @@ export const AppSidebar = () => {
                   opacity: 0.7,
                 }}
               />
-              <SidebarPromoCopy text="Create presentation with Excalidraw+" />
+              <SidebarPromoCopy text="Create presentation with Mosaic+" />
               <LinkButton
                 href={`${
                   import.meta.env.VITE_APP_PLUS_LP
-                }/plus?utm_source=mosaic&utm_medium=app&utm_content=presentations_promo#excalidraw-redirect`}
+                }/plus?utm_source=mosaic&utm_medium=app&utm_content=presentations_promo`}
               >
                 Sign up now
               </LinkButton>

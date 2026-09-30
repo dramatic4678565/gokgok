@@ -102,7 +102,7 @@ export const ExportToMosaicPlus: React.FC<{
           }}
         />
       </div>
-      <h2>Excalidraw+</h2>
+      <h2>Mosaic+</h2>
       <div className="Card-details">
         {t("exportDialog.excalidrawplus_description")}
       </div>

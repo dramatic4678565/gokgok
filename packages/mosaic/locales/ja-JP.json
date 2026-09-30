@@ -438,9 +438,9 @@
     "link_title": "共有可能なリンク",
     "link_details": "読み取り専用リンクとしてエクスポート",
     "link_button": "リンクとしてエクスポート",
-    "excalidrawplus_description": "Excalidraw+ ワークスペースにシーンを保存します。",
+    "excalidrawplus_description": "Mosaic+ ワークスペースにシーンを保存します。",
     "excalidrawplus_button": "エクスポート",
-    "excalidrawplus_exportError": "Excalidraw+ にエクスポートできませんでした..."
+    "excalidrawplus_exportError": "Mosaic+ にエクスポートできませんでした..."
   },
   "helpDialog": {
     "blog": "公式ブログを読む",
@@ -596,7 +596,7 @@
       "center_heading": "描画データはブラウザーのストレージに保存されます。",
       "center_heading_line2": "ブラウザーのストレージは予期せず消去されることがあります。",
       "center_heading_line3": "作業を失わないよう、定期的にファイルへ保存してください。",
-      "center_heading_plus": "代わりにExcalidraw+を開きますか？",
+      "center_heading_plus": "代わりにMosaic+を開きますか？",
       "menuHint": "エクスポート、設定、言語..."
     },
     "defaults": {
@@ -631,9 +631,9 @@
         "description": "シーンデータを後でインポートできるファイルにエクスポートします。"
       },
       "excalidrawPlus": {
-        "title": "Excalidraw+",
-        "button": "Excalidraw+にエクスポート",
-        "description": "Excalidraw+ ワークスペースにシーンを保存します。"
+        "title": "Mosaic+",
+        "button": "Mosaic+にエクスポート",
+        "description": "Mosaic+ ワークスペースにシーンを保存します。"
       }
     },
     "modal": {
@@ -699,7 +699,7 @@
       "mermaidParseError": "Mermaid構文エラー"
     },
     "rateLimit": {
-      "messageLimit": "無料プランのAI利用上限に達しました。Excalidraw+をお試しいただくか、また明日ご利用ください。",
+      "messageLimit": "無料プランのAI利用上限に達しました。Mosaic+をお試しいただくか、また明日ご利用ください。",
       "generalRateLimit": "操作が速すぎたようです。もう少し待ってから再度お試しください。",
       "messageLimitInputPlaceholder": "メッセージの送信上限に達しました"
     },

@@ -107,7 +107,7 @@
     "untitled": "தலைப்பற்றது",
     "name": "பெயர்",
     "yourName": "உங்கள் பெயர்",
-    "madeWithExcalidraw": "எக்ஸ்கேலிட்ரா கொண்டு ஆனது",
+    "madeWithExcalidraw": "Mosaic மூலம் உருவாக்கப்பட்டது",
     "group": "தேர்ந்ததை ஒன்றிணை",
     "ungroup": "தேர்ந்ததைப் பிரி",
     "collaborators": "கூட்டுப்பணியினர்",
@@ -596,7 +596,7 @@
       "center_heading": "",
       "center_heading_line2": "",
       "center_heading_line3": "",
-      "center_heading_plus": "நீங்கள் Excalidraw+க்கு செல்ல விரும்புகிறீர்களா?",
+      "center_heading_plus": "நீங்கள் Mosaic+க்கு செல்ல விரும்புகிறீர்களா?",
       "menuHint": "விருப்பத்தேர்வுகள், மொழிகள் போன்றனவை ஏற்றுமதிசெய்..."
     },
     "defaults": {

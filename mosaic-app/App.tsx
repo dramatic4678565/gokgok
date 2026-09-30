@@ -41,7 +41,7 @@ import {
   GithubIcon,
   XBrandIcon,
   DiscordIcon,
-  ExcalLogo,
+  MosaicLogoIcon,
   usersIcon,
   exportToPlus,
   share,
@@ -898,11 +898,16 @@ const MosaicWrapper = () => {
     );
   }
 
+  /*
+    Command palette entries for the paid workspace. Gated on
+    SHOW_UPSTREAM_PROMOS along with the rest of the upstream promotion, and
+    spliced into `commands` only when it is on. See BRANDING.md.
+  */
   const MosaicPlusCommand = {
-    label: "Excalidraw+",
+    label: "Mosaic+",
     category: DEFAULT_CATEGORIES.links,
     predicate: true,
-    icon: <div style={{ width: 14 }}>{ExcalLogo}</div>,
+    icon: <div style={{ width: 14 }}>{MosaicLogoIcon}</div>,
     keywords: ["plus", "cloud", "server"],
     perform: () => {
       window.open(
@@ -917,9 +922,9 @@ const MosaicWrapper = () => {
     label: "Sign up",
     category: DEFAULT_CATEGORIES.links,
     predicate: true,
-    icon: <div style={{ width: 14 }}>{ExcalLogo}</div>,
+    icon: <div style={{ width: 14 }}>{MosaicLogoIcon}</div>,
     keywords: [
-      "excalidraw",
+      "mosaic",
       "plus",
       "cloud",
       "server",
@@ -957,30 +962,39 @@ const MosaicWrapper = () => {
             toggleTheme: true,
             export: {
               onExportToBackend,
-              renderCustomUI: mosaicAPI
-                ? (elements, appState, files) => {
-                    return (
-                      <ExportToMosaicPlus
-                        elements={elements}
-                        appState={appState}
-                        files={files}
-                        name={mosaicAPI.getName()}
-                        onError={(error) => {
-                          mosaicAPI?.updateScene({
-                            appState: {
-                              errorMessage: error.message,
-                            },
-                          });
-                        }}
-                        onSuccess={() => {
-                          mosaicAPI.updateScene({
-                            appState: { openDialog: null },
-                          });
-                        }}
-                      />
-                    );
-                  }
-                : undefined,
+              /*
+                The "Export to Mosaic+" card in the export dialog. It uploads
+                the scene to upstream's storage and opens their import page, so
+                it is gated on SHOW_UPSTREAM_PROMOS like the rest of the
+                upstream promotion. Returning `undefined` leaves the dialog
+                with its ordinary image/SVG/PDF options and no empty slot
+                where the card was. See BRANDING.md.
+              */
+              renderCustomUI:
+                SHOW_UPSTREAM_PROMOS && mosaicAPI
+                  ? (elements, appState, files) => {
+                      return (
+                        <ExportToMosaicPlus
+                          elements={elements}
+                          appState={appState}
+                          files={files}
+                          name={mosaicAPI.getName()}
+                          onError={(error) => {
+                            mosaicAPI?.updateScene({
+                              appState: {
+                                errorMessage: error.message,
+                              },
+                            });
+                          }}
+                          onSuccess={() => {
+                            mosaicAPI.updateScene({
+                              appState: { openDialog: null },
+                            });
+                          }}
+                        />
+                      );
+                    }
+                  : undefined,
             },
           },
         }}
@@ -999,7 +1013,7 @@ const MosaicWrapper = () => {
           return (
             <div className="excalidraw-ui-top-right">
               {/*
-                The "Excalidraw+" button in the top right. It links to the
+                The "Mosaic+" button in the top right. It links to the
                 upstream paid workspace, which Mosaic does not resell, so it is
                 gated on SHOW_UPSTREAM_PROMOS (see app_constants.ts) rather than
                 deleted. See BRANDING.md.
@@ -1045,7 +1059,12 @@ const MosaicWrapper = () => {
         <OverwriteConfirmDialog>
           <OverwriteConfirmDialog.Actions.ExportToImage />
           <OverwriteConfirmDialog.Actions.SaveToDisk />
-          {mosaicAPI && (
+          {/*
+            The "Export to Mosaic+" confirmation. Same gate as the export
+            dialog card above: it pushes the scene to upstream's storage and
+            opens their app. See BRANDING.md.
+          */}
+          {SHOW_UPSTREAM_PROMOS && mosaicAPI && (
             <OverwriteConfirmDialog.Action
               title={t("overwriteConfirm.action.excalidrawPlus.title")}
               actionLabel={t("overwriteConfirm.action.excalidrawPlus.button")}
@@ -1173,107 +1192,126 @@ const MosaicWrapper = () => {
                 setShareDialogState({ isOpen: true, type: "share" });
               },
             },
-            {
-              label: "GitHub",
-              icon: GithubIcon,
-              category: DEFAULT_CATEGORIES.links,
-              predicate: true,
-              keywords: [
-                "issues",
-                "bugs",
-                "requests",
-                "report",
-                "features",
-                "social",
-                "community",
-              ],
-              perform: () => {
-                window.open(
-                  "https://github.com/excalidraw/excalidraw",
-                  "_blank",
-                  "noopener noreferrer",
-                );
-              },
-            },
-            {
-              label: t("labels.followUs"),
-              icon: XBrandIcon,
-              category: DEFAULT_CATEGORIES.links,
-              predicate: true,
-              keywords: ["twitter", "contact", "social", "community"],
-              perform: () => {
-                window.open(
-                  "https://x.com/excalidraw",
-                  "_blank",
-                  "noopener noreferrer",
-                );
-              },
-            },
-            {
-              label: t("labels.discordChat"),
-              category: DEFAULT_CATEGORIES.links,
-              predicate: true,
-              icon: DiscordIcon,
-              keywords: [
-                "chat",
-                "talk",
-                "contact",
-                "bugs",
-                "requests",
-                "report",
-                "feedback",
-                "suggestions",
-                "social",
-                "community",
-              ],
-              perform: () => {
-                window.open(
-                  "https://discord.gg/UexuTaE",
-                  "_blank",
-                  "noopener noreferrer",
-                );
-              },
-            },
-            {
-              label: "YouTube",
-              icon: youtubeIcon,
-              category: DEFAULT_CATEGORIES.links,
-              predicate: true,
-              keywords: ["features", "tutorials", "howto", "help", "community"],
-              perform: () => {
-                window.open(
-                  "https://youtube.com/@excalidraw",
-                  "_blank",
-                  "noopener noreferrer",
-                );
-              },
-            },
-            ...(isMosaicPlusSignedUser
+            /*
+              Upstream's own social and community accounts, and the paid
+              workspace. Same reasoning as `Socials` in
+              packages/mosaic/components/main-menu/DefaultItems.tsx: on a
+              self-hosted Mosaic these send the user to someone else's GitHub,
+              X profile, Discord and YouTube. Kept and gated rather than
+              deleted, so an upstream merge does not resurrect them as a
+              conflict and so a fork with its own accounts can get them back by
+              editing these hrefs. See BRANDING.md.
+            */
+            ...(SHOW_UPSTREAM_PROMOS
               ? [
                   {
-                    ...MosaicPlusAppCommand,
-                    label: "Sign in / Go to Excalidraw+",
+                    label: "GitHub",
+                    icon: GithubIcon,
+                    category: DEFAULT_CATEGORIES.links,
+                    predicate: true,
+                    keywords: [
+                      "issues",
+                      "bugs",
+                      "requests",
+                      "report",
+                      "features",
+                      "social",
+                      "community",
+                    ],
+                    perform: () => {
+                      window.open(
+                        "https://github.com/excalidraw/excalidraw",
+                        "_blank",
+                        "noopener noreferrer",
+                      );
+                    },
+                  },
+                  {
+                    label: t("labels.followUs"),
+                    icon: XBrandIcon,
+                    category: DEFAULT_CATEGORIES.links,
+                    predicate: true,
+                    keywords: ["twitter", "contact", "social", "community"],
+                    perform: () => {
+                      window.open(
+                        "https://x.com/excalidraw",
+                        "_blank",
+                        "noopener noreferrer",
+                      );
+                    },
+                  },
+                  {
+                    label: t("labels.discordChat"),
+                    category: DEFAULT_CATEGORIES.links,
+                    predicate: true,
+                    icon: DiscordIcon,
+                    keywords: [
+                      "chat",
+                      "talk",
+                      "contact",
+                      "bugs",
+                      "requests",
+                      "report",
+                      "feedback",
+                      "suggestions",
+                      "social",
+                      "community",
+                    ],
+                    perform: () => {
+                      window.open(
+                        "https://discord.gg/UexuTaE",
+                        "_blank",
+                        "noopener noreferrer",
+                      );
+                    },
+                  },
+                  {
+                    label: "YouTube",
+                    icon: youtubeIcon,
+                    category: DEFAULT_CATEGORIES.links,
+                    predicate: true,
+                    keywords: [
+                      "features",
+                      "tutorials",
+                      "howto",
+                      "help",
+                      "community",
+                    ],
+                    perform: () => {
+                      window.open(
+                        "https://youtube.com/@excalidraw",
+                        "_blank",
+                        "noopener noreferrer",
+                      );
+                    },
+                  },
+                  ...(isMosaicPlusSignedUser
+                    ? [
+                        {
+                          ...MosaicPlusAppCommand,
+                          label: "Sign in / Go to Mosaic+",
+                        },
+                      ]
+                    : [MosaicPlusCommand, MosaicPlusAppCommand]),
+                  {
+                    label: t("overwriteConfirm.action.excalidrawPlus.button"),
+                    category: DEFAULT_CATEGORIES.export,
+                    icon: exportToPlus,
+                    predicate: true,
+                    keywords: ["plus", "export", "save", "backup"],
+                    perform: () => {
+                      if (mosaicAPI) {
+                        exportToMosaicPlus(
+                          mosaicAPI.getSceneElements(),
+                          mosaicAPI.getAppState(),
+                          mosaicAPI.getFiles(),
+                          mosaicAPI.getName(),
+                        );
+                      }
+                    },
                   },
                 ]
-              : [MosaicPlusCommand, MosaicPlusAppCommand]),
-
-            {
-              label: t("overwriteConfirm.action.excalidrawPlus.button"),
-              category: DEFAULT_CATEGORIES.export,
-              icon: exportToPlus,
-              predicate: true,
-              keywords: ["plus", "export", "save", "backup"],
-              perform: () => {
-                if (mosaicAPI) {
-                  exportToMosaicPlus(
-                    mosaicAPI.getSceneElements(),
-                    mosaicAPI.getAppState(),
-                    mosaicAPI.getFiles(),
-                    mosaicAPI.getName(),
-                  );
-                }
-              },
-            },
+              : []),
             {
               label: t("labels.installPWA"),
               category: DEFAULT_CATEGORIES.app,

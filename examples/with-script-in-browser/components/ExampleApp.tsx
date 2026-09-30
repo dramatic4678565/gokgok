@@ -805,8 +805,8 @@ export default function ExampleApp({
                     avatarUrl: "images/doremon.png",
                   });
                   collaborators.set("id2", {
-                    username: "Excalibot",
-                    avatarUrl: "images/excalibot.png",
+                    username: "MosaicBot",
+                    avatarUrl: "images/mosaicbot.png",
                   });
                   collaborators.set("id3", {
                     username: "Pika",

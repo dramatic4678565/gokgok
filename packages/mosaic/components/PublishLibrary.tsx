@@ -5,6 +5,7 @@ import {
   EDITOR_LS_KEYS,
   EXPORT_DATA_TYPES,
   MIME_TYPES,
+  SHOW_UPSTREAM_PROMOS,
   VERSIONS,
   chunk,
   getExportSource,
@@ -381,34 +382,49 @@ const PublishLibrary = ({
     >
       {shouldRenderForm ? (
         <form onSubmit={onSubmit}>
-          <div className="publish-library-note">
-            <Trans
-              i18nKey="publishDialog.noteDescription"
-              link={(el) => (
-                <a
-                  href="https://libraries.excalidraw.com"
-                  target="_blank"
-                  rel="noopener"
-                >
-                  {el}
-                </a>
-              )}
-            />
-          </div>
-          <span className="publish-library-note">
-            <Trans
-              i18nKey="publishDialog.noteGuidelines"
-              link={(el) => (
-                <a
-                  href="https://github.com/excalidraw/excalidraw-libraries#guidelines"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {el}
-                </a>
-              )}
-            />
-          </span>
+          {/*
+            Upstream's public library site, its contribution guidelines and its
+            library licence. All three point at Excalidraw's own projects, so
+            they are gated on SHOW_UPSTREAM_PROMOS.
+
+            The surrounding sentences are kept: each one is mostly guidance
+            about what publishing a library involves, with the link attached to
+            the one clause that needs upstream's specific rules. Dropping the
+            whole note would leave the user without the terms they are agreeing
+            to. See BRANDING.md.
+          */}
+          {SHOW_UPSTREAM_PROMOS && (
+            <>
+              <div className="publish-library-note">
+                <Trans
+                  i18nKey="publishDialog.noteDescription"
+                  link={(el) => (
+                    <a
+                      href="https://libraries.excalidraw.com"
+                      target="_blank"
+                      rel="noopener"
+                    >
+                      {el}
+                    </a>
+                  )}
+                />
+              </div>
+              <span className="publish-library-note">
+                <Trans
+                  i18nKey="publishDialog.noteGuidelines"
+                  link={(el) => (
+                    <a
+                      href="https://github.com/excalidraw/excalidraw-libraries#guidelines"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {el}
+                    </a>
+                  )}
+                />
+              </span>
+            </>
+          )}
 
           <div className="publish-library-note">
             {t("publishDialog.noteItems")}
@@ -500,20 +516,26 @@ const PublishLibrary = ({
                 placeholder={t("publishDialog.placeholder.website")}
               />
             </label>
-            <span className="publish-library-note">
-              <Trans
-                i18nKey="publishDialog.noteLicense"
-                link={(el) => (
-                  <a
-                    href="https://github.com/excalidraw/excalidraw-libraries/blob/main/LICENSE"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {el}
-                  </a>
-                )}
-              />
-            </span>
+            {/*
+              The licence the library is published under, which is upstream's
+              own library repo. Gated for the same reason as the notes above.
+            */}
+            {SHOW_UPSTREAM_PROMOS && (
+              <span className="publish-library-note">
+                <Trans
+                  i18nKey="publishDialog.noteLicense"
+                  link={(el) => (
+                    <a
+                      href="https://github.com/excalidraw/excalidraw-libraries/blob/main/LICENSE"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {el}
+                    </a>
+                  )}
+                />
+              </span>
+            )}
           </div>
           <div className="publish-library__buttons">
             <DialogActionButton

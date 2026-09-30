@@ -438,9 +438,9 @@
     "link_title": "Deelbare link",
     "link_details": "Exporteren als een alleen-lezen link.",
     "link_button": "Exporteer naar link",
-    "excalidrawplus_description": "Sla de scène op in je Excalidraw+ werkruimte.",
+    "excalidrawplus_description": "Sla de scène op in je Mosaic+ werkruimte.",
     "excalidrawplus_button": "Exporteer",
-    "excalidrawplus_exportError": "Kan op dit moment niet exporteren naar Excalidraw+..."
+    "excalidrawplus_exportError": "Kan op dit moment niet exporteren naar Mosaic+..."
   },
   "helpDialog": {
     "blog": "Lees onze blog",
@@ -596,7 +596,7 @@
       "center_heading": "Je tekeningen worden bewaard in de opslag van je browser.",
       "center_heading_line2": "Browser opslag kan onverwacht gewist worden.",
       "center_heading_line3": "Sla je werk regelmatig op in een bestand om te voorkomen dat je het kwijtraakt.",
-      "center_heading_plus": "Wil je in plaats daarvan naar Excalidraw+ gaan?",
+      "center_heading_plus": "Wil je in plaats daarvan naar Mosaic+ gaan?",
       "menuHint": "Exporteren, voorkeuren en meer, ..."
     },
     "defaults": {
@@ -631,9 +631,9 @@
         "description": "Exporteer de scènegegevens als bestand die je later weer kunt importeren."
       },
       "excalidrawPlus": {
-        "title": "Excalidraw+",
-        "button": "Exporteer naar Excalidraw+",
-        "description": "Sla de scène op in je Excalidraw+ werkruimte."
+        "title": "Mosaic+",
+        "button": "Exporteer naar Mosaic+",
+        "description": "Sla de scène op in je Mosaic+ werkruimte."
       }
     },
     "modal": {
@@ -699,7 +699,7 @@
       "mermaidParseError": "Mermaid syntax fout"
     },
     "rateLimit": {
-      "messageLimit": "Je hebt je AI limiet bereikt op het gratis abonnement. Probeer Excalidraw+ uit voor meer of kom morgen terug.",
+      "messageLimit": "Je hebt je AI limiet bereikt op het gratis abonnement. Probeer Mosaic+ uit voor meer of kom morgen terug.",
       "generalRateLimit": "Ho ho, rustig aan, je gaat te snel voor ons! Wacht even voor je het opnieuw probeert.",
       "messageLimitInputPlaceholder": "Je hebt je berichtenlimiet bereikt"
     },

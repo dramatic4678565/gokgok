@@ -1,6 +1,11 @@
 import React from "react";
 
-import { isDarwin, isFirefox, isWindows } from "@mosaic/common";
+import {
+  SHOW_UPSTREAM_PROMOS,
+  isDarwin,
+  isFirefox,
+  isWindows,
+} from "@mosaic/common";
 
 import { KEYS } from "@mosaic/common";
 
@@ -18,44 +23,60 @@ import "./HelpDialog.scss";
 
 import type { JSX } from "react";
 
+/*
+  Upstream's own documentation, blog, issue tracker and YouTube channel.
+
+  Gated on SHOW_UPSTREAM_PROMOS: on a self-hosted Mosaic these point at
+  Excalidraw's docs and accounts, so "Documentation" would send the user to
+  another product's manual. Kept and gated rather than deleted, because
+  upstream is merged in regularly and a host with its own docs site can get
+  them back by editing the hrefs here. See BRANDING.md.
+
+  The row collapses to an empty flex container rather than being removed, so
+  the header keeps its spacing and the shortcuts below stay put.
+*/
 const Header = () => (
   <div className="HelpDialog__header">
-    <a
-      className="HelpDialog__btn"
-      href="https://docs.excalidraw.com"
-      target="_blank"
-      rel="noopener"
-    >
-      <div className="HelpDialog__link-icon">{ExternalLinkIcon}</div>
-      {t("helpDialog.documentation")}
-    </a>
-    <a
-      className="HelpDialog__btn"
-      href="https://plus.excalidraw.com/blog"
-      target="_blank"
-      rel="noopener"
-    >
-      <div className="HelpDialog__link-icon">{ExternalLinkIcon}</div>
-      {t("helpDialog.blog")}
-    </a>
-    <a
-      className="HelpDialog__btn"
-      href="https://github.com/excalidraw/excalidraw/issues"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      <div className="HelpDialog__link-icon">{GithubIcon}</div>
-      {t("helpDialog.github")}
-    </a>
-    <a
-      className="HelpDialog__btn"
-      href="https://youtube.com/@excalidraw"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      <div className="HelpDialog__link-icon">{youtubeIcon}</div>
-      YouTube
-    </a>
+    {SHOW_UPSTREAM_PROMOS && (
+      <>
+        <a
+          className="HelpDialog__btn"
+          href="https://docs.excalidraw.com"
+          target="_blank"
+          rel="noopener"
+        >
+          <div className="HelpDialog__link-icon">{ExternalLinkIcon}</div>
+          {t("helpDialog.documentation")}
+        </a>
+        <a
+          className="HelpDialog__btn"
+          href="https://plus.excalidraw.com/blog"
+          target="_blank"
+          rel="noopener"
+        >
+          <div className="HelpDialog__link-icon">{ExternalLinkIcon}</div>
+          {t("helpDialog.blog")}
+        </a>
+        <a
+          className="HelpDialog__btn"
+          href="https://github.com/excalidraw/excalidraw/issues"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <div className="HelpDialog__link-icon">{GithubIcon}</div>
+          {t("helpDialog.github")}
+        </a>
+        <a
+          className="HelpDialog__btn"
+          href="https://youtube.com/@excalidraw"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <div className="HelpDialog__link-icon">{youtubeIcon}</div>
+          YouTube
+        </a>
+      </>
+    )}
   </div>
 );
 

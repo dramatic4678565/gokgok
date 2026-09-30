@@ -438,9 +438,9 @@
     "link_title": "Povezava za deljenje",
     "link_details": "Izvoz kot povezava samo za branje.",
     "link_button": "Izvoz kot povezava",
-    "excalidrawplus_description": "Shrani sceno v svoj delovni prostor Excalidraw+.",
+    "excalidrawplus_description": "Shrani sceno v svoj delovni prostor Mosaic+.",
     "excalidrawplus_button": "Izvoz",
-    "excalidrawplus_exportError": "Trenutno ni bilo mogoče izvoziti v Excalidraw+..."
+    "excalidrawplus_exportError": "Trenutno ni bilo mogoče izvoziti v Mosaic+..."
   },
   "helpDialog": {
     "blog": "Preberite naš blog",
@@ -596,7 +596,7 @@
       "center_heading": "Vaše risbe so shranjene v pomnilniku vašega brskalnika.",
       "center_heading_line2": "Pomnilnik brskalnika se lahko nepričakovano izprazni.",
       "center_heading_line3": "Redno shranjujte svoje delo v datoteko, da ga ne izgubite.",
-      "center_heading_plus": "Ste namesto tega želeli odpreti Excalidraw+?",
+      "center_heading_plus": "Ste namesto tega želeli odpreti Mosaic+?",
       "menuHint": "Izvoz, nastavitve, jeziki, ..."
     },
     "defaults": {
@@ -631,9 +631,9 @@
         "description": "Izvozite podatke scene v datoteko, iz katere jo lahko pozneje uvozite."
       },
       "excalidrawPlus": {
-        "title": "Excalidraw+",
-        "button": "Izvozi v Excalidraw+",
-        "description": "Shrani sceno v svoj delovni prostor Excalidraw+."
+        "title": "Mosaic+",
+        "button": "Izvozi v Mosaic+",
+        "description": "Shrani sceno v svoj delovni prostor Mosaic+."
       }
     },
     "modal": {
@@ -699,7 +699,7 @@
       "mermaidParseError": "Sintaktična napaka Mermaid"
     },
     "rateLimit": {
-      "messageLimit": "Dosegli ste omejitev uporabe umetne inteligence v brezplačnem paketu. Za več informacij preizkusite Excalidraw+ ali se vrnite jutri.",
+      "messageLimit": "Dosegli ste omejitev uporabe umetne inteligence v brezplačnem paketu. Za več informacij preizkusite Mosaic+ ali se vrnite jutri.",
       "generalRateLimit": "Počakaj malo, prehiter si za nas! Prosim, počakaj trenutek, preden poskusiš znova.",
       "messageLimitInputPlaceholder": "Dosegli ste omejitev števila sporočil"
     },

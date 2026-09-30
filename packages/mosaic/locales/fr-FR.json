@@ -438,9 +438,9 @@
     "link_title": "Lien partageable",
     "link_details": "Exporter comme un lien en lecture seule.",
     "link_button": "Exporter comme lien",
-    "excalidrawplus_description": "Enregistrer la scène dans votre espace de travail Excalidraw+.",
+    "excalidrawplus_description": "Enregistrer la scène dans votre espace de travail Mosaic+.",
     "excalidrawplus_button": "Exporter",
-    "excalidrawplus_exportError": "Impossible d'exporter vers Excalidraw+ pour le moment..."
+    "excalidrawplus_exportError": "Impossible d'exporter vers Mosaic+ pour le moment..."
   },
   "helpDialog": {
     "blog": "Lire notre blog",
@@ -596,7 +596,7 @@
       "center_heading": "Vos dessins sont enregistrés dans le stockage de votre navigateur.",
       "center_heading_line2": "Le stockage du navigateur peut être effacé de manière inattendue.",
       "center_heading_line3": "Enregistrez régulièrement votre travail dans un fichier pour éviter de le perdre.",
-      "center_heading_plus": "Vouliez-vous plutôt aller à Excalidraw+ à la place ?",
+      "center_heading_plus": "Vouliez-vous plutôt aller à Mosaic+ à la place ?",
       "menuHint": "Exportation, préférences, langues, ..."
     },
     "defaults": {
@@ -631,9 +631,9 @@
         "description": "Exporter les données de la scène comme un fichier que vous pourrez importer ultérieurement."
       },
       "excalidrawPlus": {
-        "title": "Excalidraw+",
-        "button": "Exporter vers Excalidraw+",
-        "description": "Enregistrer la scène dans votre espace de travail Excalidraw+."
+        "title": "Mosaic+",
+        "button": "Exporter vers Mosaic+",
+        "description": "Enregistrer la scène dans votre espace de travail Mosaic+."
       }
     },
     "modal": {
@@ -699,7 +699,7 @@
       "mermaidParseError": "Erreur de syntaxe Mermaid"
     },
     "rateLimit": {
-      "messageLimit": "Vous avez atteint votre limite d'IA sur le plan gratuit. Essayez Excalidraw+ pour plus ou revenez demain.",
+      "messageLimit": "Vous avez atteint votre limite d'IA sur le plan gratuit. Essayez Mosaic+ pour plus ou revenez demain.",
       "generalRateLimit": "Tenez vos chevaux, vous êtes trop rapide pour nous! Veuillez attendre un instant avant de réessayer.",
       "messageLimitInputPlaceholder": "Vous avez atteint votre limite de messages"
     },

@@ -438,9 +438,9 @@
     "link_title": "Tautan",
     "link_details": "Ekspor sebagai tautan yang hanya dibaca.",
     "link_button": "Ekspor ke tautan",
-    "excalidrawplus_description": "Simpan pemandangan ke ruang kerja Excalidraw+ Anda.",
+    "excalidrawplus_description": "Simpan pemandangan ke ruang kerja Mosaic+ Anda.",
     "excalidrawplus_button": "Ekspor",
-    "excalidrawplus_exportError": "Tidak dapat ekspor ke Excalidraw+ saat ini..."
+    "excalidrawplus_exportError": "Tidak dapat ekspor ke Mosaic+ saat ini..."
   },
   "helpDialog": {
     "blog": "Baca blog kami",
@@ -596,7 +596,7 @@
       "center_heading": "Gambar anda disimpan di penyimpanan browser anda.",
       "center_heading_line2": "Penyimpanan browser dapat terhapus secara tidak terduga.",
       "center_heading_line3": "Simpan pekerjaan anda ke file secara berkala agar tidak hilang.",
-      "center_heading_plus": "Apa Anda ingin berpindah ke Excalidraw+?",
+      "center_heading_plus": "Apa Anda ingin berpindah ke Mosaic+?",
       "menuHint": "Ekspor, preferensi, bahasa, ..."
     },
     "defaults": {
@@ -631,9 +631,9 @@
         "description": "Ekspor data pemandangan ke file yang dapat Anda dapat impor nanti."
       },
       "excalidrawPlus": {
-        "title": "Excalidraw+",
-        "button": "Ekspor ke Excalidraw+",
-        "description": "Simpan pemandangan ke ruang kerja Excalidraw+ Anda."
+        "title": "Mosaic+",
+        "button": "Ekspor ke Mosaic+",
+        "description": "Simpan pemandangan ke ruang kerja Mosaic+ Anda."
       }
     },
     "modal": {

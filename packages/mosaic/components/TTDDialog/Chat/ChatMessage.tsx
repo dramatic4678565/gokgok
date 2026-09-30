@@ -1,6 +1,8 @@
 import clsx from "clsx";
 import React, { useState, useEffect } from "react";
 
+import { SHOW_UPSTREAM_PROMOS } from "@mosaic/common";
+
 import { t } from "../../../i18n";
 import { FilledButton } from "../../FilledButton";
 import { TrashIcon, codeIcon, stackPushIcon, RetryIcon } from "../../icons";
@@ -80,21 +82,31 @@ export const ChatMessage: React.FC<{
               ) : message.warningType === "messageLimitExceeded" ? (
                 <>
                   {t("chat.rateLimit.messageLimit")}
-                  <div style={{ marginTop: "10px" }}>
-                    <FilledButton
-                      onClick={() => {
-                        window.open(
-                          `${
-                            import.meta.env.VITE_APP_PLUS_LP
-                          }/plus?utm_source=mosaic&utm_medium=app&utm_content=ttdChatBanner#excalidraw-redirect`,
-                          "_blank",
-                          "noopener",
-                        );
-                      }}
-                    >
-                      {t("chat.upsellBtnLabel")}
-                    </FilledButton>
-                  </div>
+                  {/*
+                    The upsell button. It points at the paid workspace Mosaic
+                    does not resell, so it is gated on SHOW_UPSTREAM_PROMOS.
+
+                    The limit message above it stays either way: the user did
+                    hit the limit, and removing the only explanation of that
+                    would be worse than an offer they cannot use. See BRANDING.md.
+                  */}
+                  {SHOW_UPSTREAM_PROMOS && (
+                    <div style={{ marginTop: "10px" }}>
+                      <FilledButton
+                        onClick={() => {
+                          window.open(
+                            `${
+                              import.meta.env.VITE_APP_PLUS_LP
+                            }/plus?utm_source=mosaic&utm_medium=app&utm_content=ttdChatBanner`,
+                            "_blank",
+                            "noopener",
+                          );
+                        }}
+                      >
+                        {t("chat.upsellBtnLabel")}
+                      </FilledButton>
+                    </div>
+                  )}
                 </>
               ) : (
                 t("chat.rateLimit.generalRateLimit")

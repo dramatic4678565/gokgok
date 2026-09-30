@@ -1,4 +1,8 @@
-import { loginIcon, ExcalLogo, eyeIcon } from "@mosaic/mosaic/components/icons";
+import {
+  loginIcon,
+  MosaicLogoIcon,
+  eyeIcon,
+} from "@mosaic/mosaic/components/icons";
 import { useI18n } from "@mosaic/mosaic/i18n";
 import { MainMenu } from "@mosaic/mosaic/index";
 import React from "react";
@@ -39,28 +43,30 @@ export const AppMainMenu: React.FC<{
       <MainMenu.DefaultItems.ClearCanvas />
       <MainMenu.Separator />
       {/*
-        The items below advertise upstream services that are not ours: the paid
-        "Excalidraw+" workspace, the Excalidraw project's own social accounts,
-        and its sign-up page. Mosaic is a self-hosted fork, so on a deployment
-        that is not reselling that product all three would send users away to
-        someone else's site.
+          The items below advertise upstream services that are not ours: the paid
+          "Mosaic+" workspace, the Excalidraw project's own social accounts,
+          and
+          its sign-up page. Mosaic is a self-hosted fork, so on a deployment that
+          is not reselling that product all three would send users away to
+          someone else's site.
 
-        They are gated on SHOW_UPSTREAM_PROMOS rather than deleted, so restoring
-        them is a one-line change in app_constants.ts. The URLs still point
-        upstream, so set VITE_APP_PLUS_LP and VITE_APP_PLUS_APP before enabling.
-        See BRANDING.md.
-      */}
+          They are gated on SHOW_UPSTREAM_PROMOS rather than deleted, so
+          restoring them is a one-line change in `packages/common`, which is
+          where the flag is defined. The URLs still point upstream, so set
+          VITE_APP_PLUS_LP and VITE_APP_PLUS_APP before enabling. See BRANDING.md.
+        */}
       {SHOW_UPSTREAM_PROMOS && (
         <>
           <MainMenu.ItemLink
-            icon={ExcalLogo}
+            icon={MosaicLogoIcon}
             href={`${
               import.meta.env.VITE_APP_PLUS_LP
             }/plus?utm_source=mosaic&utm_medium=app&utm_content=hamburger`}
             className=""
           >
-            Excalidraw+
+            Mosaic+
           </MainMenu.ItemLink>
+
           <MainMenu.DefaultItems.Socials />
           <MainMenu.ItemLink
             icon={loginIcon}

@@ -438,9 +438,9 @@
     "link_title": "Link condivisibile",
     "link_details": "Esporta come link di sola lettura.",
     "link_button": "Esporta come Link",
-    "excalidrawplus_description": "Salva la scena nel tuo spazio di lavoro Excalidraw+.",
+    "excalidrawplus_description": "Salva la scena nel tuo spazio di lavoro Mosaic+.",
     "excalidrawplus_button": "Esporta",
-    "excalidrawplus_exportError": "Non è stato possibile esportare su Excalidraw+ al questo momento..."
+    "excalidrawplus_exportError": "Non è stato possibile esportare su Mosaic+ al questo momento..."
   },
   "helpDialog": {
     "blog": "Leggi il nostro blog",
@@ -596,7 +596,7 @@
       "center_heading": "I tuoi disegni vengono salvati nella memoria del tuo browser.",
       "center_heading_line2": "La memoria del browser potrebbe essere cancellata inaspettatamente.",
       "center_heading_line3": "Salva regolarmente il tuo lavoro in un file per evitare di perderlo.",
-      "center_heading_plus": "Volevi invece andare su Excalidraw+?",
+      "center_heading_plus": "Volevi invece andare su Mosaic+?",
       "menuHint": "Esporta, preferenze, lingue, ..."
     },
     "defaults": {
@@ -631,9 +631,9 @@
         "description": "Esporta i dati della scena su file, che potrai importare in seguito."
       },
       "excalidrawPlus": {
-        "title": "Excalidraw+",
-        "button": "Esporta su Excalidraw+",
-        "description": "Salva la scena sul tuo spazio di lavoro Excalidraw+."
+        "title": "Mosaic+",
+        "button": "Esporta su Mosaic+",
+        "description": "Salva la scena sul tuo spazio di lavoro Mosaic+."
       }
     },
     "modal": {
@@ -699,7 +699,7 @@
       "mermaidParseError": "Errore di sintassi Mermaid"
     },
     "rateLimit": {
-      "messageLimit": "Hai raggiunto il tuo limite di IA sul piano gratuito. Prova Excalidraw+ per saperne di più o torna domani.",
+      "messageLimit": "Hai raggiunto il tuo limite di IA sul piano gratuito. Prova Mosaic+ per saperne di più o torna domani.",
       "generalRateLimit": "Fermati, sei troppo veloce per noi! Attendi un attimo prima di riprovare.",
       "messageLimitInputPlaceholder": "Hai raggiunto il limite di messaggi"
     },

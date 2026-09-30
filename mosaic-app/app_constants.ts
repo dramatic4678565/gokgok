@@ -63,29 +63,20 @@ export const isMosaicPlusSignedUser = document.cookie.includes(
 /**
  * Whether to surface upstream promotion surfaces in the UI.
  *
- * These are the "Excalidraw+" button in the top right, the "Excalidraw+", "Sign
- * up", "GitHub", "Follow us" and "Discord chat" entries in the main menu, and
- * the Excalidraw+ promo tabs in the sidebar. Every one of them points at
- * upstream's paid workspace or its own social/community accounts, so on a self
- * -hosted Mosaic deployment they would point users at someone else's product.
+ * Defined in `@mosaic/common` so `packages/mosaic` can gate on the same value
+ * -- the help dialog, the Brave error dialog, the library publish dialog and
+ * the text-to-diagram chat live there, and a second copy of this flag in either
+ * package would drift. Re-exported here because app code reads it from this
+ * module alongside the other app-level constants.
  *
- * Off by default. Flip it to true for a fork that actually resells a hosted
- * tier, and point the relevant env vars at that service first:
- *
- *   VITE_APP_PLUS_LP    the landing page (VITE_APP_PLUS_LP + "/plus")
- *   VITE_APP_PLUS_APP   the app itself (VITE_APP_PLUS_APP + "/sign-up")
- *
- * The code behind each surface is still present, just gated on this flag, so
- * toggling it here is all that is needed to bring them back.
- *
- * See BRANDING.md.
+ * See the definition in `packages/common/src/constants.ts` and BRANDING.md.
  */
-export const SHOW_UPSTREAM_PROMOS = false;
+export { SHOW_UPSTREAM_PROMOS } from "@mosaic/common";
 
 /**
  * Backed services this app can talk to.
  *
- * These were all inherited from upstream and pointed at Excalidraw's own
+ * These were all inherited from upstream and pointed at Mosaic's own
  * services, which meant a deployment of this fork was shipping real user data
  * to someone else's infrastructure: share links resolved through
  * json.excalidraw.com, live collaboration drawings relayed through their

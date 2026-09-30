@@ -438,9 +438,9 @@
     "link_title": "Delbar länk",
     "link_details": "Exportera som en skrivskyddad länk.",
     "link_button": "Exportera till länk",
-    "excalidrawplus_description": "Spara skissen till din Excalidraw+ arbetsyta.",
+    "excalidrawplus_description": "Spara skissen till din Mosaic+ arbetsyta.",
     "excalidrawplus_button": "Exportera",
-    "excalidrawplus_exportError": "Det gick inte att exportera till Excalidraw+ just nu..."
+    "excalidrawplus_exportError": "Det gick inte att exportera till Mosaic+ just nu..."
   },
   "helpDialog": {
     "blog": "Läs vår blogg",
@@ -596,7 +596,7 @@
       "center_heading": "Dina teckningar sparas i webbläsarens lagring.",
       "center_heading_line2": "Webbläsarens lagringsutrymme kan rensas oväntat.",
       "center_heading_line3": "Spara ditt arbete till en fil regelbundet för att undvika att förlora det.",
-      "center_heading_plus": "Ville du gå till Excalidraw+ istället?",
+      "center_heading_plus": "Ville du gå till Mosaic+ istället?",
       "menuHint": "Exportera, inställningar, språk, ..."
     },
     "defaults": {
@@ -631,9 +631,9 @@
         "description": "Exportera scendata till en fil från vilken du kan importera senare."
       },
       "excalidrawPlus": {
-        "title": "Excalidraw+",
-        "button": "Exportera till Excalidraw+",
-        "description": "Spara skissen till din Excalidraw+ arbetsyta."
+        "title": "Mosaic+",
+        "button": "Exportera till Mosaic+",
+        "description": "Spara skissen till din Mosaic+ arbetsyta."
       }
     },
     "modal": {
@@ -699,7 +699,7 @@
       "mermaidParseError": "Mermaid syntax fel"
     },
     "rateLimit": {
-      "messageLimit": "Du har nått din gräns på den fria AI-planen. Prova Excalidraw+ för mer eller kom tillbaka imorgon.",
+      "messageLimit": "Du har nått din gräns på den fria AI-planen. Prova Mosaic+ för mer eller kom tillbaka imorgon.",
       "generalRateLimit": "Håll dina hästar, du är för snabb för oss! Vänligen vänta en stund innan du försöker igen.",
       "messageLimitInputPlaceholder": "Du har nått din meddelandegräns"
     },

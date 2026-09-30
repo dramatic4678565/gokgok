@@ -438,9 +438,9 @@
     "link_title": "Megosztható hivatkozás",
     "link_details": "Exportálás csak olvasható hivatkozásként.",
     "link_button": "Exportálás hivatkozásba",
-    "excalidrawplus_description": "Mentse el a jelenetet az Excalidraw+ munkaterületére.",
+    "excalidrawplus_description": "Mentse el a jelenetet az Mosaic+ munkaterületére.",
     "excalidrawplus_button": "Exportálás",
-    "excalidrawplus_exportError": "Jelenleg nem lehet exportálni az Excalidraw+-ba..."
+    "excalidrawplus_exportError": "Jelenleg nem lehet exportálni az Mosaic+-ba..."
   },
   "helpDialog": {
     "blog": "Olvasd a blogunkat",

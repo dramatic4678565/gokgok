@@ -3,6 +3,8 @@ import { t } from "@mosaic/mosaic/i18n";
 import * as Sentry from "@sentry/browser";
 import React from "react";
 
+import { SHOW_UPSTREAM_PROMOS } from "../app_constants";
+
 interface TopErrorBoundaryState {
   hasError: boolean;
   sentryEventId: string;
@@ -119,14 +121,26 @@ export class TopErrorBoundary extends React.Component<
                 eventId: this.state.sentryEventId,
               })}
             </div>
-            <div className="ErrorSplash-paragraph">
-              <Trans
-                i18nKey="errorSplash.openIssueMessage"
-                button={(el) => (
-                  <button onClick={() => this.createGithubIssue()}>{el}</button>
-                )}
-              />
-            </div>
+            {/*
+              The whole paragraph, not just the button: `openIssueMessage` is
+              written entirely around upstream's bug tracker ("following up on
+              our bug tracker ... copying and pasting into the GitHub issue").
+              Hiding only the button would leave a dead promise in the crash
+              screen. Gated on SHOW_UPSTREAM_PROMOS like the rest of the
+              upstream promotion. See BRANDING.md.
+            */}
+            {SHOW_UPSTREAM_PROMOS && (
+              <div className="ErrorSplash-paragraph">
+                <Trans
+                  i18nKey="errorSplash.openIssueMessage"
+                  button={(el) => (
+                    <button onClick={() => this.createGithubIssue()}>
+                      {el}
+                    </button>
+                  )}
+                />
+              </div>
+            )}
             <div className="ErrorSplash-paragraph">
               <div className="ErrorSplash-details">
                 <label>{t("errorSplash.sceneContent")}</label>

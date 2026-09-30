@@ -438,9 +438,9 @@
     "link_title": "Deleleg lenke",
     "link_details": "Eksporter som skrivebeskytta lenke.",
     "link_button": "Eksporter til lenke",
-    "excalidrawplus_description": "Lagre scena til Excalidraw+-arbeidsområdet ditt.",
+    "excalidrawplus_description": "Lagre scena til Mosaic+-arbeidsområdet ditt.",
     "excalidrawplus_button": "Eksporter",
-    "excalidrawplus_exportError": "Kunne ikkje eksportere til Excalidraw+ akkurat no..."
+    "excalidrawplus_exportError": "Kunne ikkje eksportere til Mosaic+ akkurat no..."
   },
   "helpDialog": {
     "blog": "Les bloggen vår",

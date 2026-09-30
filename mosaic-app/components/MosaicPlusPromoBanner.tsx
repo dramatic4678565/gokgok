@@ -10,13 +10,13 @@ export const MosaicPlusPromoBanner = ({
           ? import.meta.env.VITE_APP_PLUS_APP
           : `${
               import.meta.env.VITE_APP_PLUS_LP
-            }/plus?utm_source=mosaic&utm_medium=app&utm_content=guestBanner#excalidraw-redirect`
+            }/plus?utm_source=mosaic&utm_medium=app&utm_content=guestBanner`
       }
       target="_blank"
       rel="noopener"
       className="plus-banner"
     >
-      Excalidraw+
+      Mosaic+
     </a>
   );
 };

@@ -438,9 +438,9 @@
     "link_title": "Jaettava linkki",
     "link_details": "Vie vain luku -linkkinä.",
     "link_button": "Vie linkkinä",
-    "excalidrawplus_description": "Tallenna teos Excalidraw+ tilaan.",
+    "excalidrawplus_description": "Tallenna teos Mosaic+ tilaan.",
     "excalidrawplus_button": "Vie",
-    "excalidrawplus_exportError": "Ei voitu viedä Excalidraw+-palveluun tällä hetkellä..."
+    "excalidrawplus_exportError": "Ei voitu viedä Mosaic+-palveluun tällä hetkellä..."
   },
   "helpDialog": {
     "blog": "Lue blogiamme",
@@ -596,7 +596,7 @@
       "center_heading": "",
       "center_heading_line2": "",
       "center_heading_line3": "",
-      "center_heading_plus": "Haluatko sen sijaan mennä Excalidraw+:aan?",
+      "center_heading_plus": "Haluatko sen sijaan mennä Mosaic+:aan?",
       "menuHint": "Vie, asetukset, kielet, ..."
     },
     "defaults": {
@@ -631,8 +631,8 @@
         "description": ""
       },
       "excalidrawPlus": {
-        "title": "Excalidraw+",
-        "button": "Vie Excalidraw+:aan",
+        "title": "Mosaic+",
+        "button": "Vie Mosaic+:aan",
         "description": ""
       }
     },

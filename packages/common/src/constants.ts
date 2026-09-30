@@ -14,6 +14,35 @@ export const supportsResizeObserver =
 
 export const APP_NAME = "Mosaic";
 
+/**
+ * Whether to surface upstream promotion surfaces in the UI.
+ *
+ * These advertise the Excalidraw project's own paid workspace ("Excalidraw+"),
+ * its own social and community accounts, and its own documentation. On a
+ * self-hosted Mosaic deployment they would point users at someone else's
+ * product, so they are off by default.
+ *
+ * Off by default. Flip it to true for a fork that actually resells a hosted
+ * tier, and point the relevant env vars at that service first:
+ *
+ *   VITE_APP_PLUS_LP    the landing page (VITE_APP_PLUS_LP + "/plus")
+ *   VITE_APP_PLUS_APP   the app itself (VITE_APP_PLUS_APP + "/sign-up")
+ *
+ * The code behind each surface is still present, just gated on this flag, so
+ * toggling it here is all that is needed to bring them back.
+ *
+ * It lives in `@mosaic/common` rather than in the app because the surfaces
+ * span two packages: `mosaic-app` (menu, command palette, export dialog,
+ * welcome screen, crash screen) and `packages/mosaic` (help dialog, the Brave
+ * error dialog, the library publish dialog, the text-to-diagram chat). One
+ * flag, one place -- a second copy in either package would drift and quietly
+ * re-enable half the surfaces. `mosaic-app/app_constants.ts` re-exports it, so
+ * app code can keep importing it from there.
+ *
+ * See BRANDING.md.
+ */
+export const SHOW_UPSTREAM_PROMOS = false;
+
 // distance when creating text before it's considered `autoResize: false`
 // we're using higher threshold so that clicks that end up being drags
 // don't unintentionally create text elements that are wrapped to a few chars
