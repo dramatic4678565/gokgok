@@ -39,6 +39,30 @@ const ALLOW = [
   { file: /config-audit\.ts$/, why: "the privacy audit itself" },
   { file: /\.test\.[jt]sx?$|__tests__|fixtures/, why: "test data" },
   { file: /vite-env\.d\.ts$/, why: "typed env declarations, no values" },
+  // CI configuration. The workflows either name an upstream service only to
+  // document what the app used to call, or take their endpoint from a secret.
+  { file: /^\.github\/workflows\//, why: "CI config" },
+
+  // Upstream links deliberately kept and gated on SHOW_UPSTREAM_PROMOS,
+  // because a fork that resells a hosted tier needs them back. They are dead
+  // by default -- see BRANDING.md.
+  {
+    file: /mosaic-app\/components\/EncryptedIcon\.tsx$/,
+    why: "gated on SHOW_UPSTREAM_PROMOS",
+  },
+  {
+    file: /packages\/mosaic\/components\/(HelpDialog|BraveMeasureTextError|PublishLibrary)\.tsx$/,
+    why: "gated on SHOW_UPSTREAM_PROMOS",
+  },
+
+  // Domain allowlists. These *are* the mechanism that stops a user-supplied
+  // link or library URL resolving against an upstream host, so naming the host
+  // is the point.
+  { file: /packages\/mosaic\/data\/library\.ts$/, why: "allowed-library-domain list" },
+  {
+    file: /packages\/element\/src\/embeddable\.ts$/,
+    why: "allowed-link-domain list",
+  },
 ];
 
 /** Files whose values are inlined into the shipped bundle. */
@@ -94,7 +118,11 @@ const walk = (dir, out = []) => {
 
 for (const rel of walk(ROOT)) {
   if (ALLOW.some((a) => a.file.test(rel))) continue;
-  const text = fs.readFileSync(path.join(ROOT, rel), "utf8");
+  // Comments are stripped here for the same reason as in the shipped-config
+  // pass above. Without it, a `// see https://excalidraw.com/...` attribution
+  // in a source file is reported as a live endpoint, and the check fails on
+  // correct code -- which is how it came to be failing on a clean tree.
+  const text = stripComments(fs.readFileSync(path.join(ROOT, rel), "utf8"), rel);
   const hits = UPSTREAM.filter((h) => text.includes(h));
   if (hits.length) {
     bad(`${rel}  -> ${hits.join(", ")}`);

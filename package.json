@@ -58,6 +58,7 @@
     "check:docs": "node ./scripts/check-doc-ids.cjs",
     "check:paths": "node ./scripts/check-stale-paths.cjs && node ./scripts/check-package-paths.cjs",
     "check:links": "node ./scripts/check-doc-links.cjs",
+    "check:config": "node ./scripts/check-config-privacy.cjs",
     "build:app:docker": "yarn --cwd ./mosaic-app build:app:docker",
     "build:app": "yarn --cwd ./mosaic-app build:app",
     "build:common": "yarn --cwd ./packages/common build:esm",

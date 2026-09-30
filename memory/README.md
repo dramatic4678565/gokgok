@@ -51,21 +51,30 @@ Full table with reasons: [BRANDING.md](../BRANDING.md).
 Upstream promo surfaces are hidden behind a flag rather than removed:
 
 ```ts
-// mosaic-app/app_constants.ts
+// packages/common/src/constants.ts
 export const SHOW_UPSTREAM_PROMOS = false;
 ```
 
-It gates the "Excalidraw+" top-right button, the Excalidraw+ / Sign up / GitHub / Follow us / Discord menu items, the sidebar promo tabs, the footer shield icon, and the welcome-screen Sign up link.
+It lives in `@mosaic/common`, not in the app, because the surfaces span two packages. `mosaic-app/app_constants.ts` re-exports it:
+
+```ts
+import { SHOW_UPSTREAM_PROMOS } from "../app_constants"; // in mosaic-app
+import { SHOW_UPSTREAM_PROMOS } from "@mosaic/common"; // in packages/mosaic
+```
+
+It gates the paid-workspace button and promo banner, the sidebar promo tabs, the main-menu items, the command palette links, the export dialog card and its overwrite confirmation, the welcome screen, the footer shield, the AI rate-limit upsell, the crash screen's bug-tracker paragraph, the help dialog header, the Brave error dialog, the library publish dialog, and the text-to-diagram chat's upgrade button. Full table: [BRANDING.md](../BRANDING.md).
 
 **Why keep the code:** it comes back on the next upstream merge otherwise, as a conflict, and re-resolving that is more expensive than flipping a boolean. A fork that _does_ resell a hosted tier needs them.
 
-If you add another such surface, gate it on this same flag.
+If you add another such surface, gate it on this same flag -- and import it from `@mosaic/common` if the file is in `packages/mosaic`, so there is still exactly one definition.
 
 ## Gotchas that cost real time
 
 - **`$ErrorActionPreference = 'Stop'` breaks native git commands in PowerShell.** Git writes progress to stderr, PowerShell turns that into a terminating `NativeCommandError`. `scripts/sync-upstream.ps1` relaxes it around the call. If you write more PowerShell tooling here, do the same.
 
 - **Never bulk-replace a brand string with a plain search-and-replace.** That is how `@excalidraw/eslint-config` (a package that does not exist) and `https://excalidraw.com` (upstream's domain) get rewritten. Mask first, rename second, restore last. `scripts/rebrand.cjs` shows the pattern, and its self-test is the guard.
+
+- **`rebrand.cjs` is NOT idempotent. Run it once, on a fresh upstream merge, never on a tree that has already been rebranded.** It is a plain string substitution, so it cannot tell "Excalidraw" meaning _our product_ from "Excalidraw" meaning _upstream, the project we forked from_ -- the difference is an explicit `PROTECT` allowlist, and that allowlist is not exhaustive. Re-running it over its own output corrupts the tree and still reports success. Observed damage: prose that means upstream was rewritten to mean us ("Excalidraw's Sentry org. That is other people's data store" -> "Mosaic's Sentry org. That is other people's data store"); the historical path literals in `check-stale-paths.cjs` were rewritten, silently disarming the stale-path check; the `MIME_TYPES.excalidraw` / `EXPORT_DATA_TYPES.excalidraw` / `VERSIONS.excalidraw` keys were renamed, which breaks every `.excalidraw` file lookup. The `fix-*` scripts _are_ idempotent; `rebrand.cjs` is not, and the difference matters. `check:brand` runs only the self-test, which passes in either case -- so it is not a guard against this.
 
 - **The rebrand scripts must never rewrite themselves.** Their `PROTECT` list contains the literal strings they are protecting; a run that renames them turns the script into a no-op that looks like it worked. They are in the skip list. Keep it that way.
 
@@ -93,6 +102,8 @@ The workflow in `.github/workflows/sync-upstream.yml` does this automatically wh
 ```bash
 git checkout upstream-sync
 # resolve conflicts, preferring upstream's code shape but our renames
+# NOTE: rebrand.cjs is not idempotent. It is correct here only because an
+# upstream merge is what reintroduces "Excalidraw" in the first place.
 node scripts/rebrand.cjs
 node scripts/fix-rebrand-consistency.cjs
 node scripts/fix-test-fixture-text.cjs
@@ -101,7 +112,7 @@ yarn test:typecheck
 npx vitest run --no-file-parallelism
 ```
 
-The three `fix-*` / `rebrand` scripts are idempotent — running them twice changes nothing. See [MOSAIC-SYNC-GUIDE.md](../MOSAIC-SYNC-GUIDE.md) for the conflict-resolution workflow and `scripts/sync-upstream.ps1` for the local commands.
+The two `fix-*` scripts are idempotent — running them twice changes nothing. `rebrand.cjs` is not: run it exactly once per merge, before any local work is on top, and read the whole diff afterwards rather than trusting the exit code. See [MOSAIC-SYNC-GUIDE.md](../MOSAIC-SYNC-GUIDE.md) for the conflict-resolution workflow and `scripts/sync-upstream.ps1` for the local commands.
 
 ## Before launching
 

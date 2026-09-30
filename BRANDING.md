@@ -74,25 +74,45 @@ The JSON is the source of truth, but a few things cannot read it at runtime:
 
 ## Hiding upstream promotions
 
-Upstream ships several surfaces that advertise Excalidraw's own paid workspace and its own social accounts. On a self-hosted Mosaic deployment they point users somewhere that has nothing to do with this product, so they are hidden behind a single flag rather than deleted:
+Upstream ships a fair number of surfaces that advertise Excalidraw's own paid workspace, its own social and community accounts, and its own documentation. On a self-hosted Mosaic deployment they point users somewhere that has nothing to do with this product, so they are hidden behind a single flag rather than deleted:
 
 ```ts
-// mosaic-app/app_constants.ts
+// packages/common/src/constants.ts
 export const SHOW_UPSTREAM_PROMOS = false;
+```
+
+It lives in `@mosaic/common` because the surfaces span two packages. `mosaic-app/app_constants.ts` re-exports it, so app code can keep importing it from there:
+
+```ts
+import { SHOW_UPSTREAM_PROMOS } from "../app_constants"; // in mosaic-app
+import { SHOW_UPSTREAM_PROMOS } from "@mosaic/common"; // in packages/mosaic
 ```
 
 It gates:
 
 | Surface | File |
 | --- | --- |
-| "Excalidraw+" button, top right | `mosaic-app/App.tsx` |
-| "Excalidraw+", "Sign up" menu items | `mosaic-app/components/AppMainMenu.tsx` |
-| "GitHub", "Follow us", "Discord chat" | `packages/mosaic/components/main-menu/DefaultItems.tsx` (`UPSTREAM_SOCIALS`) |
+| "Mosaic+" button, top right; welcome-screen promo banner | `mosaic-app/App.tsx` |
 | Sidebar promo tabs ("comments", "presentation") | `mosaic-app/components/AppSidebar.tsx` |
+| "Mosaic+" promo banner (top right) | `mosaic-app/components/MosaicPlusPromoBanner.tsx` |
+| "Mosaic+", "Sign up" menu items | `mosaic-app/components/AppMainMenu.tsx` |
+| "GitHub", "Follow us", "Discord chat" | `packages/mosaic/components/main-menu/DefaultItems.tsx` (`UPSTREAM_SOCIALS`) |
+| Command palette: GitHub / X / Discord / YouTube / "Mosaic+" / "Sign up" | `mosaic-app/App.tsx` |
+| Export dialog "Export to Mosaic+" card, and its overwrite confirmation | `mosaic-app/App.tsx`, `mosaic-app/components/ExportToMosaicPlus.tsx` |
+| Welcome screen "Sign up" link, and the signed-in "Did you want to go to Mosaic+ instead?" heading | `mosaic-app/components/AppWelcomeScreen.tsx` |
 | Footer shield icon (links to an upstream blog post) | `mosaic-app/components/AppFooter.tsx` |
-| Welcome screen "Sign up" | `mosaic-app/components/AppWelcomeScreen.tsx` |
+| AI rate-limit upsell line | `mosaic-app/components/AI.tsx` |
+| Crash screen "bug tracker" paragraph | `mosaic-app/components/TopErrorBoundary.tsx` |
+| Help dialog header: docs / blog / GitHub / YouTube | `packages/mosaic/components/HelpDialog.tsx` |
+| Brave error dialog: FAQ, issue tracker, Discord | `packages/mosaic/components/BraveMeasureTextError.tsx` |
+| Library publish dialog: library site, guidelines, licence | `packages/mosaic/components/PublishLibrary.tsx` |
+| Text-to-diagram chat "upgrade" button | `packages/mosaic/components/TTDDialog/Chat/ChatMessage.tsx` |
 
-**Why gate instead of delete:** upstream is merged in every six hours, so a removed block comes back as a merge conflict. Re-resolving that is far more expensive than flipping a boolean, and a fork that _does_ resell a hosted tier needs these back. Enabling the flag also needs `VITE_APP_PLUS_LP` and `VITE_APP_PLUS_APP` pointed somewhere real first — the URLs in the code still target upstream.
+**What is gated, and what is only branded.** The flag hides _links to a service that is not ours_. The product name "Mosaic+" is a plain rename and is not gated, because the strings are still in the translation files (46 Crowdin locales) and a fork that flips the flag needs one coherent name -- a menu that says "Mosaic+" and a dialog that says "Excalidraw+" would be a bug.
+
+**Why gate instead of delete:** upstream is merged in every six hours, so a removed block comes back as a merge conflict. Re-resolving that is far more expensive than flipping a boolean, and a fork that _does_ resell a hosted tier needs these back. Enabling the flag also needs `VITE_APP_PLUS_LP` and `VITE_APP_PLUS_APP` pointed somewhere real first -- the URLs in the code still target upstream.
+
+**Surrounding copy is kept, not deleted.** Where a gated link sat inside a sentence that was mostly still true -- the rate-limit message, the Brave explanation, the library publishing guidance -- only the link is removed. Dropping the whole paragraph would leave the user with no explanation of what went wrong or no warning about what they are agreeing to.
 
 ## What deliberately did **not** get renamed
 
@@ -140,6 +160,17 @@ Always run the self-test before trusting a change to `rebrand.cjs`:
 ```powershell
 node scripts/rebrand.cjs --test
 ```
+
+### `rebrand.cjs` is not safe to re-run on an already-rebranded tree
+
+The rename is a plain string substitution, so it has no way to tell "Excalidraw" meaning _this product_ from "Excalidraw" meaning _upstream, the project we forked from_. Those two cases are handled by an explicit `PROTECT` allowlist, and that allowlist is not exhaustive. Running the script a second time over its own output therefore corrupts the tree, and it fails quietly -- it reports success either way. Observed damage:
+
+- prose that deliberately refers to upstream was rewritten to refer to us, e.g. "Excalidraw's Sentry org. That is other people's data store" became "Mosaic's Sentry org. That is other people's data store", which is nonsense;
+- the historical path literals in `scripts/check-stale-paths.cjs` were rewritten, turning `\bexcalidraw-app\b` into `\bmosaic-app\b` and silently disarming the check that is supposed to catch stale paths;
+- test fixtures whose _measured pixel width_ is part of the assertion were reworded;
+- the protected contract keys `MIME_TYPES.excalidraw`, `EXPORT_DATA_TYPES.excalidraw` and `VERSIONS.excalidraw` were renamed, which would break every `.excalidraw` file lookup.
+
+So: **run it once, on a fresh upstream merge, before any of your own work is on top of it.** If you have to run it on a dirty tree, commit or stash first, and read the whole diff afterwards -- do not trust the exit code. `check:brand` runs only the self-test, which passes in either case.
 
 If a future upstream merge brings new code in, the usual order is:
 

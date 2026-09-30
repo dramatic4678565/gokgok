@@ -30,7 +30,9 @@ const ENV_BY_HOSTNAME: Record<string, string> = {
 const hostname = window.location.hostname;
 const environment =
   (import.meta.env.VITE_APP_SENTRY_ENVIRONMENT as string | undefined) ??
-  Object.keys(ENV_BY_HOSTNAME).find((h) => hostname === h || hostname.endsWith(`.${h}`))
+  Object.keys(ENV_BY_HOSTNAME).find(
+    (h) => hostname === h || hostname.endsWith(`.${h}`),
+  )
     ? ENV_BY_HOSTNAME[
         Object.keys(ENV_BY_HOSTNAME).find(
           (h) => hostname === h || hostname.endsWith(`.${h}`),
@@ -80,7 +82,9 @@ if (enabled) {
                   .map((frame) => ({
                     filename: frame.getFileName() ?? undefined,
                     function: frame.getFunctionName() ?? undefined,
-                    in_app: !(frame.getFileName()?.includes("node_modules") ?? false),
+                    in_app: !(
+                      frame.getFileName()?.includes("node_modules") ?? false
+                    ),
                     lineno: frame.getLineNumber() ?? undefined,
                     colno: frame.getColumnNumber() ?? undefined,
                   })),

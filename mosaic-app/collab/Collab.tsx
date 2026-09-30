@@ -31,8 +31,6 @@ import { PureComponent } from "react";
 
 import { bumpElementVersions } from "@mosaic/mosaic/data/restore";
 
-import { isServiceConfigured } from "../app_constants";
-
 import type {
   ReconciledMosaicElement,
   RemoteMosaicElement,
@@ -53,6 +51,8 @@ import type {
   UserToFollow,
 } from "@mosaic/mosaic/types";
 import type { Mutable, ValueOf } from "@mosaic/common/utility-types";
+
+import { isServiceConfigured } from "../app_constants";
 
 import { appJotaiStore, atom } from "../app-jotai";
 import {
